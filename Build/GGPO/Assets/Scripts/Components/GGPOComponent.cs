@@ -1,15 +1,20 @@
+using SharedGame;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using UnityEngine;
+using UnityGGPO;
 
-public class GGPOComponent : MonoBehaviour
+public class GGPOComponent : GameManager
 {
-    [DllImport("GGPO")]
-    public static extern int ggponet_start_session(int number);
-
-    void Start()
+    public override void StartLocalGame()
     {
-        
+        StartGame(new LocalRunner(new GGPOGameState(2)));
+    }
+
+    public override void StartGGPOGame(IPerfUpdate perfPanel, IList<Connections> connections, int playerIndex)
+    {
+        var game = new GGPORunner("GGPO-Demo", new GGPOGameState(connections.Count), perfPanel);
+        game.Init(connections, playerIndex);
+        StartGame(game);
     }
 }
