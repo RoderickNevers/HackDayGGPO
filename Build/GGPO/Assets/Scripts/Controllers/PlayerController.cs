@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     private const float GROUND_DISTANCE = 0.2f;
     private const float GRAVITY = -9.81f;
 
-    [SerializeField] private ReplayManager _ReplayManager;
+    //[SerializeField] private ReplayManager _ReplayManager;
     [SerializeField] private int _PlayerSpeed = 20;
     [SerializeField] private int _JumpHeight = 8;
     [SerializeField] private LayerMask _Ground;
@@ -18,6 +17,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 _JumpVelocity;
     private bool _IsReplaying;
     private bool _GroundedPlayer;
+
+    public ReplayManager ReplayManager { get; set; }
 
     public Vector3 MoveDirection 
     {
@@ -31,9 +32,12 @@ public class PlayerController : MonoBehaviour
     {
         _Controller = GetComponent<CharacterController>();
         _GroundChecker = transform.GetChild(0);
+    }
 
-        _ReplayManager.OnStartedReplaying += () => { _IsReplaying = true; };
-        _ReplayManager.OnStoppedReplaying += () => { _IsReplaying = false; };
+    public void Setup()
+    {
+        ReplayManager.OnStartedReplaying += () => { _IsReplaying = true; };
+        ReplayManager.OnStoppedReplaying += () => { _IsReplaying = false; };
     }
 
     // Physics
@@ -67,10 +71,10 @@ public class PlayerController : MonoBehaviour
             _MoveDirection.y = 0f;
         }
 
-        if (Jump)
-        {
-            _JumpVelocity.y = _JumpHeight;
-        }
+        //if (Jump)
+        //{
+        //    _JumpVelocity.y = _JumpHeight;
+        //}
 
         _JumpVelocity.y += GRAVITY * Time.deltaTime;
         _Controller.Move(_JumpVelocity * Time.deltaTime);
@@ -78,10 +82,10 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (!_IsReplaying)
+        if (!_IsReplaying && isLocalPlayer)
         {
             MoveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-            Jump = Input.GetButtonDown("Jump") && _GroundedPlayer;
+            //Jump = Input.GetButtonDown("Jump") && _GroundedPlayer;
 
             // STEP 1: Send these inputs to GGPO
             // ggpo_synchronize_input
