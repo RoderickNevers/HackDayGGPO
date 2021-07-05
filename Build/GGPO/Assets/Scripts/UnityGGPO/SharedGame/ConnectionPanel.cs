@@ -14,10 +14,11 @@ namespace SharedGame {
         public Text txtIp;
         public Text txtPort;
 
-        private GameManager gameManager => GameManager.Instance;
+        private GameManager gameManager;
         private GgpoPerformancePanel perf;
 
         private void Awake() {
+            gameManager = GameManager.Instance;
             gameManager.OnRunningChanged += OnRunningChanged;
 
             perf = FindObjectOfType<GgpoPerformancePanel>();

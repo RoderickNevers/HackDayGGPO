@@ -121,6 +121,14 @@ using UnityEngine;
 [Serializable]
 public struct GGPOGameState : IGame
 {
+    public const int INPUT_FORWARD = (1 << 0);
+    public const int INPUT_BACKWARD = (1 << 1);
+    public const int INPUT_LEFT = (1 << 2);
+    public const int INPUT_RIGHT = (1 << 3);
+
+    public long UnserializedInputsP1 { get; private set; }
+    public long UnserializedInputsP2 { get; private set; }
+
     public int Framenumber { get; private set; }
 
     public int Checksum => GetHashCode();
@@ -198,6 +206,8 @@ public struct GGPOGameState : IGame
         var h = _bounds.yMax - _bounds.yMin;
         var r = h / 4;
         Framenumber = 0;
+        UnserializedInputsP1 = 0;
+        UnserializedInputsP2 = 0;
         //_ships = new Ship[num_players];
         //for (int i = 0; i < _ships.Length; i++)
         //{
@@ -375,6 +385,11 @@ public struct GGPOGameState : IGame
     public void Update(long[] inputs, int disconnect_flags)
     {
         Framenumber++;
+
+        // hacky way to store inputs on state
+        UnserializedInputsP1 = inputs[0];
+        UnserializedInputsP2 = inputs[1];
+
         //for (int i = 0; i < _ships.Length; i++)
         //{
         //    float thrust, heading;
@@ -430,22 +445,6 @@ public struct GGPOGameState : IGame
         //}
         //else if (id == 1)
         //{
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.W))
-        //    {
-        //        input |= INPUT_THRUST;
-        //    }
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.S))
-        //    {
-        //        input |= INPUT_BREAK;
-        //    }
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.A))
-        //    {
-        //        input |= INPUT_ROTATE_LEFT;
-        //    }
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.D))
-        //    {
-        //        input |= INPUT_ROTATE_RIGHT;
-        //    }
         //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.F))
         //    {
         //        input |= INPUT_FIRE;
@@ -455,6 +454,25 @@ public struct GGPOGameState : IGame
         //        input |= INPUT_BOMB;
         //    }
         //}
+
+
+
+        if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.W))
+        {
+            input |= INPUT_FORWARD;
+        }
+        if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.S))
+        {
+            input |= INPUT_BACKWARD;
+        }
+        if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.A))
+        {
+            input |= INPUT_LEFT;
+        }
+        if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.D))
+        {
+            input |= INPUT_RIGHT;
+        }
 
         return input;
     }
