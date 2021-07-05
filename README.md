@@ -1,3 +1,3 @@
-# Way of the Mix
+# Hack'in together GGPO & Unity
 
 Info and stuff
