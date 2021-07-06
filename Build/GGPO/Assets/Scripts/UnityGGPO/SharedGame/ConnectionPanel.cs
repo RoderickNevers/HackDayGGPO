@@ -43,14 +43,15 @@ namespace SharedGame {
 
         private List<Connections> GetConnections() {
             var list = new List<Connections>();
-            list.Add(new Connections() {
-                ip = inpIp.text,
-                port = ushort.Parse(inpPort.text),
+            list.Add(new Connections()
+            {
+                ip = hostIP.text,
+                port = ushort.Parse(hostPort.text),
                 spectator = false
             });
             list.Add(new Connections() {
-                ip = hostIP.text,
-                port = ushort.Parse(hostPort.text),
+                ip = inpIp.text,
+                port = ushort.Parse(inpPort.text),
                 spectator = false
             });
             return list;
