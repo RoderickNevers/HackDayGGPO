@@ -49,8 +49,8 @@ namespace SharedGame {
                 spectator = false
             });
             list.Add(new Connections() {
-                ip = txtIp.text,
-                port = ushort.Parse(txtPort.text),
+                ip = hostIP.text,
+                port = ushort.Parse(hostPort.text),
                 spectator = false
             });
             return list;
