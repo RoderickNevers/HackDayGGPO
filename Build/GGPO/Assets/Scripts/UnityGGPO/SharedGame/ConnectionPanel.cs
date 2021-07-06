@@ -11,6 +11,8 @@ namespace SharedGame {
         public Button btnHost;
         public InputField inpIp;
         public InputField inpPort;
+        public InputField hostIP;
+        public InputField hostPort;
         public Text txtIp;
         public Text txtPort;
 
@@ -28,8 +30,8 @@ namespace SharedGame {
             btnLocal.onClick.AddListener(OnLocalClick);
             inpIp.text = "127.0.0.1";
             inpPort.text = "7000";
-            txtIp.text = "127.0.0.1";
-            txtPort.text = "7001";
+            hostIP.text = "127.0.0.1";
+            hostPort.text = "7001";
         }
 
         private void OnDestroy() {
