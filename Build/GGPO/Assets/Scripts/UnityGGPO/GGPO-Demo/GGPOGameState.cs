@@ -31,31 +31,41 @@ using UnityEngine;
 //    public const int BULLET_DAMAGE = 10;
 //}
 
-//[Serializable]
-//public struct Bullet
-//{
-//    public bool active;
-//    public Vector2 position;
-//    public Vector2 velocity;
+[Serializable]
+public struct Player
+{
+    public Vector3 position;
+    public Vector3 velocity;
 
-//    public void Serialize(BinaryWriter bw)
-//    {
-//        bw.Write(active);
-//        bw.Write(position.x);
-//        bw.Write(position.y);
-//        bw.Write(velocity.x);
-//        bw.Write(velocity.y);
-//    }
+    public void Serialize(BinaryWriter bw)
+    {
+        bw.Write(position.x);
+        bw.Write(position.y);
+        bw.Write(position.z);
+        bw.Write(velocity.x);
+        bw.Write(velocity.y);
+        bw.Write(velocity.z);
+    }
 
-//    public void Deserialize(BinaryReader br)
-//    {
-//        active = br.ReadBoolean();
-//        position.x = br.ReadSingle();
-//        position.y = br.ReadSingle();
-//        velocity.x = br.ReadSingle();
-//        velocity.y = br.ReadSingle();
-//    }
-//};
+    public void Deserialize(BinaryReader br)
+    {
+        position.x = br.ReadSingle();
+        position.y = br.ReadSingle();
+        position.z = br.ReadSingle();
+        velocity.x = br.ReadSingle();
+        velocity.y = br.ReadSingle();
+        velocity.z = br.ReadSingle();
+    }
+
+    // @LOOK Not hashing bullets.
+    public override int GetHashCode()
+    {
+        int hashCode = 1858597544;
+        hashCode = hashCode * -1521134295 + position.GetHashCode();
+        hashCode = hashCode * -1521134295 + velocity.GetHashCode();
+        return hashCode;
+    }
+};
 
 //[Serializable]
 //public class Ship
@@ -130,33 +140,37 @@ public struct GGPOGameState : IGame
     public long UnserializedInputsP2 { get; private set; }
 
     public int Framenumber { get; private set; }
-
     public int Checksum => GetHashCode();
 
-    public static Rect _bounds = new Rect(0, 0, 640, 480);
+    public Player[] Players;
 
-    public void Serialize(BinaryWriter bw)
+    private int _Speed;
+
+    public void Serialize(BinaryWriter writer)
     {
-        bw.Write(Framenumber);
-        //bw.Write(_ships.Length);
-        //for (int i = 0; i < _ships.Length; ++i)
-        //{
-        //    _ships[i].Serialize(bw);
-        //}
+        writer.Write(Framenumber);
+        writer.Write(Players.Length);
+
+        for (int i = 0; i < Players.Length; ++i)
+        {
+            Players[i].Serialize(writer);
+        }
     }
 
-    public void Deserialize(BinaryReader br)
+    public void Deserialize(BinaryReader reader)
     {
-        Framenumber = br.ReadInt32();
-        //int length = br.ReadInt32();
-        //if (length != _ships.Length)
-        //{
-        //    _ships = new Ship[length];
-        //}
-        //for (int i = 0; i < _ships.Length; ++i)
-        //{
-        //    _ships[i].Deserialize(br);
-        //}
+        Framenumber = reader.ReadInt32();
+        int length = reader.ReadInt32();
+
+        if (length != Players.Length)
+        {
+            Players = new Player[length];
+        }
+
+        for (int i = 0; i < Players.Length; ++i)
+        {
+            Players[i].Deserialize(reader);
+        }
     }
 
     public NativeArray<byte> ToBytes()
@@ -167,6 +181,7 @@ public struct GGPOGameState : IGame
             {
                 Serialize(writer);
             }
+
             return new NativeArray<byte>(memoryStream.ToArray(), Allocator.Persistent);
         }
     }
@@ -182,17 +197,6 @@ public struct GGPOGameState : IGame
         }
     }
 
-    //private static float DegToRad(float deg)
-    //{
-    //    return PI * deg / 180;
-    //}
-
-    private static float Distance(Vector2 lhs, Vector2 rhs)
-    {
-        float x = rhs.x - lhs.x;
-        float y = rhs.y - lhs.y;
-        return Mathf.Sqrt(x * x + y * y);
-    }
 
     /*
         * InitGameState --
@@ -202,64 +206,64 @@ public struct GGPOGameState : IGame
 
     public GGPOGameState(int num_players)
     {
-        var w = _bounds.xMax - _bounds.xMin;
-        var h = _bounds.yMax - _bounds.yMin;
-        var r = h / 4;
+        // consts
+        _Speed = 1;
+
         Framenumber = 0;
         UnserializedInputsP1 = 0;
         UnserializedInputsP2 = 0;
-        //_ships = new Ship[num_players];
-        //for (int i = 0; i < _ships.Length; i++)
-        //{
-        //    _ships[i] = new Ship();
-        //    int heading = i * 360 / num_players;
-        //    float cost, sint, theta;
 
-        //    theta = (float)heading * PI / 180;
-        //    cost = Mathf.Cos(theta);
-        //    sint = Mathf.Sin(theta);
+        Players = new Player[num_players];
 
-        //    _ships[i].position.x = (w / 2) + r * cost;
-        //    _ships[i].position.y = (h / 2) + r * sint;
-        //    _ships[i].heading = (heading + 180) % 360;
-        //    _ships[i].health = STARTING_HEALTH;
-        //    _ships[i].radius = SHIP_RADIUS;
-        //}
+        for (int i = 0; i < Players.Length; i++)
+        {
+            Players[i] = new Player();
+        }
     }
 
-    //public void ParseShipInputs(long inputs, int i, out float heading, out float thrust, out int fire)
-    //{
-    //    //var ship = _ships[i];
+    public void InitPlayer(int index, Vector3 startPosition)
+    {
+        Players[index].position = startPosition;
+    }
 
-    //    //GGPORunner.LogGame($"parsing ship {i} inputs: {inputs}.");
+    public Player GetPlayer(int index)
+    {
+        return Players[index];
+    }
 
-    //    //if ((inputs & INPUT_ROTATE_RIGHT) != 0)
-    //    //{
-    //    //    heading = (ship.heading - ROTATE_INCREMENT) % 360;
-    //    //}
-    //    //else if ((inputs & INPUT_ROTATE_LEFT) != 0)
-    //    //{
-    //    //    heading = (ship.heading + ROTATE_INCREMENT + 360) % 360;
-    //    //}
-    //    //else
-    //    //{
-    //    //    heading = ship.heading;
-    //    //}
+    public void ParsePlayerInputs(long inputs, int i)
+    {
+        GGPORunner.LogGame($"parsing ship {i} inputs: {inputs}.");
+        
+        Players[i].velocity = new Vector3();
 
-    //    //if ((inputs & INPUT_THRUST) != 0)
-    //    //{
-    //    //    thrust = SHIP_THRUST;
-    //    //}
-    //    //else if ((inputs & INPUT_BREAK) != 0)
-    //    //{
-    //    //    thrust = -SHIP_THRUST;
-    //    //}
-    //    //else
-    //    //{
-    //    //    thrust = 0;
-    //    //}
-    //    //fire = (int)(inputs & INPUT_FIRE);
-    //}
+        if ((inputs & INPUT_LEFT) != 0)
+        {
+            Players[i].velocity = new Vector3(-1, 0, 0) * _Speed;
+        }
+
+        if ((inputs & INPUT_RIGHT) != 0)
+        {
+            Players[i].velocity = new Vector3(1, 0, 0) * _Speed;
+        }
+
+        if ((inputs & INPUT_FORWARD) != 0)
+        {
+            Players[i].velocity = new Vector3(0, 0, 1) * _Speed;
+        }
+
+        if ((inputs & INPUT_BACKWARD) != 0)
+        {
+            Players[i].velocity = new Vector3(0, 0, -1) * _Speed;
+        }
+    }
+
+    public void MovePlayer(int index)
+    {
+        var player = Players[index];
+
+        Players[index].position = player.position + player.velocity;
+    }
 
     public void MoveShip(int index, float heading, float thrust, int fire)
     {
@@ -390,86 +394,51 @@ public struct GGPOGameState : IGame
         UnserializedInputsP1 = inputs[0];
         UnserializedInputsP2 = inputs[1];
 
+        for (int i = 0; i < Players.Length; i++)
+        {
+            ParsePlayerInputs(inputs[i], i);
+            MovePlayer(i);
+        }    
+
         //for (int i = 0; i < _ships.Length; i++)
         //{
         //    float thrust, heading;
         //    int fire;
 
-        //    if ((disconnect_flags & (1 << i)) != 0)
-        //    {
-        //        GetShipAI(i, out heading, out thrust, out fire);
-        //    }
-        //    else
-        //    {
-        //        ParseShipInputs(inputs[i], i, out heading, out thrust, out fire);
-        //    }
-        //    MoveShip(i, heading, thrust, fire);
+            //    if ((disconnect_flags & (1 << i)) != 0)
+            //    {
+            //        GetShipAI(i, out heading, out thrust, out fire);
+            //    }
+            //    else
+            //    {
+            //        ParseShipInputs(inputs[i], i, out heading, out thrust, out fire);
+            //    }
+            //    MoveShip(i, heading, thrust, fire);
 
-        //    if (_ships[i].cooldown != 0)
-        //    {
-        //        _ships[i].cooldown--;
-        //    }
-        //}
+            //    if (_ships[i].cooldown != 0)
+            //    {
+            //        _ships[i].cooldown--;
+            //    }
+            //}
     }
 
     public long ReadInputs(int id)
     {
         long input = 0;
 
-        //if (id == 0)
-        //{
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow))
-        //    {
-        //        input |= INPUT_THRUST;
-        //    }
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow))
-        //    {
-        //        input |= INPUT_BREAK;
-        //    }
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftArrow))
-        //    {
-        //        input |= INPUT_ROTATE_LEFT;
-        //    }
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightArrow))
-        //    {
-        //        input |= INPUT_ROTATE_RIGHT;
-        //    }
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightControl))
-        //    {
-        //        input |= INPUT_FIRE;
-        //    }
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightShift))
-        //    {
-        //        input |= INPUT_BOMB;
-        //    }
-        //}
-        //else if (id == 1)
-        //{
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.F))
-        //    {
-        //        input |= INPUT_FIRE;
-        //    }
-        //    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.G))
-        //    {
-        //        input |= INPUT_BOMB;
-        //    }
-        //}
-
-
-
-        if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
             input |= INPUT_FORWARD;
         }
-        if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.S))
+        if (Input.GetKey(KeyCode.S))
         {
             input |= INPUT_BACKWARD;
         }
-        if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             input |= INPUT_LEFT;
         }
-        if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             input |= INPUT_RIGHT;
         }
@@ -489,10 +458,10 @@ public struct GGPOGameState : IGame
     {
         int hashCode = -1214587014;
         hashCode = hashCode * -1521134295 + Framenumber.GetHashCode();
-        //foreach (var ship in _ships)
-        //{
-        //    hashCode = hashCode * -1521134295 + ship.GetHashCode();
-        //}
+        foreach (var player in Players)
+        {
+            hashCode = hashCode * -1521134295 + player.GetHashCode();
+        }
         return hashCode;
     }
 }
