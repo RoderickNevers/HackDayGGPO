@@ -12,7 +12,7 @@ namespace SharedGame {
         public int PlayerIndex { get; set; }
 
         public const int MAX_PLAYERS = 2;
-        private const int FRAME_DELAY = 2;
+        private const int FRAME_DELAY = 0;
 
         public string Name { get; private set; }
         public IGame Game { get; private set; }
