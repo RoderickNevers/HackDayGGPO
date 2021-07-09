@@ -40,20 +40,16 @@ public struct Player
     public void Serialize(BinaryWriter bw)
     {
         bw.Write(position.x);
-        bw.Write(position.y);
         bw.Write(position.z);
         bw.Write(velocity.x);
-        bw.Write(velocity.y);
         bw.Write(velocity.z);
     }
 
     public void Deserialize(BinaryReader br)
     {
         position.x = br.ReadSingle();
-        position.y = br.ReadSingle();
         position.z = br.ReadSingle();
         velocity.x = br.ReadSingle();
-        velocity.y = br.ReadSingle();
         velocity.z = br.ReadSingle();
     }
 

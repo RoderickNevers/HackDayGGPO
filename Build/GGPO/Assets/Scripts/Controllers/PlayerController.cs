@@ -46,13 +46,13 @@ public class PlayerController : NetworkBehaviour
     // Physics
     private void FixedUpdate()
     {
-        UpdatePlayerPosition();
         //CharacterPhysics();
     }
 
     // Gameplay
     void Update()
     {
+        UpdatePlayerPosition();
     }
 
     void UpdatePlayerPosition()
