@@ -1,7 +1,6 @@
-using Mirror;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : MonoBehaviour
 {
     private const float GROUND_DISTANCE = 0.2f;
     private const float GRAVITY = -9.81f;

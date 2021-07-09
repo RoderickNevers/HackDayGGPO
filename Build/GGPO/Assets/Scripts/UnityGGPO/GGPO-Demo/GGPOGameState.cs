@@ -231,27 +231,29 @@ public struct GGPOGameState : IGame
     {
         GGPORunner.LogGame($"parsing ship {i} inputs: {inputs}.");
         
-        Players[i].velocity = new Vector3();
+        Players[i].velocity.Set(0, 0, 0);
 
         if ((inputs & INPUT_LEFT) != 0)
         {
-            Players[i].velocity = new Vector3(-1, 0, 0) * _Speed;
+            Players[i].velocity.Set(-1, 0, 0);
         }
 
         if ((inputs & INPUT_RIGHT) != 0)
         {
-            Players[i].velocity = new Vector3(1, 0, 0) * _Speed;
+            Players[i].velocity.Set(1, 0, 0);
         }
 
         if ((inputs & INPUT_FORWARD) != 0)
         {
-            Players[i].velocity = new Vector3(0, 0, 1) * _Speed;
+            Players[i].velocity.Set(0, 0, 1);
         }
 
         if ((inputs & INPUT_BACKWARD) != 0)
         {
-            Players[i].velocity = new Vector3(0, 0, -1) * _Speed;
+            Players[i].velocity.Set(0, 0, -1);
         }
+
+        Players[i].velocity = Players[i].velocity.normalized * _Speed;
     }
 
     public void MovePlayer(int index)

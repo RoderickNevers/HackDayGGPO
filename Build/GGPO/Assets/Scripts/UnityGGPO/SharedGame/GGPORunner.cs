@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.Collections;
+using UnityEngine;
 using UnityGGPO;
 
 namespace SharedGame {
@@ -13,6 +14,7 @@ namespace SharedGame {
 
         public const int MAX_PLAYERS = 2;
         private const int FRAME_DELAY = 0;
+        private const int FRAME_AHEAD_THRESHOLD = 2;
 
         public string Name { get; private set; }
         public IGame Game { get; private set; }
@@ -22,6 +24,8 @@ namespace SharedGame {
         public static event Action<string> OnGameLog;
 
         public static event Action<string> OnPluginLog;
+
+        public static event Action<int> OnFrameDelay;
 
         public Stopwatch frameWatch = new Stopwatch();
         public Stopwatch idleWatch = new Stopwatch();
@@ -81,7 +85,9 @@ namespace SharedGame {
         }
 
         public bool OnEventEventcodeTimesyncDelegate(int timesync_frames_ahead) {
-            Utils.Sleep(1000 * timesync_frames_ahead / 60);
+            UnityEngine.Debug.Log(string.Format("EventCode Timesync Delegate: {0} frames ahead", timesync_frames_ahead));
+            OnFrameDelay?.Invoke(timesync_frames_ahead);
+            Utils.Sleep((1000 * timesync_frames_ahead) / 60);
             return true;
         }
 
@@ -345,20 +351,6 @@ namespace SharedGame {
             // Notify ggpo that we've moved forward exactly 1 frame.
             CheckAndReport(GGPO.Session.AdvanceFrame());
 
-            // Update the performance monitor display.
-            int[] handles = new int[MAX_PLAYERS];
-            int count = 0;
-            for (int i = 0; i < GameInfo.players.Length; i++) {
-                if (GameInfo.players[i].type == GGPOPlayerType.GGPO_PLAYERTYPE_REMOTE) {
-                    handles[count++] = GameInfo.players[i].handle;
-                }
-            }
-
-            var statss = new GGPONetworkStats[count];
-            for (int i = 0; i < count; ++i) {
-                CheckAndReport(GGPO.Session.GetNetworkStats(handles[i], out statss[i]));
-            }
-            perf?.ggpoutil_perfmon_update(statss);
         }
 
         /*
@@ -394,6 +386,30 @@ namespace SharedGame {
                 }
                 frameWatch.Stop();
             }
+
+
+            //// Update the performance monitor display.
+            //int[] handles = new int[MAX_PLAYERS];
+            //int count = 0;
+            //for (int i = 0; i < GameInfo.players.Length; i++)
+            //{
+            //    if (GameInfo.players[i].type == GGPOPlayerType.GGPO_PLAYERTYPE_REMOTE)
+            //    {
+            //        handles[count++] = GameInfo.players[i].handle;
+            //    }
+            //}
+
+            //var statss = new GGPONetworkStats[count];
+            //for (int i = 0; i < count; ++i)
+            //{
+            //    CheckAndReport(GGPO.Session.GetNetworkStats(handles[i], out statss[i]));
+            //}
+
+            //if (count > 0)
+            //{
+            //    StallIfAhead(statss[0]);
+            //}
+            //perf?.ggpoutil_perfmon_update(statss);
         }
 
         /*
@@ -443,6 +459,15 @@ namespace SharedGame {
 
         public static void LogPlugin(string value) {
             OnPluginLog?.Invoke(value);
+        }
+
+        private void StallIfAhead(GGPONetworkStats stats)
+        {
+            // really shouldn't be doing this in a performance monitor
+            if (stats.local_frames_behind <= -FRAME_AHEAD_THRESHOLD)
+            {
+                Utils.Sleep((-1000 * stats.local_frames_behind) / 60);
+            }
         }
     }
 }

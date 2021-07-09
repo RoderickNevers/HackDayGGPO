@@ -7,12 +7,17 @@ using UnityGGPO;
 
 public class GGPOComponent : GameManager
 {
-    private IGameRunner runner;
+    public override void Shutdown()
+    {
+        GGPORunner.OnFrameDelay -= OnFrameDelay;
+
+        base.Shutdown();
+    }
 
     public override void StartLocalGame()
     {
-        runner = new LocalRunner(new GGPOGameState(2));
-        StartGame(runner);
+        var game = new LocalRunner(new GGPOGameState(2));
+        StartGame(game);
     }
 
     public override void StartGGPOGame(IPerfUpdate perfPanel, IList<Connections> connections, int playerIndex)
@@ -21,19 +26,24 @@ public class GGPOComponent : GameManager
         game.Init(connections, playerIndex);
         StartGame(game);
 
-        runner = game;
+        GGPORunner.OnFrameDelay += OnFrameDelay;
+    }
+
+    public override void OnFrameDelay(int framesToDelay)
+    {
+        next += framesToDelay * FRAME_LENGTH_MILLI;
     }
 
     public string DisplayCurrentInputs()
     {
         string fp = "";
 
-        if (runner != null)
+        if (Runner != null)
         {
-            GGPOGameState gameState = (GGPOGameState)runner.Game;
+            GGPOGameState gameState = (GGPOGameState)Runner.Game;
             fp = string.Format("Frame: {0} - P1 input: {1}, P2 input: {2}\n", gameState.Framenumber, gameState.UnserializedInputsP1, gameState.UnserializedInputsP2);
 
-            Debug.Log(fp);
+            // Debug.Log(fp);
         }
 
         return fp;

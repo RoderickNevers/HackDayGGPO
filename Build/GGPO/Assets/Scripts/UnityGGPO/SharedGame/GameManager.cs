@@ -19,7 +19,9 @@ namespace SharedGame {
             }
         }
 
-        private float next;
+        public const float FRAME_LENGTH_MILLI = 1f / 60f;
+        protected float next;
+        protected float nextIdle;
 
         public event Action<string> OnStatus;
 
@@ -43,7 +45,7 @@ namespace SharedGame {
             }
         }
 
-        public void Shutdown() {
+        public virtual void Shutdown() {
             if (Runner != null) {
                 Runner.Shutdown();
                 Runner = null;
@@ -58,32 +60,60 @@ namespace SharedGame {
         protected virtual void OnPreRunFrame() {
         }
 
-        private void Update() {
+        private void Update()
+        {
+            var now = Time.time;
+
             if (IsRunning != (Runner != null)) {
                 IsRunning = Runner != null;
                 OnRunningChanged?.Invoke(IsRunning);
                 if (IsRunning) {
                     OnInit?.Invoke();
+
+                    next = now;
+                    nextIdle = now;
                 }
             }
-            if (Runner != null) {
-                updateWatch.Start();
-                var now = Time.time;
-                var extraMs = Mathf.Max(0, (int)((next - now) * 1000f) - 1);
-                Runner.Idle(extraMs);
-                Thread.Sleep(extraMs);
+            if (Runner != null)
+            {
+                if (now >= next)
+                {
+                    next += FRAME_LENGTH_MILLI;
+                    //if (updateWatch.IsRunning)
+                    //{
+                    //    updateWatch.Stop();
 
-                if (now >= next) {
+                    //    string status = Runner.GetStatus(updateWatch);
+                    //    OnStatus?.Invoke(status);
+                    //    OnChecksum?.Invoke(RenderChecksum(Runner.GameInfo.periodic) + RenderChecksum(Runner.GameInfo.now));
+                    //}
+
+                    //updateWatch.Start();
+
                     OnPreRunFrame();
                     Runner.RunFrame();
-                    next = now + 1f / 60f;
                     OnStateChanged?.Invoke();
-                }
-                updateWatch.Stop();
 
-                string status = Runner.GetStatus(updateWatch);
-                OnStatus?.Invoke(status);
-                OnChecksum?.Invoke(RenderChecksum(Runner.GameInfo.periodic) + RenderChecksum(Runner.GameInfo.now));
+                    now = Time.time;
+                    var extraMs = Mathf.Max(0, (int)((next - now) * 1000f) - 1);
+                    Runner.Idle(extraMs);
+
+                    // UnityEngine.Debug.Log(string.Format("Next: {0}, Now: {1}, Diff: {2}, Extra ms: {3}", next, now, next-now, extraMs));
+                }
+
+
+                //updateWatch.Start();
+                //var now = Time.time;
+                //var extraMs = Mathf.Max(0, (int)((next - now) * 1000f) - 1);
+                //Runner.Idle(extraMs);
+                //Thread.Sleep(extraMs);
+
+                //if (now >= next) {
+                //    OnPreRunFrame();
+                //    Runner.RunFrame();
+                //    next += 1f / 60f;
+                //    OnStateChanged?.Invoke();
+                //}
             }
         }
 
@@ -98,5 +128,10 @@ namespace SharedGame {
         public abstract void StartLocalGame();
 
         public abstract void StartGGPOGame(IPerfUpdate perfPanel, IList<Connections> connections, int playerIndex);
+
+        public virtual void OnFrameDelay(int framesToDelay)
+        {
+
+        }
     }
 }
