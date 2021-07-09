@@ -87,7 +87,6 @@ namespace SharedGame {
         public bool OnEventEventcodeTimesyncDelegate(int timesync_frames_ahead) {
             UnityEngine.Debug.Log(string.Format("EventCode Timesync Delegate: {0} frames ahead", timesync_frames_ahead));
             OnFrameDelay?.Invoke(timesync_frames_ahead);
-            Utils.Sleep((1000 * timesync_frames_ahead) / 60);
             return true;
         }
 

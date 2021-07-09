@@ -29,11 +29,6 @@ public class GGPOComponent : GameManager
         GGPORunner.OnFrameDelay += OnFrameDelay;
     }
 
-    public override void OnFrameDelay(int framesToDelay)
-    {
-        next += framesToDelay * FRAME_LENGTH_MILLI;
-    }
-
     public string DisplayCurrentInputs()
     {
         string fp = "";

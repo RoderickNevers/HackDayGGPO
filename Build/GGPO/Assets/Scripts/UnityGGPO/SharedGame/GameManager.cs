@@ -79,6 +79,7 @@ namespace SharedGame {
                 if (now >= next)
                 {
                     next += FRAME_LENGTH_MILLI;
+
                     //if (updateWatch.IsRunning)
                     //{
                     //    updateWatch.Stop();
@@ -100,20 +101,6 @@ namespace SharedGame {
 
                     // UnityEngine.Debug.Log(string.Format("Next: {0}, Now: {1}, Diff: {2}, Extra ms: {3}", next, now, next-now, extraMs));
                 }
-
-
-                //updateWatch.Start();
-                //var now = Time.time;
-                //var extraMs = Mathf.Max(0, (int)((next - now) * 1000f) - 1);
-                //Runner.Idle(extraMs);
-                //Thread.Sleep(extraMs);
-
-                //if (now >= next) {
-                //    OnPreRunFrame();
-                //    Runner.RunFrame();
-                //    next += 1f / 60f;
-                //    OnStateChanged?.Invoke();
-                //}
             }
         }
 
@@ -131,7 +118,7 @@ namespace SharedGame {
 
         public virtual void OnFrameDelay(int framesToDelay)
         {
-
+            next += framesToDelay * FRAME_LENGTH_MILLI;
         }
     }
 }
