@@ -219,7 +219,7 @@ public class SteamManager : MonoBehaviour
             }
             else if (!IsFacepunchHost && connectionManager != null)
             {
-                socketManager.Receive();
+                connectionManager.Receive();
             }
         }
         catch
