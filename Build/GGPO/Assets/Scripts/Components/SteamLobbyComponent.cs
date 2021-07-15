@@ -27,7 +27,6 @@ public class SteamLobbyComponent : MonoBehaviour
     private Lobby? m_CurrentLobby;
     private int m_MaxLobbyMembers = 4;
 
-    private GGPOComponent m_GameManager;
     private SteamManager m_SteamManager;
 
     private void Start()
@@ -41,8 +40,6 @@ public class SteamLobbyComponent : MonoBehaviour
         {
             Debug.Log("Steam API init -- failure ...");
         }
-
-        m_GameManager = (GGPOComponent)SharedGame.GameManager.Instance;
 
         m_SteamManager = FindObjectOfType<SteamManager>();
         Debug.Assert(m_SteamManager != null, "Could not find SteamManager!");

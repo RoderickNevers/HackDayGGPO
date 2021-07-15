@@ -59,7 +59,7 @@ public class FacepunchSocketManager : SocketManager, FacepunchConnectionInterfac
     public void ForwardGGPOPacketToSteamworkConnection(byte[] data)
     {
         // Send data received from "remote" socket to steamworks connection
-        clientConnection.SendMessage(data);
+        clientConnection.SendMessage(data, SendType.NoDelay);
     }
 
     public void InitGGPOForwardSockets(GGPOComponent gameManager)
