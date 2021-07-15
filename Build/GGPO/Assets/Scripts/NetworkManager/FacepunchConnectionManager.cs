@@ -10,13 +10,13 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
     public override void OnConnecting(ConnectionInfo data)
     {
         base.OnConnecting(data);//The base class will accept the connection
-        Debug.Log("SocketManager OnConnecting");
+        Debug.Log("ConnectionManager OnConnecting");
     }
 
     public override void OnConnected(ConnectionInfo data)
     {
         base.OnConnected(data);
-        Debug.Log("OnConnected!!");
+        Debug.Log("ConnectionManager OnConnected!!");
 
         // Initialize GGPO session
         // ggpoSocketLayer.InitializeGGPOSocketLayer( _ );
@@ -26,7 +26,7 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
     public override void OnDisconnected(ConnectionInfo data)
     {
         base.OnDisconnected(data);
-        Debug.Log("Player disconnected");
+        Debug.Log("ConnectionManager Player disconnected");
 
         // Disconnect GGPO session
     }
@@ -34,7 +34,7 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
     public override void OnMessage(IntPtr data, int size, long messageNum, long recvTime, int channel)
     {
         // Message Received!!
-        Debug.Log("Connection Got A Message");
+        Debug.Log("ConnectionManager Connection Got A Message");
 
         ggpoSocketLayer.OnFacepunchMessageReceived(data, size);
     }

@@ -109,7 +109,7 @@ public class GGPOSocketLayer
 
     private void ListenForForwardPackets()
     {
-        IPEndPoint forwardEndPoint = new IPEndPoint(IPAddress.Any, DEFAULT_REMOTE_GGPO_PORT);
+        IPEndPoint forwardEndPoint = new IPEndPoint("127.0.0.1", DEFAULT_REMOTE_GGPO_PORT);
         while (true)
         {
             byte[] data = ggpoForwardSendSocket.Receive(ref forwardEndPoint);
