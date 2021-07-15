@@ -236,6 +236,8 @@ public class SteamManager : MonoBehaviour
     // Other user (client) will use ConnectionManager to connect to host SocketManager using hostId
     public void StartSteamworksConnection(bool asHost, SteamId hostId)
     {
+        IsFacepunchHost = asHost;
+
         if (asHost)
         {
             socketManager = SteamNetworkingSockets.CreateRelaySocket<FacepunchSocketManager>();
