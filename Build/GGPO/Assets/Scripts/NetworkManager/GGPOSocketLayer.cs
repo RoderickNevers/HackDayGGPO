@@ -89,7 +89,8 @@ public class GGPOSocketLayer
         this.facepunchConnection = facepunchConnection;
 
         // This socket is for receiving data from the remote client
-        ggpoForwardReceiveSocket = new UdpClient(DEFAULT_LOCAL_GGPO_PORT);
+        ggpoForwardReceiveSocket = new UdpClient();
+        ggpoForwardReceiveSocket.Connect(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
 
         // This socket receives "outgoing" packets which we forward to Steamworks
         ggpoForwardSendSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
