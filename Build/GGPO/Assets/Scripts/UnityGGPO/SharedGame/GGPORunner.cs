@@ -192,7 +192,7 @@ namespace SharedGame {
                     if (playerIndex == i) {
                         player.type = GGPOPlayerType.GGPO_PLAYERTYPE_LOCAL;
                         player.ip_address = "";
-                        player.port = 0;
+                        player.port = 7000;
                     }
                     else if (connections[i].spectator) {
                         player.type = GGPOPlayerType.GGPO_PLAYERTYPE_SPECTATOR;
