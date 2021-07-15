@@ -108,6 +108,8 @@ public class SteamLobbyComponent : MonoBehaviour
         try
         {
             m_CurrentLobby = await CreateLobbyAsync();
+            m_CurrentLobby?.SetJoinable(true);
+            m_CurrentLobby?.SetPublic();
         }
         catch (Exception e)
         {
