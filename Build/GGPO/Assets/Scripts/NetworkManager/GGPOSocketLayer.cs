@@ -42,6 +42,11 @@ public class GGPOSocketLayer
         }
     }
 
+    public void StopGGPOSession()
+    {
+        gameManager.StopGGPOGame();
+    }
+
     private List<Connections> GetConnections()
     {
         var list = new List<Connections>();

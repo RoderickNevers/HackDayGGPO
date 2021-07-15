@@ -23,8 +23,7 @@ public class FacepunchSocketManager : SocketManager, FacepunchConnectionInterfac
         clientConnection = connection;
 
         // Initialize GGPO session
-        // ggpoSocketLayer.InitializeGGPOSocketLayer( _ );
-        // ggpoSocketLayer.StartGGPOSession(true);
+        ggpoSocketLayer.StartGGPOSession(true);
     }
 
     public override void OnDisconnected(Connection connection, ConnectionInfo data)
@@ -35,6 +34,7 @@ public class FacepunchSocketManager : SocketManager, FacepunchConnectionInterfac
         if (connection.Id == clientConnection.Id)
         {
             // Disconnect GGPO session
+            CloseGGPOForwardSockets();
         }
         else
         {
@@ -62,14 +62,16 @@ public class FacepunchSocketManager : SocketManager, FacepunchConnectionInterfac
         clientConnection.SendMessage(data);
     }
 
-    public void InitGGPOForwardSockets()
+    public void InitGGPOForwardSockets(GGPOComponent gameManager)
     {
         ggpoSocketLayer = new GGPOSocketLayer();
+        ggpoSocketLayer.InitializeGGPOSocketLayer(gameManager);
         ggpoSocketLayer.InitGGPOForwardSockets(this);
     }
 
     public void CloseGGPOForwardSockets()
     {
+        ggpoSocketLayer.StopGGPOSession();
         ggpoSocketLayer.CloseGGPOForwardSockets();
     }
 }

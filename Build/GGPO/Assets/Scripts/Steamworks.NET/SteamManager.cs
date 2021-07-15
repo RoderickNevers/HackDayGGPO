@@ -54,6 +54,8 @@ public class SteamManager : MonoBehaviour
     private FacepunchConnectionManager connectionManager;
     private FacepunchSocketManager socketManager;
 
+    private GGPOComponent m_GameManager;
+
     //protected SteamAPIWarningMessageHook_t m_SteamAPIWarningMessageHook;
 
     //[AOT.MonoPInvokeCallback(typeof(SteamAPIWarningMessageHook_t))]
@@ -155,6 +157,8 @@ public class SteamManager : MonoBehaviour
 
         // Init P2P relay
         SteamNetworkingUtils.InitRelayNetworkAccess();
+
+        m_GameManager = (GGPOComponent)SharedGame.GameManager.Instance;
     }
 
     // This should only ever get called on first load and after an Assembly reload, You should never Disable the Steamworks Manager yourself.
@@ -235,12 +239,12 @@ public class SteamManager : MonoBehaviour
         if (asHost)
         {
             socketManager = SteamNetworkingSockets.CreateRelaySocket<FacepunchSocketManager>();
-            socketManager.InitGGPOForwardSockets();
+            socketManager.InitGGPOForwardSockets(m_GameManager);
         }
         else
         {
             connectionManager = SteamNetworkingSockets.ConnectRelay<FacepunchConnectionManager>(hostId);
-            connectionManager.InitGGPOForwardSockets();
+            connectionManager.InitGGPOForwardSockets(m_GameManager);
         }
     }
 
@@ -255,10 +259,10 @@ public class SteamManager : MonoBehaviour
             }
             else if (socketManager != null)
             {
-                //foreach (var clientConnection in socketManager.Connected)
-                //{
-                //    clientConnection.Close();
-                //}
+                foreach (var clientConnection in socketManager.Connected)
+                {
+                    clientConnection.Close();
+                }
                 socketManager.Close();
             }
         }

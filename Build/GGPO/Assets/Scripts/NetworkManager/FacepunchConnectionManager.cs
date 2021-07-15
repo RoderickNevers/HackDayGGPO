@@ -19,8 +19,7 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
         Debug.Log("ConnectionManager OnConnected!!");
 
         // Initialize GGPO session
-        // ggpoSocketLayer.InitializeGGPOSocketLayer( _ );
-        // ggpoSocketLayer.StartGGPOSession(false);
+        ggpoSocketLayer.StartGGPOSession(false);
     }
 
     public override void OnDisconnected(ConnectionInfo data)
@@ -29,6 +28,7 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
         Debug.Log("ConnectionManager Player disconnected");
 
         // Disconnect GGPO session
+        CloseGGPOForwardSockets();
     }
 
     public override void OnMessage(IntPtr data, int size, long messageNum, long recvTime, int channel)
@@ -45,14 +45,16 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
         Connection.SendMessage(data);
     }
 
-    public void InitGGPOForwardSockets()
+    public void InitGGPOForwardSockets(GGPOComponent gameManager)
     {
         ggpoSocketLayer = new GGPOSocketLayer();
+        ggpoSocketLayer.InitializeGGPOSocketLayer(gameManager);
         ggpoSocketLayer.InitGGPOForwardSockets(this);
     }
 
     public void CloseGGPOForwardSockets()
     {
+        ggpoSocketLayer.StopGGPOSession();
         ggpoSocketLayer.CloseGGPOForwardSockets();
     }
 }
