@@ -84,7 +84,7 @@ public class GGPOSocketLayer
         ggpoForwardReceiveSocket = new UdpClient(DEFAULT_LOCAL_GGPO_PORT);
 
         // This socket receives "outgoing" packets which we forward to Steamworks
-        ggpoForwardSendSocket = new UdpClient();
+        ggpoForwardSendSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
 
         // Spawn thread
         ggpoForwardThread = new Thread(ListenForForwardPackets);
@@ -109,10 +109,10 @@ public class GGPOSocketLayer
 
     private void ListenForForwardPackets()
     {
-        IPEndPoint forwardEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), DEFAULT_REMOTE_GGPO_PORT);
+        IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         while (true)
         {
-            byte[] data = ggpoForwardSendSocket.Receive(ref forwardEndPoint);
+            byte[] data = ggpoForwardSendSocket.Receive(ref RemoteIpEndPoint);
 
             if (data.Length > 0)
             {

@@ -196,6 +196,8 @@ public class SteamManager : MonoBehaviour
             return;
         }
 
+        CloseSteamworksConnection();
+
         SteamClient.Shutdown();
     }
 
@@ -232,7 +234,7 @@ public class SteamManager : MonoBehaviour
     {
         if (asHost)
         {
-            socketManager = SteamNetworkingSockets.CreateRelaySocket<FacepunchSocketManager>(0);
+            socketManager = SteamNetworkingSockets.CreateRelaySocket<FacepunchSocketManager>();
             socketManager.InitGGPOForwardSockets();
         }
         else
