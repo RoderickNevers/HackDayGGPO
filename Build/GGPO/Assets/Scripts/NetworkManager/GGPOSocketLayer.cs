@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
+using SharedGame;
+
 
 public interface FacepunchConnectionInterface
 {
@@ -14,11 +17,48 @@ public class GGPOSocketLayer
     private const int DEFAULT_LOCAL_GGPO_PORT = 7000; // receiving
     private const int DEFAULT_REMOTE_GGPO_PORT = 7001; // sending
 
+    private GGPOComponent gameManager;
+
     private UdpClient ggpoForwardReceiveSocket;
     private UdpClient ggpoForwardSendSocket;
     private Thread ggpoForwardThread;
 
     private FacepunchConnectionInterface facepunchConnection;
+
+    public void InitializeGGPOSocketLayer(GGPOComponent gameManager)
+    {
+        this.gameManager = gameManager;
+    }
+
+    public void StartGGPOSession(bool isHost)
+    {
+        if (isHost)
+        {
+            gameManager.StartGGPOGame(null, GetConnections(), 0);
+        }
+        else
+        {
+            gameManager.StartGGPOGame(null, GetConnections(), 1);
+        }
+    }
+
+    private List<Connections> GetConnections()
+    {
+        var list = new List<Connections>();
+        list.Add(new Connections()
+        {
+            ip = "127.0.0.1",
+            port = DEFAULT_REMOTE_GGPO_PORT,
+            spectator = false
+        });
+        list.Add(new Connections()
+        {
+            ip = "127.0.0.1",
+            port = DEFAULT_LOCAL_GGPO_PORT,
+            spectator = false
+        });
+        return list;
+    }
 
     public void OnFacepunchMessageReceived(IntPtr data, int size)
     {

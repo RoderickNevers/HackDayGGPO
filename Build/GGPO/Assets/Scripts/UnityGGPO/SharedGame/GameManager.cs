@@ -19,7 +19,7 @@ namespace SharedGame {
             }
         }
 
-        public const float FRAME_LENGTH_MILLI = 1f / 60f;
+        public const float FRAME_LENGTH_SEC = 1f / 60f;
         protected float next;
         protected float nextIdle;
 
@@ -78,7 +78,7 @@ namespace SharedGame {
             {
                 if (now >= next)
                 {
-                    next += FRAME_LENGTH_MILLI;
+                    next += FRAME_LENGTH_SEC;
 
                     //if (updateWatch.IsRunning)
                     //{
@@ -118,7 +118,7 @@ namespace SharedGame {
 
         public virtual void OnFrameDelay(int framesToDelay)
         {
-            next += framesToDelay * FRAME_LENGTH_MILLI;
+            next += framesToDelay * FRAME_LENGTH_SEC;
         }
     }
 }

@@ -19,6 +19,8 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
         Debug.Log("OnConnected!!");
 
         // Initialize GGPO session
+        // ggpoSocketLayer.InitializeGGPOSocketLayer( _ );
+        // ggpoSocketLayer.StartGGPOSession(false);
     }
 
     public override void OnDisconnected(ConnectionInfo data)
