@@ -247,11 +247,22 @@ public class SteamManager : MonoBehaviour
         // Close connection
         try
         {
-            connectionManager.Close();
+            if (connectionManager != null)
+            {
+                connectionManager.Close();
+            }
+            else if (socketManager != null)
+            {
+                //foreach (var clientConnection in socketManager.Connected)
+                //{
+                //    clientConnection.Close();
+                //}
+                socketManager.Close();
+            }
         }
         catch
         {
-            Debug.Log("Error closing connection manager");
+            Debug.Log("Error closing connection/socket manager");
         }
     }
 

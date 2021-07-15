@@ -129,6 +129,10 @@ public class SteamLobbyComponent : MonoBehaviour
             // Start game?
             Debug.Log($"OnLobbyGameCreated - I am the host!!\n");
         }
+        else
+        {
+            m_SteamManager.StartSteamworksConnection(false, steamId);
+        }
     }
 
     private async void CreateLobby()
@@ -185,16 +189,17 @@ public class SteamLobbyComponent : MonoBehaviour
     {
         if (m_CurrentLobby.HasValue && m_CurrentLobby.Value.IsOwnedBy(SteamClient.SteamId))
         {
+            // Take the role of host
+            m_SteamManager.StartSteamworksConnection(true, SteamClient.SteamId);
+
+            // Alert all in lobby
             m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
         }
-
-        // Take the role of host
-        // m_SteamManager.StartSteamworksConnection(true, SteamClient.SteamId);
     }
 
     private void EndSession()
     {
-
+        m_SteamManager.CloseSteamworksConnection();
     }
 
     //private void ListLobbies()
