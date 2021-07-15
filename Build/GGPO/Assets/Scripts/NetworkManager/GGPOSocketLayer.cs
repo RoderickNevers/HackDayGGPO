@@ -14,10 +14,11 @@ public interface FacepunchConnectionInterface
 
 public class GGPOSocketLayer
 {
-    private const int DEFAULT_LOCAL_GGPO_PORT = 7000; // receiving
-    private const int DEFAULT_REMOTE_GGPO_PORT = 7001; // sending
+    private const ushort DEFAULT_LOCAL_GGPO_PORT = 7000; // receiving
+    private const ushort DEFAULT_REMOTE_GGPO_PORT = 7001; // sending
 
     private GGPOComponent gameManager;
+    private bool isHost;
 
     private UdpClient ggpoForwardReceiveSocket;
     private UdpClient ggpoForwardSendSocket;
@@ -32,6 +33,8 @@ public class GGPOSocketLayer
 
     public void StartGGPOSession(bool isHost)
     {
+        this.isHost = isHost;
+
         if (isHost)
         {
             gameManager.StartGGPOGame(null, GetConnections(), 0);
@@ -53,13 +56,13 @@ public class GGPOSocketLayer
         list.Add(new Connections()
         {
             ip = "127.0.0.1",
-            port = DEFAULT_REMOTE_GGPO_PORT,
+            port = isHost ? DEFAULT_LOCAL_GGPO_PORT : DEFAULT_REMOTE_GGPO_PORT,
             spectator = false
         });
         list.Add(new Connections()
         {
             ip = "127.0.0.1",
-            port = DEFAULT_LOCAL_GGPO_PORT,
+            port = isHost ? DEFAULT_REMOTE_GGPO_PORT : DEFAULT_LOCAL_GGPO_PORT,
             spectator = false
         });
         return list;
