@@ -99,7 +99,9 @@ public class SteamLobbyComponent : MonoBehaviour
     private void OnGameLobbyJoinRequested(Lobby lobby, SteamId steamID)
     {
         Debug.Log($"Barging, uninvited into {lobby.Owner.Name}'s Lobby.\n");
-        JoinLobby(steamID);
+        m_CurrentLobby = lobby;
+        lobby.Join();
+        //JoinLobby(steamID);
     }
 
     private async void CreateLobby()
@@ -127,7 +129,7 @@ public class SteamLobbyComponent : MonoBehaviour
         Debug.Log("Trying to join lobby ...");
         try
         {
-            await JoinLobbyAsync(lobbyToJoin);
+            m_CurrentLobby = await JoinLobbyAsync(lobbyToJoin);
         }
         catch (Exception e)
         {
