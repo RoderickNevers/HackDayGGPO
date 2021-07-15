@@ -16,6 +16,9 @@ public class SteamLobbyComponent : MonoBehaviour
 
     [SerializeField] private Button m_LeaveBtn;
 
+    [SerializeField] private Button m_StartSessionBtn;
+    [SerializeField] private Button m_EndSessionBtn;
+
     [SerializeField] private Button m_ListLobbiesBtn;
     [SerializeField] private Button m_ListLobbyMembersBtn;
     [SerializeField] private TMP_Text m_LobbyData;
@@ -23,6 +26,9 @@ public class SteamLobbyComponent : MonoBehaviour
 
     private Lobby? m_CurrentLobby;
     private int m_MaxLobbyMembers = 4;
+
+    private GGPOComponent m_GameManager;
+    private SteamManager m_SteamManager;
 
     private void Start()
     {
@@ -35,6 +41,11 @@ public class SteamLobbyComponent : MonoBehaviour
         {
             Debug.Log("Steam API init -- failure ...");
         }
+
+        m_GameManager = (GGPOComponent)SharedGame.GameManager.Instance;
+
+        m_SteamManager = FindObjectOfType<SteamManager>();
+        Debug.Assert(m_SteamManager != null, "Could not find SteamManager!");
     }
 
     private void AddListeners()
@@ -44,8 +55,13 @@ public class SteamLobbyComponent : MonoBehaviour
         SteamMatchmaking.OnLobbyMemberJoined += OnLobbyMemberJoined;
         SteamFriends.OnGameLobbyJoinRequested += OnGameLobbyJoinRequested;
 
+        // Match starting
+        SteamMatchmaking.OnLobbyGameCreated += OnLobbyGameCreated;
+
         m_CreateBtn.onClick.AddListener(CreateLobby);
         m_LeaveBtn.onClick.AddListener(LeaveLobby);
+        m_StartSessionBtn.onClick.AddListener(StartSession);
+        m_EndSessionBtn.onClick.AddListener(EndSession);
         //m_ListLobbiesBtn.onClick.AddListener(ListLobbies);
         //m_ListLobbyMembersBtn.onClick.AddListener(ListLobbyMembers);
     }
@@ -104,6 +120,17 @@ public class SteamLobbyComponent : MonoBehaviour
         //JoinLobby(steamID);
     }
 
+    private void OnLobbyGameCreated(Lobby lobby, uint ip, ushort port, SteamId steamId)
+    {
+        Debug.Log($"OnLobbyGameCreated for {lobby.Owner.Name}'s Lobby. {steamId.AccountId} is the host!\n");
+
+        if (lobby.Owner.Id == SteamClient.SteamId)
+        {
+            // Start game?
+            Debug.Log($"OnLobbyGameCreated - I am the host!!\n");
+        }
+    }
+
     private async void CreateLobby()
     {
         Debug.Log("Trying to create lobby ...");
@@ -153,6 +180,22 @@ public class SteamLobbyComponent : MonoBehaviour
     {
         m_CurrentLobby?.InviteFriend(friend);
     }    
+
+    private void StartSession()
+    {
+        if (m_CurrentLobby.HasValue && m_CurrentLobby.Value.IsOwnedBy(SteamClient.SteamId))
+        {
+            m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
+        }
+
+        // Take the role of host
+        // m_SteamManager.StartSteamworksConnection(true, SteamClient.SteamId);
+    }
+
+    private void EndSession()
+    {
+
+    }
 
     //private void ListLobbies()
     //{

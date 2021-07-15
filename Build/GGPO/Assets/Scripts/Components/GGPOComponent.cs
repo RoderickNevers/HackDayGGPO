@@ -29,6 +29,15 @@ public class GGPOComponent : GameManager
         GGPORunner.OnFrameDelay += OnFrameDelay;
     }
 
+    public void StopGGPOGame()
+    {
+        if (Runner is GGPORunner)
+        {
+            GGPORunner ggpoRunner = (GGPORunner)Runner;
+            ggpoRunner.Exit();
+        }
+    }
+
     public string DisplayCurrentInputs()
     {
         string fp = "";
