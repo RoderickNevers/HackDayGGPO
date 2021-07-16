@@ -9,7 +9,7 @@ using SharedGame;
 
 public interface FacepunchConnectionInterface
 {
-    public void ForwardGGPOPacketToSteamworkConnection(byte[] data);
+    void ForwardGGPOPacketToSteamworkConnection(byte[] data);
 }
 
 public class GGPOSocketLayer
@@ -135,14 +135,13 @@ public class GGPOSocketLayer
 
     private void ListenForForwardPackets()
     {
-        IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         while (true)
         {
-            byte[] recData = ggpoRemoteSocket.Receive(ref RemoteIpEndPoint);
+            byte[] recData = ggpoRemoteSocket.Receive(ref localEndPoint);
 
             if (recData.Length > 0)
             {
-                Debug.Log("Receive from remote");
+                Debug.Log("send to remote client");
                 ForwardGGPOPacketToSteamworkConnection(recData);
             }
 
@@ -150,10 +149,10 @@ public class GGPOSocketLayer
             if (byteDataQueue.Count > 0)
             {
                 byte[] sendData;
-                if (byteDataQueue.TryDequeue(out sendData) && sendData.Length > 0)
+                if (byteDataQueue.TryDequeue(out sendData))
                 {
-                    Debug.Log("send to local");
-                    ggpoRemoteSocket.Send(sendData, sendData.Length);
+                    Debug.Log("send to local port");
+                    ggpoRemoteSocket.Send(sendData, sendData.Length, localEndPoint);
                 }
             }
         }
