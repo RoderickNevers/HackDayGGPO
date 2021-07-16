@@ -29,6 +29,8 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
 
         // Disconnect GGPO session
         CloseGGPOForwardSockets();
+
+        Close();
     }
 
     public override void OnMessage(IntPtr data, int size, long messageNum, long recvTime, int channel)
@@ -43,6 +45,11 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
     {
         // Send data received from "remote" socket to steamworks connection
         Connection.SendMessage(data, SendType.NoDelay);
+    }
+
+    public ConnectionInfo GetConnectionInfo()
+    {
+        return ConnectionInfo;
     }
 
     public void InitGGPOForwardSockets(GGPOComponent gameManager)

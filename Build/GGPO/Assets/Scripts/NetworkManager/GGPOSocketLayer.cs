@@ -1,3 +1,4 @@
+using Steamworks.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
@@ -10,12 +11,15 @@ using SharedGame;
 public interface FacepunchConnectionInterface
 {
     public void ForwardGGPOPacketToSteamworkConnection(byte[] data);
+
+    public ConnectionInfo GetConnectionInfo();
 }
 
 public class GGPOSocketLayer
 {
     private const ushort DEFAULT_LOCAL_GGPO_PORT = 7000; // receiving
     private const ushort DEFAULT_REMOTE_GGPO_PORT = 7001; // sending
+    private const string LOCAL_IP = "127.0.0.1";
 
     private GGPOComponent gameManager;
     private bool isHost;
@@ -56,17 +60,20 @@ public class GGPOSocketLayer
 
     private List<Connections> GetConnections()
     {
+        ConnectionInfo connectionInfo = facepunchConnection.GetConnectionInfo();
+        Debug.Log($"Remote client IP is {connectionInfo.Address.ToString()}");
+
         var list = new List<Connections>();
         list.Add(new Connections()
         {
-            ip = "127.0.0.1",
-            port = isHost ? DEFAULT_LOCAL_GGPO_PORT : DEFAULT_REMOTE_GGPO_PORT,
+            ip = isHost ? connectionInfo.Address.Address.ToString() : LOCAL_IP,
+            port = DEFAULT_LOCAL_GGPO_PORT,
             spectator = false
         });
         list.Add(new Connections()
         {
-            ip = "127.0.0.1",
-            port = isHost ? DEFAULT_REMOTE_GGPO_PORT : DEFAULT_LOCAL_GGPO_PORT,
+            ip = isHost ? LOCAL_IP : connectionInfo.Address.ToString(),
+            port = DEFAULT_REMOTE_GGPO_PORT,
             spectator = false
         });
         return list;
@@ -110,8 +117,8 @@ public class GGPOSocketLayer
             //ggpoForwardSendSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
 
             // Spawn thread
-            ggpoForwardThread = new Thread(ListenForForwardPackets);
-            ggpoForwardThread.Start();
+            //ggpoForwardThread = new Thread(ListenForForwardPackets);
+            //ggpoForwardThread.Start();
         }
     }
 
@@ -135,10 +142,9 @@ public class GGPOSocketLayer
 
     private void ListenForForwardPackets()
     {
-        IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         while (true)
         {
-            byte[] recData = ggpoRemoteSocket.Receive(ref RemoteIpEndPoint);
+            byte[] recData = ggpoRemoteSocket.Receive(ref localEndPoint);
 
             if (recData.Length > 0)
             {
@@ -162,6 +168,6 @@ public class GGPOSocketLayer
     private void ForwardGGPOPacketToSteamworkConnection(byte[] data)
     {
         // Send data to either SocketManager or ConnectionManager
-        facepunchConnection.ForwardGGPOPacketToSteamworkConnection(data);
+        // facepunchConnection.ForwardGGPOPacketToSteamworkConnection(data);
     }
 }
