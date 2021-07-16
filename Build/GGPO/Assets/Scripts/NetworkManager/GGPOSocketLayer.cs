@@ -97,9 +97,7 @@ public class GGPOSocketLayer
 
             // This socket is for receiving data from the remote client
             localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
-
             ggpoRemoteSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
-            ggpoRemoteSocket.Connect(localEndPoint);
 
             byteDataQueue = new ConcurrentQueue<byte[]>();
 
