@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
 using SharedGame;
-
 
 public interface FacepunchConnectionInterface
 {
@@ -23,6 +23,10 @@ public class GGPOSocketLayer
     private UdpClient ggpoForwardReceiveSocket;
     private UdpClient ggpoForwardSendSocket;
     private Thread ggpoForwardThread;
+
+    private IPEndPoint localEndPoint;
+    private UdpClient ggpoRemoteSocket;
+    private ConcurrentQueue<byte[]> byteDataQueue;
 
     private FacepunchConnectionInterface facepunchConnection;
 
@@ -76,7 +80,8 @@ public class GGPOSocketLayer
             byte[] ggpoPacket = new byte[size];
             System.Runtime.InteropServices.Marshal.Copy(data, ggpoPacket, 0, size);
 
-            ggpoForwardReceiveSocket.Send(ggpoPacket, size);
+            byteDataQueue.Enqueue(ggpoPacket);
+            // ggpoForwardReceiveSocket.Send(ggpoPacket, size);
         }
         catch
         {
@@ -89,11 +94,16 @@ public class GGPOSocketLayer
         this.facepunchConnection = facepunchConnection;
 
         // This socket is for receiving data from the remote client
-        ggpoForwardReceiveSocket = new UdpClient();
-        ggpoForwardReceiveSocket.Connect(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
+        localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
 
-        // This socket receives "outgoing" packets which we forward to Steamworks
-        ggpoForwardSendSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
+        ggpoRemoteSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
+        ggpoRemoteSocket.Connect(localEndPoint);
+
+        //ggpoForwardReceiveSocket = new UdpClient();
+        //ggpoForwardReceiveSocket.Connect(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
+
+        //// This socket receives "outgoing" packets which we forward to Steamworks
+        //ggpoForwardSendSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
 
         // Spawn thread
         ggpoForwardThread = new Thread(ListenForForwardPackets);
@@ -111,8 +121,8 @@ public class GGPOSocketLayer
             Debug.Log("Forward thread aborted");
         }
 
-        ggpoForwardReceiveSocket.Close();
-        ggpoForwardSendSocket.Close();
+        //ggpoForwardReceiveSocket.Close();
+        //ggpoForwardSendSocket.Close();
     }
 
     private void ListenForForwardPackets()
@@ -120,11 +130,21 @@ public class GGPOSocketLayer
         IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         while (true)
         {
-            byte[] data = ggpoForwardSendSocket.Receive(ref RemoteIpEndPoint);
+            byte[] recData = ggpoRemoteSocket.Receive(ref RemoteIpEndPoint);
 
-            if (data.Length > 0)
+            if (recData.Length > 0)
             {
-                ForwardGGPOPacketToSteamworkConnection(data);
+                ForwardGGPOPacketToSteamworkConnection(recData);
+            }
+
+            // send data if there's any
+            if (byteDataQueue.Count > 0)
+            {
+                byte[] sendData;
+                while (byteDataQueue.TryDequeue(out sendData) && sendData.Length > 0)
+                {
+                    ggpoRemoteSocket.Send(sendData, sendData.Length);
+                }
             }
         }
     }
