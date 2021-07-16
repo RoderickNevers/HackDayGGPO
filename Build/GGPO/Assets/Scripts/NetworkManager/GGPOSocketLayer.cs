@@ -17,11 +17,11 @@ public class GGPOSocketLayer
     private const ushort DEFAULT_LOCAL_GGPO_PORT = 7000; // receiving
     private const ushort DEFAULT_REMOTE_GGPO_PORT = 7001; // sending
 
+    private const int PACKET_BUFFER_SIZE = 200;
+
     private GGPOComponent gameManager;
     private bool isHost;
-
-    private UdpClient ggpoForwardReceiveSocket;
-    private UdpClient ggpoForwardSendSocket;
+    
     private Thread ggpoForwardThread;
 
     private IPEndPoint localEndPoint;
@@ -29,7 +29,7 @@ public class GGPOSocketLayer
 
     private UdpClient ggpoRemoteSocketSend;
     private UdpClient ggpoRemoteSocketReceive;
-    private ConcurrentQueue<byte[]> byteDataQueue;
+    private byte[] packetReceiveBuffer;
 
     private FacepunchConnectionInterface facepunchConnection;
 
@@ -80,11 +80,13 @@ public class GGPOSocketLayer
         try
         {
             // forward data to listening GGPO socket
-            byte[] ggpoPacket = new byte[size];
-            System.Runtime.InteropServices.Marshal.Copy(data, ggpoPacket, 0, size);
-
-            // byteDataQueue.Enqueue(ggpoPacket);
-            ggpoRemoteSocketSend.Send(ggpoPacket, size, localEndPoint);
+            if (size > packetReceiveBuffer.Length)
+            {
+                packetReceiveBuffer = new byte[size];
+            }
+            System.Runtime.InteropServices.Marshal.Copy(data, packetReceiveBuffer, 0, size);
+            
+            ggpoRemoteSocketSend.Send(packetReceiveBuffer, size, localEndPoint);
         }
         catch
         {
@@ -100,7 +102,6 @@ public class GGPOSocketLayer
         localEndPoint = new IPEndPoint(IPAddress.Loopback, DEFAULT_LOCAL_GGPO_PORT);
         remoteEndPoint = new IPEndPoint(IPAddress.Loopback, DEFAULT_REMOTE_GGPO_PORT);
 
-
         ggpoRemoteSocketReceive = new UdpClient();
         ggpoRemoteSocketReceive.ExclusiveAddressUse = false;
         ggpoRemoteSocketReceive.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -111,14 +112,7 @@ public class GGPOSocketLayer
         ggpoRemoteSocketSend.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
         ggpoRemoteSocketSend.Client.Bind(remoteEndPoint);
 
-
-        byteDataQueue = new ConcurrentQueue<byte[]>();
-
-        //ggpoForwardReceiveSocket = new UdpClient();
-        //ggpoForwardReceiveSocket.Connect(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
-
-        //// This socket receives "outgoing" packets which we forward to Steamworks
-        //ggpoForwardSendSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
+        packetReceiveBuffer = new byte[PACKET_BUFFER_SIZE];
 
         // Spawn thread
         ggpoForwardThread = new Thread(ListenForForwardPackets);
@@ -137,10 +131,7 @@ public class GGPOSocketLayer
         }
 
         ggpoRemoteSocketReceive.Close();
-        ggpoRemoteSocketSend.Close();
-
-        //ggpoForwardReceiveSocket.Close();
-        //ggpoForwardSendSocket.Close();
+        ggpoRemoteSocketSend.Close();\
 
         this.facepunchConnection = null;
     }
