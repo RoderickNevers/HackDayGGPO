@@ -91,23 +91,28 @@ public class GGPOSocketLayer
 
     public void InitGGPOForwardSockets(FacepunchConnectionInterface facepunchConnection)
     {
-        this.facepunchConnection = facepunchConnection;
+        if (this.facepunchConnection == null)
+        {
+            this.facepunchConnection = facepunchConnection;
 
-        // This socket is for receiving data from the remote client
-        localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
+            // This socket is for receiving data from the remote client
+            localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
 
-        ggpoRemoteSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
-        ggpoRemoteSocket.Connect(localEndPoint);
+            ggpoRemoteSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
+            ggpoRemoteSocket.Connect(localEndPoint);
 
-        //ggpoForwardReceiveSocket = new UdpClient();
-        //ggpoForwardReceiveSocket.Connect(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
+            byteDataQueue = new ConcurrentQueue<byte[]>();
 
-        //// This socket receives "outgoing" packets which we forward to Steamworks
-        //ggpoForwardSendSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
+            //ggpoForwardReceiveSocket = new UdpClient();
+            //ggpoForwardReceiveSocket.Connect(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
 
-        // Spawn thread
-        ggpoForwardThread = new Thread(ListenForForwardPackets);
-        ggpoForwardThread.Start();
+            //// This socket receives "outgoing" packets which we forward to Steamworks
+            //ggpoForwardSendSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
+
+            // Spawn thread
+            ggpoForwardThread = new Thread(ListenForForwardPackets);
+            ggpoForwardThread.Start();
+        }
     }
 
     public void CloseGGPOForwardSockets()
@@ -121,8 +126,11 @@ public class GGPOSocketLayer
             Debug.Log("Forward thread aborted");
         }
 
+        ggpoRemoteSocket.Close();
         //ggpoForwardReceiveSocket.Close();
         //ggpoForwardSendSocket.Close();
+
+        this.facepunchConnection = null;
     }
 
     private void ListenForForwardPackets()
