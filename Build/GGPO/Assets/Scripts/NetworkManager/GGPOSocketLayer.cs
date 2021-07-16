@@ -142,6 +142,7 @@ public class GGPOSocketLayer
 
             if (recData.Length > 0)
             {
+                Debug.Log("Receive from remote");
                 ForwardGGPOPacketToSteamworkConnection(recData);
             }
 
@@ -149,8 +150,9 @@ public class GGPOSocketLayer
             if (byteDataQueue.Count > 0)
             {
                 byte[] sendData;
-                while (byteDataQueue.TryDequeue(out sendData) && sendData.Length > 0)
+                if (byteDataQueue.TryDequeue(out sendData) && sendData.Length > 0)
                 {
+                    Debug.Log("send to local");
                     ggpoRemoteSocket.Send(sendData, sendData.Length);
                 }
             }

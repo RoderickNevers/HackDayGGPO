@@ -34,7 +34,7 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
     public override void OnMessage(IntPtr data, int size, long messageNum, long recvTime, int channel)
     {
         // Message Received!!
-        Debug.Log("ConnectionManager Connection Got A Message");
+        // Debug.Log("ConnectionManager Connection Got A Message");
 
         ggpoSocketLayer.OnFacepunchMessageReceived(data, size);
     }
