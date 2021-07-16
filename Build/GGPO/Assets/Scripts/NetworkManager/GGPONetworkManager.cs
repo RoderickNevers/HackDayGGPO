@@ -5,7 +5,6 @@ using UnityEngine;
 public class GGPONetworkManager : MonoBehaviour, IGameView
 {
     [SerializeField] private GGPOComponent _GGPOComponent;
-    [SerializeField] private ReplayManager _ReplayManager;
     public GameObject playerPrefab;
     public Transform _P1Spawn;
     public Transform _P2Spawn;
@@ -50,13 +49,11 @@ public class GGPONetworkManager : MonoBehaviour, IGameView
 
         GameObject player = Instantiate(playerPrefab, start.position, start.rotation);
         PlayerControllers[playerIndex] = player.GetComponent<GGPOPlayerController>();
-        PlayerControllers[playerIndex].ReplayManager = _ReplayManager;
-        PlayerControllers[playerIndex].Setup();
     }
 
     private void ResetView(GGPOGameState gs)
     {
-        var players = gs.Players;
+        Player[] players = gs.Players;
         PlayerControllers = new GGPOPlayerController[players.Length];
 
         for (int i = 0; i < players.Length; ++i)

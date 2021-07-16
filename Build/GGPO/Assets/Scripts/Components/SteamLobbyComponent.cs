@@ -1,6 +1,4 @@
 using Steamworks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -12,20 +10,17 @@ public class SteamLobbyComponent : MonoBehaviour
 {
     [SerializeField] private Button m_JoinBtn;
     [SerializeField] private Button m_CreateBtn;
-    [SerializeField] private Button m_InviteBtn;
-
     [SerializeField] private Button m_LeaveBtn;
-
     [SerializeField] private Button m_StartSessionBtn;
     [SerializeField] private Button m_EndSessionBtn;
-
     [SerializeField] private Button m_ListLobbiesBtn;
-    [SerializeField] private Button m_ListLobbyMembersBtn;
     [SerializeField] private TMP_Text m_LobbyData;
     [SerializeField] private TMP_Text m_Lobbies;
 
     private Lobby? m_CurrentLobby;
     private int m_MaxLobbyMembers = 4;
+
+    private LobbyQuery m_LobbyList { get; }
 
     private SteamManager m_SteamManager;
 
@@ -35,14 +30,18 @@ public class SteamLobbyComponent : MonoBehaviour
         {
             Debug.Log("Steam API init -- SUCCESS!");
             AddListeners();
+            m_SteamManager = FindObjectOfType<SteamManager>();
+            Debug.Assert(m_SteamManager != null, "Could not find SteamManager!");
         }
         else
         {
             Debug.Log("Steam API init -- failure ...");
         }
+    }
 
-        m_SteamManager = FindObjectOfType<SteamManager>();
-        Debug.Assert(m_SteamManager != null, "Could not find SteamManager!");
+    private void OnDestroy()
+    {
+        RemoveListeners();
     }
 
     private void AddListeners()
@@ -57,10 +56,25 @@ public class SteamLobbyComponent : MonoBehaviour
 
         m_CreateBtn.onClick.AddListener(CreateLobby);
         m_LeaveBtn.onClick.AddListener(LeaveLobby);
+        m_ListLobbiesBtn.onClick.AddListener(ListCloseLobbies);
         m_StartSessionBtn.onClick.AddListener(StartSession);
         m_EndSessionBtn.onClick.AddListener(EndSession);
-        //m_ListLobbiesBtn.onClick.AddListener(ListLobbies);
-        //m_ListLobbyMembersBtn.onClick.AddListener(ListLobbyMembers);
+    }
+
+    private void RemoveListeners()
+    {
+        SteamMatchmaking.OnLobbyCreated -= OnLobbyCreated;
+        SteamMatchmaking.OnLobbyInvite -= OnLobbyInvite;
+        SteamMatchmaking.OnLobbyMemberJoined -= OnLobbyMemberJoined;
+        SteamFriends.OnGameLobbyJoinRequested -= OnGameLobbyJoinRequested;
+
+        SteamMatchmaking.OnLobbyGameCreated -= OnLobbyGameCreated;
+
+        m_CreateBtn.onClick.RemoveAllListeners();
+        m_LeaveBtn.onClick.RemoveAllListeners();
+        m_ListLobbiesBtn.onClick.RemoveAllListeners();
+        m_StartSessionBtn.onClick.RemoveAllListeners();
+        m_EndSessionBtn.onClick.RemoveAllListeners();
     }
 
     /// <summary>
@@ -71,17 +85,13 @@ public class SteamLobbyComponent : MonoBehaviour
     private void OnLobbyCreated(Result result, Lobby lobby)
     {
         if (result == Result.OK)
-            Debug.Log("Lobby created -- SUCCESS!");
+            Debug.Log($"SUCCESS! Lobby created id:{lobby.Id}");
         else
             Debug.Log("Lobby created -- failure ...");
 
         m_CurrentLobby = lobby;
 
-        Debug.Log($"Lobby Members: {lobby.MemberCount}\n");
-        foreach (Friend member in lobby.Members)
-        {
-            Debug.Log($"Member Name: {member.Name}\n");
-        }
+        DisplayLobbyMembers(lobby);
     }
 
     /// <summary>
@@ -102,6 +112,7 @@ public class SteamLobbyComponent : MonoBehaviour
     private void OnLobbyMemberJoined(Lobby lobby, Friend friend)
     {
         Debug.Log($"Friend {friend.Name} joined the lobby\n");
+        DisplayLobbyMembers(lobby);
     }
 
     /// <summary>
@@ -114,7 +125,6 @@ public class SteamLobbyComponent : MonoBehaviour
         Debug.Log($"Barging, uninvited into {lobby.Owner.Name}'s Lobby.\n");
         m_CurrentLobby = lobby;
         lobby.Join();
-        //JoinLobby(steamID);
     }
 
     private void OnLobbyGameCreated(Lobby lobby, uint ip, ushort port, SteamId steamId)
@@ -151,25 +161,6 @@ public class SteamLobbyComponent : MonoBehaviour
     {
         return await SteamMatchmaking.CreateLobbyAsync(m_MaxLobbyMembers);
     }
-    
-    private async void JoinLobby(SteamId lobbyToJoin)
-    {
-        Debug.Log("Trying to join lobby ...");
-        try
-        {
-            m_CurrentLobby = await JoinLobbyAsync(lobbyToJoin);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error Creating Lobby {e.Message}");
-        }
-    }
-
-    public async Task<Lobby?> JoinLobbyAsync(SteamId lobbyToJoin)
-    {
-        Lobby? lobby = await SteamMatchmaking.JoinLobbyAsync(lobbyToJoin);
-        return lobby;
-    }
 
     private void LeaveLobby()
     {
@@ -199,112 +190,41 @@ public class SteamLobbyComponent : MonoBehaviour
         m_SteamManager.CloseSteamworksConnection();
     }
 
-    //private void ListLobbies()
-    //{
-    //    Debug.Log("Trying to get list of available lobbies ...");
-    //    SteamAPICall_t try_getList = SteamMatchmaking.RequestLobbyList();
+    private void DisplayLobbyMembers(Lobby lobby)
+    {
+        Debug.Log($"Lobby Members: {lobby.MemberCount}\n");
+        foreach (Friend member in lobby.Members)
+        {
+            Debug.Log($"Member Name: {member.Name}\n");
+        }
+    }
 
-    //    displaylobby();
-    //}
+    private async void ListCloseLobbies()
+    {
+        Debug.Log("Trying to get list of available lobbies ...");
+        Lobby[] lobbies = await m_LobbyList.FilterDistanceClose().RequestAsync();
+        Debug.Log($"Total Lobbies found: {lobbies.Length}");
 
-    //private void ListLobbyMembers()
-    //{
-    //    int numPlayers = SteamMatchmaking.GetNumLobbyMembers((CSteamID)current_lobbyID);
-    //    string header = $"\t Number of players currently in lobby: {numPlayers})";
-    //    Debug.Log(header);
-    //    m_LobbyData.text += header;
+        foreach (Lobby lobby in lobbies)
+        {
+            Debug.Log(lobby.Id);
+        }
+    }
 
-    //    for (int i = 0; i < numPlayers; i++)
-    //    {
-    //        string message = $"\t Player({i}) == {SteamFriends.GetFriendPersonaName(SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)current_lobbyID, i))}\n";
-    //        Debug.Log(message);
-    //        m_LobbyData.text += message;
-    //    }
-    //}
+    private async Task<Lobby?> FindFriendsLobby(SteamId friendID)
+    {
+        Debug.Log("Trying to find friends lobby...");
+        Lobby[] lobbies = await m_LobbyList.RequestAsync();
 
+        foreach (Lobby lobby in lobbies)
+        {
+            if (lobby.IsOwnedBy(friendID))
+            {
+                return lobby;
+            }
+        }
 
-
-    //private void OnLobbyCreated(LobbyCreated_t result)
-    //{
-    //    if (result.m_eResult == EResult.k_EResultOK)
-    //        Debug.Log("Lobby created -- SUCCESS!");
-    //    else
-    //        Debug.Log("Lobby created -- failure ...");
-
-    //    string personalName = SteamFriends.GetPersonaName();
-    //    SteamMatchmaking.SetLobbyData((CSteamID)result.m_ulSteamIDLobby, "name", personalName + "'s game");
-    //    m_CurrentLobbyID = (CSteamID)result.m_ulSteamIDLobby;
-    //}
-
-    //private void OnGetLobbiesList(LobbyMatchList_t result)
-    //{
-    //    Debug.Log("Found " + result.m_nLobbiesMatching + " lobbies!");
-    //    for (int i = 0; i < result.m_nLobbiesMatching; i++)
-    //    {
-    //        CSteamID lobbyID = SteamMatchmaking.GetLobbyByIndex(i);
-    //        lobbyIDS.Add(lobbyID);
-    //        SteamMatchmaking.RequestLobbyData(lobbyID);
-    //    }
-    //}
-
-    //private void OnGetLobbyInfo(LobbyDataUpdate_t result)
-    //{
-    //    for (int i = 0; i < lobbyIDS.Count; i++)
-    //    {
-    //        if (lobbyIDS[i].m_SteamID == result.m_ulSteamIDLobby)
-    //        {
-    //            Debug.Log("Lobby " + i + " :: " + SteamMatchmaking.GetLobbyData((CSteamID)lobbyIDS[i].m_SteamID, "name"));
-    //            return;
-    //        }
-    //    }
-    //}
-
-    //private void OnLobbyEntered(LobbyEnter_t result)
-    //{
-    //    current_lobbyID = result.m_ulSteamIDLobby;
-
-    //    if (result.m_EChatRoomEnterResponse == 1)
-    //        Debug.Log("Lobby joined!");
-    //    else
-    //        Debug.Log("Failed to join lobby.");
-    //}
-
-    //void displaylobby()
-    //{
-    //    Lobby lobby = new Lobby();
-    //    lobby.m_SteamID = m_CurrentLobbyID; // ID, which was passed to the method
-    //    lobby.m_Owner = SteamMatchmaking.GetLobbyOwner(m_CurrentLobbyID);
-    //    lobby.m_Members = new LobbyMembers[SteamMatchmaking.GetNumLobbyMembers(m_CurrentLobbyID)];
-    //    lobby.m_MemberLimit = SteamMatchmaking.GetLobbyMemberLimit(m_CurrentLobbyID);
-
-    //    int DataCount = SteamMatchmaking.GetLobbyDataCount(m_CurrentLobbyID);
-
-    //    lobby.m_Data = new LobbyMetaData[DataCount];
-    //    for (int i = 0; i < DataCount; i++) // Getting all the lobby metadata
-    //    {
-    //        bool lobbyDataRet = SteamMatchmaking.GetLobbyDataByIndex(
-    //            m_CurrentLobbyID,
-    //            iLobbyData: i,
-    //            out lobby.m_Data[i].m_Key,
-    //            Constants.k_nMaxLobbyKeyLength,
-    //            out lobby.m_Data[i].m_Value,
-    //            Constants.k_cubChatMetadataMax);
-
-    //        if (!lobbyDataRet)
-    //        {
-    //            Debug.LogError("Error retrieving lobby metadata");
-    //            continue;
-    //        }
-    //    }
-    //    //
-    //    // Displaying the lobby in the list...
-    //    //
-    //}
-
-    //void lol()
-    //{
-    //    SteamGameServer.GetPublicIP();
-    //    SteamNetworkingSockets.ConnectP2P();
-    //    SteamUser.BIsBehindNAT();
-    //}
+        Debug.Log("Lobby was not found");
+        return null;
+    }
 }
