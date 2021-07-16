@@ -44,7 +44,7 @@ public class FacepunchSocketManager : SocketManager, FacepunchConnectionInterfac
 
     public override void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum, long recvTime, int channel)
     {
-        Debug.Log($"We got a message from {identity}!");
+        // Debug.Log($"We got a message from {identity}!");
 
         if (connection.Id == clientConnection.Id)
         {

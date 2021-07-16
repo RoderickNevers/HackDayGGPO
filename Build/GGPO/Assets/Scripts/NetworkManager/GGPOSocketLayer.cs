@@ -25,7 +25,10 @@ public class GGPOSocketLayer
     private Thread ggpoForwardThread;
 
     private IPEndPoint localEndPoint;
-    private UdpClient ggpoRemoteSocket;
+    private IPEndPoint remoteEndPoint;
+
+    private UdpClient ggpoRemoteSocketSend;
+    private UdpClient ggpoRemoteSocketReceive;
     private ConcurrentQueue<byte[]> byteDataQueue;
 
     private FacepunchConnectionInterface facepunchConnection;
@@ -80,8 +83,8 @@ public class GGPOSocketLayer
             byte[] ggpoPacket = new byte[size];
             System.Runtime.InteropServices.Marshal.Copy(data, ggpoPacket, 0, size);
 
-            byteDataQueue.Enqueue(ggpoPacket);
-            // ggpoForwardReceiveSocket.Send(ggpoPacket, size);
+            // byteDataQueue.Enqueue(ggpoPacket);
+            ggpoRemoteSocketSend.Send(ggpoPacket, size, localEndPoint);
         }
         catch
         {
@@ -97,7 +100,19 @@ public class GGPOSocketLayer
 
             // This socket is for receiving data from the remote client
             localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), DEFAULT_LOCAL_GGPO_PORT);
-            ggpoRemoteSocket = new UdpClient(DEFAULT_REMOTE_GGPO_PORT);
+            remoteEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), DEFAULT_REMOTE_GGPO_PORT);
+
+
+            ggpoRemoteSocketSend = new UdpClient();
+            ggpoRemoteSocketSend.ExclusiveAddressUse = false;
+            ggpoRemoteSocketSend.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            ggpoRemoteSocketSend.Client.Bind(remoteEndPoint);
+
+            ggpoRemoteSocketReceive = new UdpClient();
+            ggpoRemoteSocketReceive.ExclusiveAddressUse = false;
+            ggpoRemoteSocketReceive.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            ggpoRemoteSocketReceive.Client.Bind(remoteEndPoint);
+
 
             byteDataQueue = new ConcurrentQueue<byte[]>();
 
@@ -124,7 +139,9 @@ public class GGPOSocketLayer
             Debug.Log("Forward thread aborted");
         }
 
-        ggpoRemoteSocket.Close();
+        ggpoRemoteSocketReceive.Close();
+        ggpoRemoteSocketSend.Close();
+
         //ggpoForwardReceiveSocket.Close();
         //ggpoForwardSendSocket.Close();
 
@@ -135,23 +152,12 @@ public class GGPOSocketLayer
     {
         while (true)
         {
-            byte[] recData = ggpoRemoteSocket.Receive(ref localEndPoint);
+            byte[] recData = ggpoRemoteSocketReceive.Receive(ref localEndPoint);
 
             if (recData.Length > 0)
             {
-                Debug.Log("send to remote client");
+                // Debug.Log("send to remote client");
                 ForwardGGPOPacketToSteamworkConnection(recData);
-            }
-
-            // send data if there's any
-            if (byteDataQueue.Count > 0)
-            {
-                byte[] sendData;
-                if (byteDataQueue.TryDequeue(out sendData))
-                {
-                    Debug.Log("send to local port");
-                    ggpoRemoteSocket.Send(sendData, sendData.Length, localEndPoint);
-                }
             }
         }
     }
