@@ -11,13 +11,16 @@ namespace SharedGame {
         public Button btnHost;
         public InputField inpIp;
         public InputField inpPort;
+        public InputField hostIP;
+        public InputField hostPort;
         public Text txtIp;
         public Text txtPort;
 
-        private GameManager gameManager => GameManager.Instance;
+        private GameManager gameManager;
         private GgpoPerformancePanel perf;
 
         private void Awake() {
+            gameManager = GameManager.Instance;
             gameManager.OnRunningChanged += OnRunningChanged;
 
             perf = FindObjectOfType<GgpoPerformancePanel>();
@@ -27,8 +30,8 @@ namespace SharedGame {
             btnLocal.onClick.AddListener(OnLocalClick);
             inpIp.text = "127.0.0.1";
             inpPort.text = "7000";
-            txtIp.text = "127.0.0.1";
-            txtPort.text = "7001";
+            hostIP.text = "127.0.0.1";
+            hostPort.text = "7001";
         }
 
         private void OnDestroy() {
@@ -40,14 +43,15 @@ namespace SharedGame {
 
         private List<Connections> GetConnections() {
             var list = new List<Connections>();
-            list.Add(new Connections() {
-                ip = inpIp.text,
-                port = ushort.Parse(inpPort.text),
+            list.Add(new Connections()
+            {
+                ip = hostIP.text,
+                port = ushort.Parse(hostPort.text),
                 spectator = false
             });
             list.Add(new Connections() {
-                ip = txtIp.text,
-                port = ushort.Parse(txtPort.text),
+                ip = inpIp.text,
+                port = ushort.Parse(inpPort.text),
                 spectator = false
             });
             return list;

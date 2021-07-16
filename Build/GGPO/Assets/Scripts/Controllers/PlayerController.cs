@@ -1,7 +1,6 @@
-using Mirror;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : MonoBehaviour
 {
     private const float GROUND_DISTANCE = 0.2f;
     private const float GRAVITY = -9.81f;
@@ -11,6 +10,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private int _JumpHeight = 8;
     [SerializeField] private LayerMask _Ground;
 
+    private int PlayerIndex;
     private CharacterController _Controller;
     private Transform _GroundChecker;
     private Vector3 _MoveDirection;
@@ -19,6 +19,7 @@ public class PlayerController : NetworkBehaviour
     private bool _GroundedPlayer;
 
     public ReplayManager ReplayManager { get; set; }
+    public GGPOGameState GameState { get; set; }
 
     public Vector3 MoveDirection 
     {
@@ -34,8 +35,9 @@ public class PlayerController : NetworkBehaviour
         _GroundChecker = transform.GetChild(0);
     }
 
-    public void Setup()
+    public void Setup(int index)
     {
+        PlayerIndex = index;
         ReplayManager.OnStartedReplaying += () => { _IsReplaying = true; };
         ReplayManager.OnStoppedReplaying += () => { _IsReplaying = false; };
     }
@@ -49,46 +51,39 @@ public class PlayerController : NetworkBehaviour
     // Gameplay
     void Update()
     {
-        CharacterPhysics();
-        Move();
+        UpdatePlayerPosition();
+    }
+
+    void UpdatePlayerPosition()
+    {
+        Player player = GameState.GetPlayer(PlayerIndex);
+        transform.position = player.position;
     }
 
     private void CharacterPhysics()
     {
-        _GroundedPlayer = Physics.CheckSphere(_GroundChecker.position, GROUND_DISTANCE, _Ground, QueryTriggerInteraction.Ignore);
+        //_GroundedPlayer = Physics.CheckSphere(_GroundChecker.position, GROUND_DISTANCE, _Ground, QueryTriggerInteraction.Ignore);
 
-        // Horizontal
-        if (MoveDirection != Vector3.zero)
-        {
-            gameObject.transform.forward = _MoveDirection;
-        }
-
-        _Controller.Move(_MoveDirection * Time.deltaTime * _PlayerSpeed);
-
-        // Vertical
-        if (_GroundedPlayer && _MoveDirection.y < 0)
-        {
-            _MoveDirection.y = 0f;
-        }
-
-        //if (Jump)
+        //// Horizontal
+        //if (MoveDirection != Vector3.zero)
         //{
-        //    _JumpVelocity.y = _JumpHeight;
+        //    gameObject.transform.forward = _MoveDirection;
         //}
 
-        _JumpVelocity.y += GRAVITY * Time.deltaTime;
-        _Controller.Move(_JumpVelocity * Time.deltaTime);
-    }
+        //_Controller.Move(_MoveDirection * Time.deltaTime * _PlayerSpeed);
 
-    private void Move()
-    {
-        if (!_IsReplaying && isLocalPlayer)
-        {
-            MoveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-            //Jump = Input.GetButtonDown("Jump") && _GroundedPlayer;
+        //// Vertical
+        //if (_GroundedPlayer && _MoveDirection.y < 0)
+        //{
+        //    _MoveDirection.y = 0f;
+        //}
 
-            // STEP 1: Send these inputs to GGPO
-            // ggpo_synchronize_input
-        }
+        ////if (Jump)
+        ////{
+        ////    _JumpVelocity.y = _JumpHeight;
+        ////}
+
+        //_JumpVelocity.y += GRAVITY * Time.deltaTime;
+        //_Controller.Move(_JumpVelocity * Time.deltaTime);
     }
 }
