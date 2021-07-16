@@ -131,7 +131,7 @@ public class GGPOSocketLayer
         }
 
         ggpoRemoteSocketReceive.Close();
-        ggpoRemoteSocketSend.Close();\
+        ggpoRemoteSocketSend.Close();
 
         this.facepunchConnection = null;
     }
