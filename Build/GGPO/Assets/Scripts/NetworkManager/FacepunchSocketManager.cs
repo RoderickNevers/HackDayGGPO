@@ -6,8 +6,6 @@ using UnityEngine;
 public class FacepunchSocketManager : SocketManager, FacepunchConnectionInterface
 {
     private GGPOSocketLayer ggpoSocketLayer;
-
-    private ConnectionInfo clientConnectionInfo;
     private Connection clientConnection;
 
     public override void OnConnecting(Connection connection, ConnectionInfo data)
@@ -23,7 +21,6 @@ public class FacepunchSocketManager : SocketManager, FacepunchConnectionInterfac
 
         // Assumed to be second player
         clientConnection = connection;
-        clientConnectionInfo = data;
 
         // Initialize GGPO session
         ggpoSocketLayer.StartGGPOSession(true);
@@ -63,11 +60,6 @@ public class FacepunchSocketManager : SocketManager, FacepunchConnectionInterfac
     {
         // Send data received from "remote" socket to steamworks connection
         clientConnection.SendMessage(data, SendType.NoDelay);
-    }
-
-    public ConnectionInfo GetConnectionInfo()
-    {
-        return clientConnectionInfo;
     }
 
     public void InitGGPOForwardSockets(GGPOComponent gameManager)
