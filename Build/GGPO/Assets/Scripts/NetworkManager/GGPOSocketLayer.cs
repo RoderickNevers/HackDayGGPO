@@ -156,6 +156,8 @@ public class GGPOSocketLayer
                 // Debug.Log("send to remote client");
                 ForwardGGPOPacketToSteamworkConnection(recData);
             }
+
+            Thread.Sleep(0);
         }
     }
 
