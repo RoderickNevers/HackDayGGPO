@@ -97,7 +97,6 @@ public class GGPOSocketLayer
 
         // Spawn thread
         ggpoForwardThread = new Thread(ListenForForwardPackets);
-        ggpoForwardThread.IsBackground = true;
         ggpoForwardThread.Start();
     }
 
@@ -127,8 +126,6 @@ public class GGPOSocketLayer
             {
                 ForwardGGPOPacketToSteamworkConnection(data);
             }
-
-            Thread.Sleep(1);
         }
     }
 
