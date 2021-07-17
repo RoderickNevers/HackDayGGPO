@@ -14,6 +14,6 @@ public class GGPOPlayerController : MonoBehaviour
     public void UpdatePlayerPosition(Player player)
     {
         //transform.position = player.position;
-        _CharacterController.Move(player.position);
+        _CharacterController.Move(player.velocity);
     }
 }
