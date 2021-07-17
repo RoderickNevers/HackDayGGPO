@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class FrameRateComponent : MonoBehaviour
 {
+    const int RATE_LOCK = 60;
     void Start()
     {
-        Application.targetFrameRate = 120;
-        Debug.Log($"Refresh Rate: {Screen.currentResolution.refreshRate}");
+        Time.captureFramerate = RATE_LOCK;
+        Application.targetFrameRate = RATE_LOCK;
     }
 }

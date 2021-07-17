@@ -114,7 +114,7 @@ public struct GGPOGameState : IGame
     public GGPOGameState(int num_players)
     {
         // consts
-        _Speed = 10;
+        _Speed = 20;
 
         Framenumber = 0;
         UnserializedInputsP1 = 0;
