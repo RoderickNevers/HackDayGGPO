@@ -175,6 +175,9 @@ public class LobbyComponent : MonoBehaviour
         {
             m_SteamManager.StartSteamworksConnection(false, steamId);
         }
+
+        // Hide the lobby UI
+        ShowGame();
     }
 
     /// <summary>
@@ -329,9 +332,6 @@ public class LobbyComponent : MonoBehaviour
 
             // Alert all in lobby
             m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
-
-            // Hide the lobby UI
-            ShowGame();
         }
     }
 
