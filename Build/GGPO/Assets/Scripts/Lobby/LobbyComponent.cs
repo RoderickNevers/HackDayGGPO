@@ -51,7 +51,13 @@ public class LobbyComponent : MonoBehaviour
     {
         SteamMatchmaking.OnLobbyCreated += OnLobbyCreated;
         SteamMatchmaking.OnLobbyInvite += OnLobbyInvite;
+        SteamMatchmaking.OnLobbyEntered += OnLobbyEntered;
         SteamMatchmaking.OnLobbyMemberJoined += OnLobbyMemberJoined;
+        SteamMatchmaking.OnLobbyMemberDisconnected += OnLobbyMemberDisconnected;
+        SteamMatchmaking.OnLobbyMemberDataChanged += OnLobbyMemberDataChanged;
+        SteamMatchmaking.OnLobbyMemberLeave += OnLobbyMemberLeave;
+        SteamMatchmaking.OnChatMessage += OnChatMessage;
+
         SteamFriends.OnGameLobbyJoinRequested += OnGameLobbyJoinRequested;
 
         // Match starting
@@ -68,8 +74,12 @@ public class LobbyComponent : MonoBehaviour
     {
         SteamMatchmaking.OnLobbyCreated -= OnLobbyCreated;
         SteamMatchmaking.OnLobbyInvite -= OnLobbyInvite;
+        SteamMatchmaking.OnLobbyEntered -= OnLobbyEntered;
         SteamMatchmaking.OnLobbyMemberJoined -= OnLobbyMemberJoined;
-        SteamFriends.OnGameLobbyJoinRequested -= OnGameLobbyJoinRequested;
+        SteamMatchmaking.OnLobbyMemberDisconnected -= OnLobbyMemberDisconnected;
+        SteamMatchmaking.OnLobbyMemberDataChanged -= OnLobbyMemberDataChanged;
+        SteamMatchmaking.OnLobbyMemberLeave -= OnLobbyMemberLeave;
+        SteamMatchmaking.OnChatMessage -= OnChatMessage;
 
         SteamMatchmaking.OnLobbyGameCreated -= OnLobbyGameCreated;
 
@@ -96,8 +106,6 @@ public class LobbyComponent : MonoBehaviour
             Debug.Log("Lobby created -- failure ...");
 
         m_CurrentLobby = lobby;
-
-        DisplayLobbyMembers(lobby);
     }
 
     /// <summary>
@@ -122,6 +130,16 @@ public class LobbyComponent : MonoBehaviour
     }
 
     /// <summary>
+    /// Called when you join a lobby
+    /// </summary>
+    /// <param name="lobby"></param>
+    private void OnLobbyEntered(Lobby lobby)
+    {
+        ShowLobby();
+        DisplayLobbyMembers(lobby);
+    }
+
+    /// <summary>
     /// Called when the user tries to join a lobby from their friends list game client should attempt to connect to specified lobby when this is received
     /// </summary>
     /// <param name="lobby"></param>
@@ -131,9 +149,6 @@ public class LobbyComponent : MonoBehaviour
         Debug.Log($"Barging, uninvited into {lobby.Owner.Name}'s Lobby.\n");
         m_CurrentLobby = lobby;
         lobby.Join();
-
-        ShowLobby();
-        DisplayLobbyMembers(lobby);
     }
 
     /// <summary>
@@ -156,6 +171,47 @@ public class LobbyComponent : MonoBehaviour
         {
             m_SteamManager.StartSteamworksConnection(false, steamId);
         }
+    }
+
+    /// <summary>
+    /// The lobby member left the room
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="friend"></param>
+    private void OnLobbyMemberDisconnected(Lobby lobby, Friend friend)
+    {
+        Debug.Log($"{friend.Name} disconnected from lobby {lobby.Id}");
+    }
+
+    /// <summary>
+    /// The lobby member metadata has changed
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="friend"></param>
+    private void OnLobbyMemberDataChanged(Lobby lobby, Friend friend)
+    {
+        Debug.Log($"{friend.Name} data changed in {lobby.Id}");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="friend"></param>
+    private void OnLobbyMemberLeave(Lobby lobby, Friend friend)
+    {
+        Debug.Log($"{friend.Name} left lobby {lobby.Id}");
+    }
+
+    /// <summary>
+    /// The lobby member left the room
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="friend"></param>
+    /// <param name="message"></param>
+    private void OnChatMessage(Lobby lobby, Friend friend, string message)
+    {
+        Debug.Log($"{friend.Name} sent message {message}  to\nlobby:{lobby.Id}");
     }
 
     private async void CreateLobby()
@@ -221,8 +277,8 @@ public class LobbyComponent : MonoBehaviour
         // Clear children
         for (int i = 0; i < _PlayerLobbyObjectContainer.transform.childCount; i++)
         {
-            Transform child = _PlayerLobbyObjectContainer.transform.GetChild(i);
-            GameObject.Destroy(transform);
+            GameObject child = _PlayerLobbyObjectContainer.transform.GetChild(i).gameObject;
+            GameObject.Destroy(child);
         }
 
         // Add new objects to ui
