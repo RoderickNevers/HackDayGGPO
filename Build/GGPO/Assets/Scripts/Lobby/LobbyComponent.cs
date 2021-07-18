@@ -37,6 +37,8 @@ public class LobbyComponent : MonoBehaviour
             AddListeners();
             m_SteamManager = FindObjectOfType<SteamManager>();
             Debug.Assert(m_SteamManager != null, "Could not find SteamManager!");
+
+            ShowMainMenu();
         }
         else
         {
@@ -264,6 +266,12 @@ public class LobbyComponent : MonoBehaviour
         _LobbyPanel.SetActive(false);
     }
 
+    private void ShowGame()
+    {
+        _MainMenuPanel.SetActive(false);
+        _LobbyPanel.SetActive(false);
+    }
+
     private void LeaveLobby()
     {
         Debug.Log($"Leave lobby {m_CurrentLobby?.Id}...");
@@ -321,6 +329,9 @@ public class LobbyComponent : MonoBehaviour
 
             // Alert all in lobby
             m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
+
+            // Hide the lobby UI
+            ShowGame();
         }
     }
 
