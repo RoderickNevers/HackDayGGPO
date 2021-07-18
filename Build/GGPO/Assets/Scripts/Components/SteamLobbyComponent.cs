@@ -29,6 +29,7 @@ public class SteamLobbyComponent : MonoBehaviour
         if (SteamManager.Initialized)
         {
             Debug.Log("Steam API init -- SUCCESS!");
+            SetButtonsActive(true);
             AddListeners();
             m_SteamManager = FindObjectOfType<SteamManager>();
             Debug.Assert(m_SteamManager != null, "Could not find SteamManager!");
@@ -36,12 +37,35 @@ public class SteamLobbyComponent : MonoBehaviour
         else
         {
             Debug.Log("Steam API init -- failure ...");
+
+            SetButtonsActive(false);
         }
     }
 
     private void OnDestroy()
     {
         RemoveListeners();
+    }
+
+    private void OnDisable()
+    {
+        if (!enabled)
+        {
+            SetButtonsActive(enabled);
+        }
+    }
+    private void OnEnable()
+    {
+        SetButtonsActive(enabled);
+    }
+
+    private void SetButtonsActive(bool enabled)
+    {
+        m_CreateBtn.gameObject.SetActive(enabled);
+        m_LeaveBtn.gameObject.SetActive(enabled);
+        m_ListLobbiesBtn.gameObject.SetActive(enabled);
+        m_StartSessionBtn.gameObject.SetActive(enabled);
+        m_EndSessionBtn.gameObject.SetActive(enabled);
     }
 
     private void AddListeners()

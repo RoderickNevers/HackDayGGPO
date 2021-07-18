@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class GGPOPlayerController : MonoBehaviour
 {
-    private CharacterController _CharacterController;
+    private CharacterController m_CharacterController;
+    private GGPOComponent m_GGPOComponent;
+
 
     private void Awake()
     {
-        _CharacterController = GetComponent<CharacterController>();
+        m_CharacterController = GetComponent<CharacterController>();
+    }
+
+    public void Init(GGPOComponent ggpoComponent)
+    {
+        m_GGPOComponent = ggpoComponent;
     }
 
     public void UpdatePlayerPosition(Player player)
     {
-        _CharacterController.Move(player.velocity * Time.fixedDeltaTime);
+        if (m_GGPOComponent.manualFrameIncrement)
+        {
+            transform.position = player.position;
+        }
+        else
+        {
+            float SpeedModifier = SharedGame.GameManager.FRAME_LENGTH_SEC / m_GGPOComponent.currentFrameLength;
+            transform.position = player.position;
+            m_CharacterController.Move(player.velocity * SpeedModifier);
+        }
     }
 }

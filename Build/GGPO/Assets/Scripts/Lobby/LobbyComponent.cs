@@ -1,47 +1,56 @@
-using Steamworks;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using Steamworks.Data;
 using System.Threading.Tasks;
 using System;
-using System.Collections.Generic;
+
+using Steamworks;
+using Steamworks.Data;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyComponent : MonoBehaviour
 {
     [Header("Main Menu Content")]
-    [SerializeField] private GameObject _MainMenuPanel;
+    [SerializeField] private GameObject m_MainMenuPanel;
     [SerializeField] private Button m_CreateBtn;
     [SerializeField] private Button m_ListLobbiesBtn;
 
     [Header("Lobby Content")]
-    [SerializeField] private GameObject _LobbyPanel;
-    [SerializeField] private Transform _PlayerLobbyObjectContainer;
-    [SerializeField] private PlayerLobbyComponent _PlayerLobbyComponent;
+    [SerializeField] private GameObject m_LobbyPanel;
+    [SerializeField] private Transform m_PlayerLobbyObjectContainer;
+    [SerializeField] private PlayerLobbyComponent m_PlayerLobbyComponent;
     [SerializeField] private Button m_LeaveBtn;
     [SerializeField] private Button m_StartSessionBtn;
     [SerializeField] private Button m_EndSessionBtn;
 
+    [Header("Gameplay Debug Panel")]
+    [SerializeField] private GameObject m_DebugPanel;
+
+    private SteamManager m_SteamManager;
     private Lobby? m_CurrentLobby;
     private int m_MaxLobbyMembers = 4;
-    private SteamManager m_SteamManager;
 
     private LobbyQuery m_LobbyList { get; }
 
+
     private void Start()
     {
-        if (SteamManager.Initialized)
+        try
         {
-            Debug.Log("Steam API init -- SUCCESS!");
-            AddListeners();
-            m_SteamManager = FindObjectOfType<SteamManager>();
-            Debug.Assert(m_SteamManager != null, "Could not find SteamManager!");
-
-            ShowMainMenu();
+            if (SteamManager.Initialized)
+            {
+                Debug.Log("Steam API init -- SUCCESS!");
+                m_SteamManager = GetComponent<SteamManager>();
+                AddListeners();
+                ShowMainMenu();
+            }
+            else
+            {
+                Debug.Log($"Steam isn't running. Going to debug mode");
+                ShowGame();
+            }
         }
-        else
+        catch (Exception e)
         {
-            Debug.Log("Steam API init -- failure ...");
+            Debug.LogError($"It's ALLLLLLLLLLLLL burning {e.Message}");
         }
     }
 
@@ -241,22 +250,25 @@ public class LobbyComponent : MonoBehaviour
         return await SteamMatchmaking.CreateLobbyAsync(m_MaxLobbyMembers);
     }
 
-    private void ShowLobby()
+    public void ShowLobby()
     {
-        _MainMenuPanel.SetActive(false);
-        _LobbyPanel.SetActive(true);
+        m_MainMenuPanel.SetActive(false);
+        m_LobbyPanel.SetActive(true);
+        m_DebugPanel.SetActive(false);
     }
 
-    private void ShowMainMenu()
+    public void ShowMainMenu()
     {
-        _MainMenuPanel.SetActive(true);
-        _LobbyPanel.SetActive(false);
+        m_MainMenuPanel.SetActive(true);
+        m_LobbyPanel.SetActive(false);
+        m_DebugPanel.SetActive(false);
     }
 
-    private void ShowGame()
+    public void ShowGame()
     {
-        _MainMenuPanel.SetActive(false);
-        _LobbyPanel.SetActive(false);
+        m_MainMenuPanel.SetActive(false);
+        m_LobbyPanel.SetActive(false);
+        m_DebugPanel.SetActive(true);
     }
 
     private void LeaveLobby()
@@ -271,21 +283,31 @@ public class LobbyComponent : MonoBehaviour
         m_CurrentLobby?.InviteFriend(friend);
     }
 
+    private void StartSession()
+    {
+        if (m_CurrentLobby.HasValue && m_CurrentLobby.Value.IsOwnedBy(SteamClient.SteamId))
+        {
+            // Take the role of host
+            m_SteamManager.StartSteamworksConnection(true, SteamClient.SteamId);
+
+            // Alert all in lobby
+            m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
+        }
+    }
+
     private void EndSession()
     {
         m_SteamManager.CloseSteamworksConnection();
     }
-
-
 
     private void DisplayLobbyMembers(Lobby lobby)
     {
         Debug.Log($"Lobby Members: {lobby.MemberCount}\n");
 
         // Clear children
-        for (int i = 0; i < _PlayerLobbyObjectContainer.transform.childCount; i++)
+        for (int i = 0; i < m_PlayerLobbyObjectContainer.transform.childCount; i++)
         {
-            GameObject child = _PlayerLobbyObjectContainer.transform.GetChild(i).gameObject;
+            GameObject child = m_PlayerLobbyObjectContainer.transform.GetChild(i).gameObject;
             GameObject.Destroy(child);
         }
 
@@ -302,20 +324,8 @@ public class LobbyComponent : MonoBehaviour
                 m_EndSessionBtn.gameObject.SetActive(isHost);
             }
 
-            PlayerLobbyComponent playerObject = Instantiate<PlayerLobbyComponent>(_PlayerLobbyComponent, _PlayerLobbyObjectContainer);
+            PlayerLobbyComponent playerObject = Instantiate<PlayerLobbyComponent>(m_PlayerLobbyComponent, m_PlayerLobbyObjectContainer);
             playerObject.Init(name, isHost);
-        }
-    }
-
-    private void StartSession()
-    {
-        if (m_CurrentLobby.HasValue && m_CurrentLobby.Value.IsOwnedBy(SteamClient.SteamId))
-        {
-            // Take the role of host
-            m_SteamManager.StartSteamworksConnection(true, SteamClient.SteamId);
-
-            // Alert all in lobby
-            m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
         }
     }
 

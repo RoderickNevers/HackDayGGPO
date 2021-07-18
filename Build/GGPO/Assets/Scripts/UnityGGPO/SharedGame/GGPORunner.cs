@@ -422,14 +422,6 @@ namespace SharedGame {
             idleWatch.Stop();
         }
 
-        public void Exit() {
-            LogGame($"Exit");
-
-            if (GGPO.Session.IsStarted()) {
-                CheckAndReport(GGPO.Session.CloseSession());
-            }
-        }
-
         private void SetStatusText(string status) {
             GameInfo.status = status;
         }
@@ -448,7 +440,7 @@ namespace SharedGame {
         }
 
         public void Shutdown() {
-            Exit();
+            GGPO.Session.CloseSession();
             GGPO.SetLogDelegate(null);
         }
 
