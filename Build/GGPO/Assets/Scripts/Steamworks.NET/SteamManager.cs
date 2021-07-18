@@ -275,8 +275,6 @@ public class SteamManager : MonoBehaviour
     }
 
 
-
-
 #else
 	public static bool Initialized {
 		get {

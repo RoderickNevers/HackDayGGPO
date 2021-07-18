@@ -31,11 +31,7 @@ public class GGPOComponent : GameManager
 
     public void StopGGPOGame()
     {
-        if (Runner is GGPORunner)
-        {
-            GGPORunner ggpoRunner = (GGPORunner)Runner;
-            ggpoRunner.Exit();
-        }
+        Shutdown();
     }
 
     public string DisplayCurrentInputs()

@@ -2,7 +2,7 @@ using SharedGame;
 using System;
 using UnityEngine;
 
-public class GGPONetworkManager : MonoBehaviour, IGameView
+public class GameController : MonoBehaviour, IGameView
 {
     [SerializeField] private GGPOComponent _GGPOComponent;
     public GameObject playerPrefab;
@@ -11,7 +11,7 @@ public class GGPONetworkManager : MonoBehaviour, IGameView
 
     private GGPOPlayerController[] PlayerControllers = Array.Empty<GGPOPlayerController>();
 
-    public void Start()
+    public void Awake()
     {
         _GGPOComponent.OnRunningChanged += OnRunningChanged;
     }
@@ -27,6 +27,10 @@ public class GGPONetworkManager : MonoBehaviour, IGameView
         {
             OnConnectionStart();
         }
+        else
+        {
+            OnConnectionEnd();
+        }
     }
 
     public void OnConnectionStart()
@@ -40,6 +44,15 @@ public class GGPONetworkManager : MonoBehaviour, IGameView
             Transform start = i == 0 ? _P1Spawn : _P2Spawn;
             gameState.InitPlayer(i, start.position);
         }
+    }
+
+    public void OnConnectionEnd()
+    {
+        for (int i = 0; i < PlayerControllers.Length; ++i)
+        {
+            Destroy(PlayerControllers[i].gameObject);
+        }
+        PlayerControllers = Array.Empty<GGPOPlayerController>();
     }
 
     private void InstantiateNewPlayer(int playerIndex)
