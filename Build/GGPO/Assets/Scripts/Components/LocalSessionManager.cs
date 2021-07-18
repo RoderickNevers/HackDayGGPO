@@ -64,6 +64,7 @@ public class LocalSessionManager : MonoBehaviour
             m_LobbyComponent.enabled = true;
 
             SetEnableLocalSessionFeatures(false);
+            m_LobbyComponent.ShowMainMenu();
         }
     }
 }
