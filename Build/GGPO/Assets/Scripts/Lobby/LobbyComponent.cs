@@ -19,13 +19,12 @@ public class LobbyComponent : MonoBehaviour
     [SerializeField] private Transform _PlayerLobbyObjectContainer;
     [SerializeField] private PlayerLobbyComponent _PlayerLobbyComponent;
     [SerializeField] private Button m_LeaveBtn;
-    //[SerializeField] private Button m_StartSessionBtn;
+    [SerializeField] private Button m_StartSessionBtn;
     [SerializeField] private Button m_EndSessionBtn;
 
     private Lobby? m_CurrentLobby;
     private int m_MaxLobbyMembers = 4;
     private SteamManager m_SteamManager;
-    private Dictionary<SteamId, PlayerLobbyComponent> _MemberList = new Dictionary<SteamId, PlayerLobbyComponent>();
 
     private LobbyQuery m_LobbyList { get; }
 
@@ -70,7 +69,7 @@ public class LobbyComponent : MonoBehaviour
         m_CreateBtn.onClick.AddListener(CreateLobby);
         m_LeaveBtn.onClick.AddListener(LeaveLobby);
         m_ListLobbiesBtn.onClick.AddListener(ListCloseLobbies);
-        //m_StartSessionBtn.onClick.AddListener(StartSession);
+        m_StartSessionBtn.onClick.AddListener(StartSession);
         m_EndSessionBtn.onClick.AddListener(EndSession);
     }
 
@@ -90,7 +89,7 @@ public class LobbyComponent : MonoBehaviour
         m_CreateBtn.onClick.RemoveAllListeners();
         m_LeaveBtn.onClick.RemoveAllListeners();
         m_ListLobbiesBtn.onClick.RemoveAllListeners();
-        //m_StartSessionBtn.onClick.RemoveAllListeners();
+        m_StartSessionBtn.onClick.RemoveAllListeners();
         m_EndSessionBtn.onClick.RemoveAllListeners();
     }
 
@@ -208,21 +207,6 @@ public class LobbyComponent : MonoBehaviour
     private void OnLobbyMemberLeave(Lobby lobby, Friend friend)
     {
         Debug.Log($"{friend.Name} left lobby {lobby.Id}");
-
-        // Remove start session abilities
-        foreach (Friend member in lobby.Members)
-        {
-            bool isHost = lobby.IsOwnedBy(member.Id);
-
-            if (!isHost)
-            {
-                continue;
-            }
-
-            PlayerLobbyComponent playerComponent = _MemberList[member.Id];
-            playerComponent.OnStartSession -= StartSession;
-        }
-
         DisplayLobbyMembers(lobby);
     }
 
@@ -305,25 +289,25 @@ public class LobbyComponent : MonoBehaviour
             GameObject.Destroy(child);
         }
 
-        // Reset the member list
-        _MemberList.Clear();
-
         // Add new objects to ui
         foreach (Friend member in lobby.Members)
         {
             Debug.Log($"Member Name: {member.Name}\n");
             string name = member.Name;
             bool isHost = lobby.IsOwnedBy(member.Id);
+
+            if (SteamClient.SteamId == member.Id)
+            {
+                m_StartSessionBtn.gameObject.SetActive(isHost);
+                m_EndSessionBtn.gameObject.SetActive(isHost);
+            }
+
             PlayerLobbyComponent playerObject = Instantiate<PlayerLobbyComponent>(_PlayerLobbyComponent, _PlayerLobbyObjectContainer);
             playerObject.Init(name, isHost);
-
-            // Assign start session privilege
-            playerObject.OnStartSession += StartSession;
-            _MemberList.Add(member.Id, playerObject);
         }
     }
 
-    private void StartSession(object sender, EventArgs e)
+    private void StartSession()
     {
         if (m_CurrentLobby.HasValue && m_CurrentLobby.Value.IsOwnedBy(SteamClient.SteamId))
         {
