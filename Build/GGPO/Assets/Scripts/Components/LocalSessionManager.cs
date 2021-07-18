@@ -5,16 +5,22 @@ using UnityEngine.UI;
 
 public class LocalSessionManager : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] private GGPOComponent m_GameManager;
     [SerializeField] private LobbyComponent m_LobbyComponent;
-
-    [SerializeField] private Button m_StartSessionBtn;
-    [SerializeField] private Button m_StopSessionBtn;
     [SerializeField] private GameSpeedManager m_GameSpeedManager;
+
+    [Header("UI")]
+    [SerializeField] private Button m_StartOnlySessionBtn;
+    [SerializeField] private Button m_StartStopSessionBtn;
+
 
     private void Awake()
     {
         AddListeners();
+
+        SetButtonsActive(true);
+
         SetEnableLocalSessionFeatures(false);
     }
 
@@ -23,16 +29,33 @@ public class LocalSessionManager : MonoBehaviour
         RemoveListeners();
     }
 
+    private void OnDisable()
+    {
+        if (!enabled)
+        {
+            SetButtonsActive(enabled);
+        }
+    }
+    private void OnEnable()
+    {
+        SetButtonsActive(enabled);
+    }
+
     private void AddListeners()
     {
-        m_StartSessionBtn.onClick.AddListener(OnStartSession);
-        m_StopSessionBtn.onClick.AddListener(OnStopSession);
+        m_StartOnlySessionBtn.onClick.AddListener(OnStartStopSession);
+        m_StartStopSessionBtn.onClick.AddListener(OnStartStopSession);
     }
 
     private void RemoveListeners()
     {
-        m_StartSessionBtn.onClick.RemoveListener(OnStartSession);
-        m_StopSessionBtn.onClick.RemoveListener(OnStopSession);
+        m_StartOnlySessionBtn.onClick.RemoveListener(OnStartStopSession);
+        m_StartStopSessionBtn.onClick.RemoveListener(OnStartStopSession);
+    }
+
+    private void SetButtonsActive(bool enabled)
+    {
+        m_StartStopSessionBtn.gameObject.SetActive(enabled);
     }
 
     private void SetEnableLocalSessionFeatures(bool enabled)
@@ -40,23 +63,22 @@ public class LocalSessionManager : MonoBehaviour
         m_GameSpeedManager.enabled = enabled;
     }
 
-    private void OnStartSession()
+    private void OnStartStopSession()
     {
+        var btnText = m_StartStopSessionBtn.GetComponentInChildren<Text>();
+
         if (!m_GameManager.IsRunning)
         {
             m_GameManager.StartLocalGame();
-            m_LobbyComponent.ShowGame();
 
-            // Disable Lobby component
+            // Disable Steam Lobby component
             m_LobbyComponent.enabled = false;
 
             SetEnableLocalSessionFeatures(true);
-        }
-    }
 
-    private void OnStopSession()
-    {
-        if (m_GameManager.IsRunning)
+            btnText.text = "Stop Local Session";
+        }
+        else
         {
             m_GameManager.Shutdown();
 
@@ -64,7 +86,8 @@ public class LocalSessionManager : MonoBehaviour
             m_LobbyComponent.enabled = true;
 
             SetEnableLocalSessionFeatures(false);
-            m_LobbyComponent.ShowMainMenu();
+
+            btnText.text = "Start Local Session";
         }
     }
 }

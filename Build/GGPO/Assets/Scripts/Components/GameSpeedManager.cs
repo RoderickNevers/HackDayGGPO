@@ -11,7 +11,7 @@ public class GameSpeedManager : MonoBehaviour
     [SerializeField] private Button m_PlayPauseBtn;
     [SerializeField] private Button m_StepBtn;
 
-    private void Awake()
+    private void Start()
     {
         AddListeners();
     }

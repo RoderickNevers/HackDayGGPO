@@ -588,9 +588,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GameManager: {fileID: 872434713}
   m_LobbyComponent: {fileID: 872434711}
-  m_StartSessionBtn: {fileID: 1682240402}
-  m_StopSessionBtn: {fileID: 1812112401}
   m_GameSpeedManager: {fileID: 155527100}
+  m_StartOnlySessionBtn: {fileID: 1682240402}
+  m_StartStopSessionBtn: {fileID: 1812112401}
 --- !u!4 &155527102
 Transform:
   m_ObjectHideFlags: 0
@@ -1138,10 +1138,10 @@ RectTransform:
   m_Father: {fileID: 1218725139}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 295.89062, y: -34.33808}
-  m_SizeDelta: {x: 591.78125, y: 68.67616}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &509935692
 MonoBehaviour:
@@ -1694,7 +1694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &604742630
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2109,6 +2109,7 @@ GameObject:
   - component: {fileID: 872434713}
   - component: {fileID: 872434712}
   - component: {fileID: 872434711}
+  - component: {fileID: 872434720}
   m_Layer: 5
   m_Name: MasterControl
   m_TagString: Untagged
@@ -2271,6 +2272,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &872434720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872434710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &908509833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2286,7 +2299,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &908509834
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5404,7 +5417,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Stop Session
+  m_Text: Start Local Session
 --- !u!222 &1670206732
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5447,10 +5460,10 @@ RectTransform:
   m_Father: {fileID: 1218725139}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 295.89062, y: -191.6904}
-  m_SizeDelta: {x: 591.78125, y: 68.67616}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1682240402
 MonoBehaviour:
@@ -5702,10 +5715,10 @@ RectTransform:
   m_Father: {fileID: 1218725139}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 295.89062, y: -113.014244}
-  m_SizeDelta: {x: 591.78125, y: 68.67616}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1746410748
 MonoBehaviour:
@@ -6078,7 +6091,7 @@ GameObject:
   - component: {fileID: 1812112402}
   - component: {fileID: 1812112401}
   m_Layer: 5
-  m_Name: StopSession
+  m_Name: StartStopSession
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
