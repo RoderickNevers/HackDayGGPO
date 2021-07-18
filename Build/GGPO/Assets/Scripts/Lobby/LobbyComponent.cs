@@ -53,9 +53,9 @@ public class LobbyComponent : MonoBehaviour
         SteamMatchmaking.OnLobbyInvite += OnLobbyInvite;
         SteamMatchmaking.OnLobbyEntered += OnLobbyEntered;
         SteamMatchmaking.OnLobbyMemberJoined += OnLobbyMemberJoined;
+        SteamMatchmaking.OnLobbyMemberLeave += OnLobbyMemberLeave;
         SteamMatchmaking.OnLobbyMemberDisconnected += OnLobbyMemberDisconnected;
         SteamMatchmaking.OnLobbyMemberDataChanged += OnLobbyMemberDataChanged;
-        SteamMatchmaking.OnLobbyMemberLeave += OnLobbyMemberLeave;
         SteamMatchmaking.OnChatMessage += OnChatMessage;
 
         SteamFriends.OnGameLobbyJoinRequested += OnGameLobbyJoinRequested;
@@ -76,9 +76,9 @@ public class LobbyComponent : MonoBehaviour
         SteamMatchmaking.OnLobbyInvite -= OnLobbyInvite;
         SteamMatchmaking.OnLobbyEntered -= OnLobbyEntered;
         SteamMatchmaking.OnLobbyMemberJoined -= OnLobbyMemberJoined;
+        SteamMatchmaking.OnLobbyMemberLeave -= OnLobbyMemberLeave;
         SteamMatchmaking.OnLobbyMemberDisconnected -= OnLobbyMemberDisconnected;
         SteamMatchmaking.OnLobbyMemberDataChanged -= OnLobbyMemberDataChanged;
-        SteamMatchmaking.OnLobbyMemberLeave -= OnLobbyMemberLeave;
         SteamMatchmaking.OnChatMessage -= OnChatMessage;
 
         SteamMatchmaking.OnLobbyGameCreated -= OnLobbyGameCreated;
@@ -201,6 +201,7 @@ public class LobbyComponent : MonoBehaviour
     private void OnLobbyMemberLeave(Lobby lobby, Friend friend)
     {
         Debug.Log($"{friend.Name} left lobby {lobby.Id}");
+        DisplayLobbyMembers(lobby);
     }
 
     /// <summary>
@@ -240,10 +241,17 @@ public class LobbyComponent : MonoBehaviour
         _LobbyPanel.SetActive(true);
     }
 
+    private void ShowMainMenu()
+    {
+        _MainMenuPanel.SetActive(true);
+        _LobbyPanel.SetActive(false);
+    }
+
     private void LeaveLobby()
     {
         Debug.Log($"Leave lobby {m_CurrentLobby?.Id}...");
         m_CurrentLobby?.Leave();
+        ShowMainMenu();
     }
 
     private void InviteFriendToLobby(SteamId friend)
