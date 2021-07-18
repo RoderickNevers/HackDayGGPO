@@ -10,9 +10,12 @@ public class ReplayPanelController : MonoBehaviour
     public Button startStopReplayButton;
     public TextMeshProUGUI startStopReplayButtonText;
     public ReplayManager replayManager;
+    [SerializeField] private GameObject UIRoot;
 
     private void OnEnable()
     {
+        UIRoot.SetActive(true);
+
         replayManager.OnStartedRecording += OnStartedRecording;
         replayManager.OnStoppedRecording += OnStoppedRecording;
         replayManager.OnStartedReplaying += OnStartedReplaying;
@@ -21,6 +24,11 @@ public class ReplayPanelController : MonoBehaviour
 
     private void OnDisable()
     {
+        if (!enabled)
+        {
+            UIRoot.SetActive(false);
+        }
+
         replayManager.OnStartedRecording -= OnStartedRecording;
         replayManager.OnStoppedRecording -= OnStoppedRecording;
         replayManager.OnStartedReplaying -= OnStartedReplaying;

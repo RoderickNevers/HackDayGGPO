@@ -7,6 +7,7 @@ public class InputDisplayComponent : MonoBehaviour
 {
 
     [SerializeField] private GGPOComponent GameManager;
+    [SerializeField] private Text CurrentP1Input;
     [SerializeField] private Text P1Text;
     [SerializeField] private Text P2Text;
 
@@ -25,7 +26,8 @@ public class InputDisplayComponent : MonoBehaviour
         if (GameManager.Runner != null)
         {
             GameState = (GGPOGameState)GameManager.Runner.Game;
-            text.text = GameManager.DisplayCurrentInputs();
+            text.text = GameManager.DisplayFrameInputs();
+            CurrentP1Input.text = $"{GameState.ReadInputs(0)}";
 
             Player player1 = GameState.GetPlayer(0);
             string p1string = string.Format("Position: {0}, {1}, {2}", player1.position.x, player1.position.y, player1.position.z);

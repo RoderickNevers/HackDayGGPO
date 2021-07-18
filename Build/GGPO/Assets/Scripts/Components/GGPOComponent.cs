@@ -34,13 +34,14 @@ public class GGPOComponent : GameManager
         Shutdown();
     }
 
-    public string DisplayCurrentInputs()
+    public string DisplayFrameInputs()
     {
         string fp = "";
 
         if (Runner != null)
         {
             GGPOGameState gameState = (GGPOGameState)Runner.Game;
+
             fp = string.Format("Frame: {0} - P1 input: {1}, P2 input: {2}\n", gameState.Framenumber, gameState.UnserializedInputsP1, gameState.UnserializedInputsP2);
 
             // Debug.Log(fp);

@@ -114,7 +114,7 @@ public struct GGPOGameState : IGame
     public GGPOGameState(int num_players)
     {
         // consts
-        _Speed = 20;
+        _Speed = 2;
 
         Framenumber = 0;
         UnserializedInputsP1 = 0;
@@ -164,7 +164,7 @@ public struct GGPOGameState : IGame
             Players[i].velocity.Set(0, 0, -1);
         }
 
-        Players[i].velocity = Players[i].velocity.normalized * _Speed;
+        Players[i].velocity = Players[i].velocity * _Speed;
     }
 
     public void MovePlayer(int index)
@@ -191,7 +191,7 @@ public struct GGPOGameState : IGame
         {
             ParsePlayerInputs(inputs[i], i);
             MovePlayer(i);
-        }    
+        }
     }
 
     public long ReadInputs(int id)

@@ -49,11 +49,14 @@ public class SteamLobbyComponent : MonoBehaviour
 
     private void OnDisable()
     {
-        SetButtonsActive(false);
+        if (!enabled)
+        {
+            SetButtonsActive(enabled);
+        }
     }
     private void OnEnable()
     {
-        SetButtonsActive(true);
+        SetButtonsActive(enabled);
     }
 
     private void SetButtonsActive(bool enabled)

@@ -19,10 +19,6 @@ namespace SharedGame {
             }
         }
 
-        public const float FRAME_LENGTH_SEC = 1f / 60f;
-        protected float next;
-        protected float nextIdle;
-
         public event Action<string> OnStatus;
 
         public event Action<string> OnChecksum;
@@ -32,6 +28,30 @@ namespace SharedGame {
         public event Action OnInit;
 
         public event Action OnStateChanged;
+
+        // Game speed
+        public const float FRAME_LENGTH_SEC = 1f / 60f;
+        public float currentFrameLength { get; protected set; } = FRAME_LENGTH_SEC;
+        protected float next;
+
+        public void ResetFrameLengthToDefault()
+        {
+            currentFrameLength = FRAME_LENGTH_SEC;
+            next = Time.time;
+        }
+
+        public void SetCurrentFrameLength(float frameLength)
+        {
+            currentFrameLength = frameLength;
+        }
+
+        public bool manualFrameIncrement { get; set; } = false;
+        protected bool shouldIncrementFrame = false;
+
+        public void IncrementFrame()
+        {
+            shouldIncrementFrame = true;
+        }
 
         public Stopwatch updateWatch = new Stopwatch();
 
@@ -71,36 +91,52 @@ namespace SharedGame {
                     OnInit?.Invoke();
 
                     next = now;
-                    nextIdle = now;
                 }
             }
             if (Runner != null)
             {
-                if (now >= next)
+                // Manual
+                if (manualFrameIncrement)
                 {
-                    next += FRAME_LENGTH_SEC;
+                    if (shouldIncrementFrame)
+                    {
+                        shouldIncrementFrame = false;
 
-                    //if (updateWatch.IsRunning)
-                    //{
-                    //    updateWatch.Stop();
-
-                    //    string status = Runner.GetStatus(updateWatch);
-                    //    OnStatus?.Invoke(status);
-                    //    OnChecksum?.Invoke(RenderChecksum(Runner.GameInfo.periodic) + RenderChecksum(Runner.GameInfo.now));
-                    //}
-
-                    //updateWatch.Start();
-
-                    OnPreRunFrame();
-                    Runner.RunFrame();
-                    OnStateChanged?.Invoke();
-
-                    now = Time.time;
-                    var extraMs = Mathf.Max(0, (int)((next - now) * 1000f) - 1);
-                    Runner.Idle(extraMs);
-
-                    // UnityEngine.Debug.Log(string.Format("Next: {0}, Now: {1}, Diff: {2}, Extra ms: {3}", next, now, next-now, extraMs));
+                        OnPreRunFrame();
+                        Runner.RunFrame();
+                        OnStateChanged?.Invoke();
+                    }
                 }
+                else
+                {
+                    // Auto
+                    if (now >= next)
+                    {
+                        next += currentFrameLength;
+
+                        //if (updateWatch.IsRunning)
+                        //{
+                        //    updateWatch.Stop();
+
+                        //    string status = Runner.GetStatus(updateWatch);
+                        //    OnStatus?.Invoke(status);
+                        //    OnChecksum?.Invoke(RenderChecksum(Runner.GameInfo.periodic) + RenderChecksum(Runner.GameInfo.now));
+                        //}
+
+                        //updateWatch.Start();
+
+                        OnPreRunFrame();
+                        Runner.RunFrame();
+                        OnStateChanged?.Invoke();
+
+                        now = Time.time;
+                        var extraMs = Mathf.Max(0, (int)((next - now) * 1000f) - 1);
+                        Runner.Idle(extraMs);
+
+                        // UnityEngine.Debug.Log(string.Format("Next: {0}, Now: {1}, Diff: {2}, Extra ms: {3}", next, now, next-now, extraMs));
+                    }
+                }
+
             }
         }
 

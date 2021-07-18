@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 public class ReplayManager : MonoBehaviour
 {
     [SerializeField] private PlayerController _Player;
+    [SerializeField] private ReplayPanelController _ReplayPanelController;
 
     private MemoryStream memoryStream = null;
     private BinaryWriter binaryWriter = null;
@@ -25,6 +26,25 @@ public class ReplayManager : MonoBehaviour
     public Action OnStoppedRecording;
     public Action OnStartedReplaying;
     public Action OnStoppedReplaying;
+
+
+    private void OnAwake()
+    {
+        _ReplayPanelController.enabled = false;
+    }
+
+    private void OnEnable()
+    {
+        _ReplayPanelController.enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        if (!enabled)
+        {
+            _ReplayPanelController.enabled = false;
+        }
+    }
 
     public void LateUpdate()
     {
