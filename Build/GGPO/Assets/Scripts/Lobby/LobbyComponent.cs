@@ -5,6 +5,7 @@ using TMPro;
 using Steamworks.Data;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 
 public class LobbyComponent : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class LobbyComponent : MonoBehaviour
     private Lobby? m_CurrentLobby;
     private int m_MaxLobbyMembers = 4;
     private SteamManager m_SteamManager;
+    private Dictionary<SteamId, PlayerLobbyComponent> _MemberList = new Dictionary<SteamId, PlayerLobbyComponent>();
 
     private LobbyQuery m_LobbyList { get; }
 
@@ -194,13 +196,28 @@ public class LobbyComponent : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// The lobby member left the room
     /// </summary>
     /// <param name="lobby"></param>
     /// <param name="friend"></param>
     private void OnLobbyMemberLeave(Lobby lobby, Friend friend)
     {
         Debug.Log($"{friend.Name} left lobby {lobby.Id}");
+
+        // Remove start session abilities
+        foreach (Friend member in lobby.Members)
+        {
+            bool isHost = lobby.IsOwnedBy(member.Id);
+
+            if (!isHost)
+            {
+                continue;
+            }
+
+            PlayerLobbyComponent playerComponent = _MemberList[member.Id];
+            playerComponent.OnStartSession -= StartSession;
+        }
+
         DisplayLobbyMembers(lobby);
     }
 
@@ -259,18 +276,6 @@ public class LobbyComponent : MonoBehaviour
         m_CurrentLobby?.InviteFriend(friend);
     }
 
-    private void StartSession()
-    {
-        if (m_CurrentLobby.HasValue && m_CurrentLobby.Value.IsOwnedBy(SteamClient.SteamId))
-        {
-            // Take the role of host
-            m_SteamManager.StartSteamworksConnection(true, SteamClient.SteamId);
-
-            // Alert all in lobby
-            m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
-        }
-    }
-
     private void EndSession()
     {
         m_SteamManager.CloseSteamworksConnection();
@@ -289,6 +294,9 @@ public class LobbyComponent : MonoBehaviour
             GameObject.Destroy(child);
         }
 
+        // Reset the member list
+        _MemberList.Clear();
+
         // Add new objects to ui
         foreach (Friend member in lobby.Members)
         {
@@ -297,6 +305,22 @@ public class LobbyComponent : MonoBehaviour
             bool isHost = lobby.IsOwnedBy(member.Id);
             PlayerLobbyComponent playerObject = Instantiate<PlayerLobbyComponent>(_PlayerLobbyComponent, _PlayerLobbyObjectContainer);
             playerObject.Init(name, isHost);
+
+            // Assign start session privilege
+            playerObject.OnStartSession += StartSession;
+            _MemberList.Add(member.Id, playerObject);
+        }
+    }
+
+    private void StartSession(object sender, EventArgs e)
+    {
+        if (m_CurrentLobby.HasValue && m_CurrentLobby.Value.IsOwnedBy(SteamClient.SteamId))
+        {
+            // Take the role of host
+            m_SteamManager.StartSteamworksConnection(true, SteamClient.SteamId);
+
+            // Alert all in lobby
+            m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
         }
     }
 
