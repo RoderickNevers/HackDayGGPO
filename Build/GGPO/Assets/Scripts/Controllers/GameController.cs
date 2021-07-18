@@ -61,7 +61,9 @@ public class GameController : MonoBehaviour, IGameView
         Transform start = playerIndex == 0 ? _P1Spawn : _P2Spawn;
 
         GameObject player = Instantiate(playerPrefab, start.position, start.rotation);
-        PlayerControllers[playerIndex] = player.GetComponent<GGPOPlayerController>();
+        GGPOPlayerController playerController = player.GetComponent<GGPOPlayerController>();
+        playerController.Init(_GGPOComponent);
+        PlayerControllers[playerIndex] = playerController;
     }
 
     private void ResetView(GGPOGameState gs)
@@ -77,7 +79,7 @@ public class GameController : MonoBehaviour, IGameView
 
     private void Update()
     {
-        if (_GGPOComponent.IsRunning)
+        if (_GGPOComponent.IsRunning && _GGPOComponent.Runner != null)
         {
             UpdateGameView(_GGPOComponent.Runner);
         }

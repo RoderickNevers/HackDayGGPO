@@ -10,17 +10,20 @@ using System.Collections.Generic;
 public class LobbyComponent : MonoBehaviour
 {
     [Header("Main Menu Content")]
-    [SerializeField] private GameObject _MainMenuPanel;
+    [SerializeField] private GameObject m_MainMenuPanel;
     [SerializeField] private Button m_CreateBtn;
     [SerializeField] private Button m_ListLobbiesBtn;
 
     [Header("Lobby Content")]
-    [SerializeField] private GameObject _LobbyPanel;
-    [SerializeField] private Transform _PlayerLobbyObjectContainer;
-    [SerializeField] private PlayerLobbyComponent _PlayerLobbyComponent;
+    [SerializeField] private GameObject m_LobbyPanel;
+    [SerializeField] private Transform m_PlayerLobbyObjectContainer;
+    [SerializeField] private PlayerLobbyComponent m_PlayerLobbyComponent;
     [SerializeField] private Button m_LeaveBtn;
     [SerializeField] private Button m_StartSessionBtn;
     [SerializeField] private Button m_EndSessionBtn;
+
+    [Header("Gameplay Debug Panel")]
+    [SerializeField] private GameObject m_DebugPanel;
 
     private Lobby? m_CurrentLobby;
     private int m_MaxLobbyMembers = 4;
@@ -241,22 +244,25 @@ public class LobbyComponent : MonoBehaviour
         return await SteamMatchmaking.CreateLobbyAsync(m_MaxLobbyMembers);
     }
 
-    private void ShowLobby()
+    public void ShowLobby()
     {
-        _MainMenuPanel.SetActive(false);
-        _LobbyPanel.SetActive(true);
+        m_MainMenuPanel.SetActive(false);
+        m_LobbyPanel.SetActive(true);
+        m_DebugPanel.SetActive(false);
     }
 
-    private void ShowMainMenu()
+    public void ShowMainMenu()
     {
-        _MainMenuPanel.SetActive(true);
-        _LobbyPanel.SetActive(false);
+        m_MainMenuPanel.SetActive(true);
+        m_LobbyPanel.SetActive(false);
+        m_DebugPanel.SetActive(false);
     }
 
-    private void ShowGame()
+    public void ShowGame()
     {
-        _MainMenuPanel.SetActive(false);
-        _LobbyPanel.SetActive(false);
+        m_MainMenuPanel.SetActive(false);
+        m_LobbyPanel.SetActive(false);
+        m_DebugPanel.SetActive(true);
     }
 
     private void LeaveLobby()
@@ -283,9 +289,9 @@ public class LobbyComponent : MonoBehaviour
         Debug.Log($"Lobby Members: {lobby.MemberCount}\n");
 
         // Clear children
-        for (int i = 0; i < _PlayerLobbyObjectContainer.transform.childCount; i++)
+        for (int i = 0; i < m_PlayerLobbyObjectContainer.transform.childCount; i++)
         {
-            GameObject child = _PlayerLobbyObjectContainer.transform.GetChild(i).gameObject;
+            GameObject child = m_PlayerLobbyObjectContainer.transform.GetChild(i).gameObject;
             GameObject.Destroy(child);
         }
 
@@ -302,7 +308,7 @@ public class LobbyComponent : MonoBehaviour
                 m_EndSessionBtn.gameObject.SetActive(isHost);
             }
 
-            PlayerLobbyComponent playerObject = Instantiate<PlayerLobbyComponent>(_PlayerLobbyComponent, _PlayerLobbyObjectContainer);
+            PlayerLobbyComponent playerObject = Instantiate<PlayerLobbyComponent>(m_PlayerLobbyComponent, m_PlayerLobbyObjectContainer);
             playerObject.Init(name, isHost);
         }
     }

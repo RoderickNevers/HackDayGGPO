@@ -10,7 +10,6 @@ public class GameSpeedManager : MonoBehaviour
     [SerializeField] private Button m_ResetSpeedModifierBtn;
     [SerializeField] private Button m_PlayPauseBtn;
     [SerializeField] private Button m_StepBtn;
-    [SerializeField] private GameObject m_UIRoot;
 
     private void Awake()
     {
@@ -20,24 +19,6 @@ public class GameSpeedManager : MonoBehaviour
     private void OnDestroy()
     {
         RemoveListeners();
-    }
-
-    private void OnEnable()
-    {
-        SetActiveUI(true);
-    }
-
-    private void OnDisable()
-    {
-        if (!enabled)
-        {
-            SetActiveUI(false);
-        }
-    }
-
-    private void SetActiveUI(bool active)
-    {
-        m_UIRoot.SetActive(active);
     }
 
     private void AddListeners()
