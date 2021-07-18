@@ -1,0 +1,350 @@
+using Steamworks;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using Steamworks.Data;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+
+public class LobbyComponent : MonoBehaviour
+{
+    [Header("Main Menu Content")]
+    [SerializeField] private GameObject _MainMenuPanel;
+    [SerializeField] private Button m_CreateBtn;
+    [SerializeField] private Button m_ListLobbiesBtn;
+
+    [Header("Lobby Content")]
+    [SerializeField] private GameObject _LobbyPanel;
+    [SerializeField] private Transform _PlayerLobbyObjectContainer;
+    [SerializeField] private PlayerLobbyComponent _PlayerLobbyComponent;
+    [SerializeField] private Button m_LeaveBtn;
+    [SerializeField] private Button m_StartSessionBtn;
+    [SerializeField] private Button m_EndSessionBtn;
+
+    private Lobby? m_CurrentLobby;
+    private int m_MaxLobbyMembers = 4;
+    private SteamManager m_SteamManager;
+
+    private LobbyQuery m_LobbyList { get; }
+
+    private void Start()
+    {
+        if (SteamManager.Initialized)
+        {
+            Debug.Log("Steam API init -- SUCCESS!");
+            AddListeners();
+            m_SteamManager = FindObjectOfType<SteamManager>();
+            Debug.Assert(m_SteamManager != null, "Could not find SteamManager!");
+
+            ShowMainMenu();
+        }
+        else
+        {
+            Debug.Log("Steam API init -- failure ...");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        RemoveListeners();
+    }
+
+    private void AddListeners()
+    {
+        SteamMatchmaking.OnLobbyCreated += OnLobbyCreated;
+        SteamMatchmaking.OnLobbyInvite += OnLobbyInvite;
+        SteamMatchmaking.OnLobbyEntered += OnLobbyEntered;
+        SteamMatchmaking.OnLobbyMemberJoined += OnLobbyMemberJoined;
+        SteamMatchmaking.OnLobbyMemberLeave += OnLobbyMemberLeave;
+        SteamMatchmaking.OnLobbyMemberDisconnected += OnLobbyMemberDisconnected;
+        SteamMatchmaking.OnLobbyMemberDataChanged += OnLobbyMemberDataChanged;
+        SteamMatchmaking.OnChatMessage += OnChatMessage;
+
+        SteamFriends.OnGameLobbyJoinRequested += OnGameLobbyJoinRequested;
+
+        // Match starting
+        SteamMatchmaking.OnLobbyGameCreated += OnLobbyGameCreated;
+
+        m_CreateBtn.onClick.AddListener(CreateLobby);
+        m_LeaveBtn.onClick.AddListener(LeaveLobby);
+        m_ListLobbiesBtn.onClick.AddListener(ListCloseLobbies);
+        m_StartSessionBtn.onClick.AddListener(StartSession);
+        m_EndSessionBtn.onClick.AddListener(EndSession);
+    }
+
+    private void RemoveListeners()
+    {
+        SteamMatchmaking.OnLobbyCreated -= OnLobbyCreated;
+        SteamMatchmaking.OnLobbyInvite -= OnLobbyInvite;
+        SteamMatchmaking.OnLobbyEntered -= OnLobbyEntered;
+        SteamMatchmaking.OnLobbyMemberJoined -= OnLobbyMemberJoined;
+        SteamMatchmaking.OnLobbyMemberLeave -= OnLobbyMemberLeave;
+        SteamMatchmaking.OnLobbyMemberDisconnected -= OnLobbyMemberDisconnected;
+        SteamMatchmaking.OnLobbyMemberDataChanged -= OnLobbyMemberDataChanged;
+        SteamMatchmaking.OnChatMessage -= OnChatMessage;
+
+        SteamMatchmaking.OnLobbyGameCreated -= OnLobbyGameCreated;
+
+        m_CreateBtn.onClick.RemoveAllListeners();
+        m_LeaveBtn.onClick.RemoveAllListeners();
+        m_ListLobbiesBtn.onClick.RemoveAllListeners();
+        m_StartSessionBtn.onClick.RemoveAllListeners();
+        m_EndSessionBtn.onClick.RemoveAllListeners();
+    }
+
+    /// <summary>
+    /// You created a lobby
+    /// </summary>
+    /// <param name="result"></param>
+    /// <param name="lobby"></param>
+    private void OnLobbyCreated(Result result, Lobby lobby)
+    {
+        if (result == Result.OK)
+        {
+             Debug.Log($"SUCCESS! Lobby created id:{lobby.Id}");
+            ShowLobby();
+        }
+        else
+            Debug.Log("Lobby created -- failure ...");
+
+        m_CurrentLobby = lobby;
+    }
+
+    /// <summary>
+    /// Someone invited you to a lobby
+    /// </summary>
+    /// <param name="friend"></param>
+    /// <param name="lobby"></param>
+    private void OnLobbyInvite(Friend friend, Lobby lobby)
+    {
+        Debug.Log($"{friend.Name} invited me to lobby: {lobby.Id}\n");
+    }
+
+    /// <summary>
+    /// The lobby member joined
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="friend"></param>
+    private void OnLobbyMemberJoined(Lobby lobby, Friend friend)
+    {
+        Debug.Log($"Friend {friend.Name} joined the lobby\n");
+        DisplayLobbyMembers(lobby);
+    }
+
+    /// <summary>
+    /// Called when you join a lobby
+    /// </summary>
+    /// <param name="lobby"></param>
+    private void OnLobbyEntered(Lobby lobby)
+    {
+        ShowLobby();
+        DisplayLobbyMembers(lobby);
+    }
+
+    /// <summary>
+    /// Called when the user tries to join a lobby from their friends list game client should attempt to connect to specified lobby when this is received
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="steamID"></param>
+    private void OnGameLobbyJoinRequested(Lobby lobby, SteamId steamID)
+    {
+        Debug.Log($"Barging, uninvited into {lobby.Owner.Name}'s Lobby.\n");
+        m_CurrentLobby = lobby;
+        lobby.Join();
+    }
+
+    /// <summary>
+    /// Is called when the session starts
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="ip"></param>
+    /// <param name="port"></param>
+    /// <param name="steamId"></param>
+    private void OnLobbyGameCreated(Lobby lobby, uint ip, ushort port, SteamId steamId)
+    {
+        Debug.Log($"OnLobbyGameCreated for {lobby.Owner.Name}'s Lobby. {steamId.AccountId} is the host!\n");
+
+        if (lobby.Owner.Id == SteamClient.SteamId)
+        {
+            // Start game?
+            Debug.Log($"OnLobbyGameCreated - I am the host!!\n");
+        }
+        else
+        {
+            m_SteamManager.StartSteamworksConnection(false, steamId);
+        }
+
+        // Hide the lobby UI
+        ShowGame();
+    }
+
+    /// <summary>
+    /// The lobby member left the room
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="friend"></param>
+    private void OnLobbyMemberDisconnected(Lobby lobby, Friend friend)
+    {
+        Debug.Log($"{friend.Name} disconnected from lobby {lobby.Id}");
+    }
+
+    /// <summary>
+    /// The lobby member metadata has changed
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="friend"></param>
+    private void OnLobbyMemberDataChanged(Lobby lobby, Friend friend)
+    {
+        Debug.Log($"{friend.Name} data changed in {lobby.Id}");
+    }
+
+    /// <summary>
+    /// The lobby member left the room
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="friend"></param>
+    private void OnLobbyMemberLeave(Lobby lobby, Friend friend)
+    {
+        Debug.Log($"{friend.Name} left lobby {lobby.Id}");
+        DisplayLobbyMembers(lobby);
+    }
+
+    /// <summary>
+    /// The lobby member left the room
+    /// </summary>
+    /// <param name="lobby"></param>
+    /// <param name="friend"></param>
+    /// <param name="message"></param>
+    private void OnChatMessage(Lobby lobby, Friend friend, string message)
+    {
+        Debug.Log($"{friend.Name} sent message {message}  to\nlobby:{lobby.Id}");
+    }
+
+    private async void CreateLobby()
+    {
+        Debug.Log("Trying to create lobby ...");
+        try
+        {
+            m_CurrentLobby = await CreateLobbyAsync();
+            m_CurrentLobby?.SetJoinable(true);
+            m_CurrentLobby?.SetPublic();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error Creating Lobby {e.Message}");
+        }
+    }
+
+    public async Task<Lobby?> CreateLobbyAsync()
+    {
+        return await SteamMatchmaking.CreateLobbyAsync(m_MaxLobbyMembers);
+    }
+
+    private void ShowLobby()
+    {
+        _MainMenuPanel.SetActive(false);
+        _LobbyPanel.SetActive(true);
+    }
+
+    private void ShowMainMenu()
+    {
+        _MainMenuPanel.SetActive(true);
+        _LobbyPanel.SetActive(false);
+    }
+
+    private void ShowGame()
+    {
+        _MainMenuPanel.SetActive(false);
+        _LobbyPanel.SetActive(false);
+    }
+
+    private void LeaveLobby()
+    {
+        Debug.Log($"Leave lobby {m_CurrentLobby?.Id}...");
+        m_CurrentLobby?.Leave();
+        ShowMainMenu();
+    }
+
+    private void InviteFriendToLobby(SteamId friend)
+    {
+        m_CurrentLobby?.InviteFriend(friend);
+    }
+
+    private void EndSession()
+    {
+        m_SteamManager.CloseSteamworksConnection();
+    }
+
+
+
+    private void DisplayLobbyMembers(Lobby lobby)
+    {
+        Debug.Log($"Lobby Members: {lobby.MemberCount}\n");
+
+        // Clear children
+        for (int i = 0; i < _PlayerLobbyObjectContainer.transform.childCount; i++)
+        {
+            GameObject child = _PlayerLobbyObjectContainer.transform.GetChild(i).gameObject;
+            GameObject.Destroy(child);
+        }
+
+        // Add new objects to ui
+        foreach (Friend member in lobby.Members)
+        {
+            Debug.Log($"Member Name: {member.Name}\n");
+            string name = member.Name;
+            bool isHost = lobby.IsOwnedBy(member.Id);
+
+            if (SteamClient.SteamId == member.Id)
+            {
+                m_StartSessionBtn.gameObject.SetActive(isHost);
+                m_EndSessionBtn.gameObject.SetActive(isHost);
+            }
+
+            PlayerLobbyComponent playerObject = Instantiate<PlayerLobbyComponent>(_PlayerLobbyComponent, _PlayerLobbyObjectContainer);
+            playerObject.Init(name, isHost);
+        }
+    }
+
+    private void StartSession()
+    {
+        if (m_CurrentLobby.HasValue && m_CurrentLobby.Value.IsOwnedBy(SteamClient.SteamId))
+        {
+            // Take the role of host
+            m_SteamManager.StartSteamworksConnection(true, SteamClient.SteamId);
+
+            // Alert all in lobby
+            m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
+        }
+    }
+
+    private async void ListCloseLobbies()
+    {
+        Debug.Log("Trying to get list of available lobbies ...");
+        Lobby[] lobbies = await m_LobbyList.FilterDistanceClose().RequestAsync();
+        Debug.Log($"Total Lobbies found: {lobbies.Length}");
+
+        foreach (Lobby lobby in lobbies)
+        {
+            Debug.Log(lobby.Id);
+        }
+    }
+
+    private async Task<Lobby?> FindFriendsLobby(SteamId friendID)
+    {
+        Debug.Log("Trying to find friends lobby...");
+        Lobby[] lobbies = await m_LobbyList.RequestAsync();
+
+        foreach (Lobby lobby in lobbies)
+        {
+            if (lobby.IsOwnedBy(friendID))
+            {
+                return lobby;
+            }
+        }
+
+        Debug.Log("Lobby was not found");
+        return null;
+    }
+}
