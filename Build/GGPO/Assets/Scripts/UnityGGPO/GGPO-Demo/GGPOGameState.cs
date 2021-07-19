@@ -5,42 +5,10 @@ using Unity.Collections;
 using UnityEngine;
 
 [Serializable]
-public struct Player
-{
-    public Vector3 position;
-    public Vector3 velocity;
-
-    public void Serialize(BinaryWriter bw)
-    {
-        bw.Write(position.x);
-        bw.Write(position.z);
-        bw.Write(velocity.x);
-        bw.Write(velocity.z);
-    }
-
-    public void Deserialize(BinaryReader br)
-    {
-        position.x = br.ReadSingle();
-        position.z = br.ReadSingle();
-        velocity.x = br.ReadSingle();
-        velocity.z = br.ReadSingle();
-    }
-
-    // @LOOK Not hashing bullets.
-    public override int GetHashCode()
-    {
-        int hashCode = 1858597544;
-        hashCode = hashCode * -1521134295 + position.GetHashCode();
-        hashCode = hashCode * -1521134295 + velocity.GetHashCode();
-        return hashCode;
-    }
-};
-
-[Serializable]
 public struct GGPOGameState : IGame
 {
-    public const int INPUT_FORWARD = (1 << 0);
-    public const int INPUT_BACKWARD = (1 << 1);
+    //public const int INPUT_FORWARD = (1 << 0);
+    //public const int INPUT_BACKWARD = (1 << 1);
     public const int INPUT_LEFT = (1 << 2);
     public const int INPUT_RIGHT = (1 << 3);
 
@@ -140,7 +108,7 @@ public struct GGPOGameState : IGame
 
     public void ParsePlayerInputs(long inputs, int i)
     {
-        GGPORunner.LogGame($"parsing ship {i} inputs: {inputs}.");
+        GGPORunner.LogGame($"parsing player {i} inputs: {inputs}.");
         
         Players[i].velocity.Set(0, 0, 0);
 
@@ -154,15 +122,15 @@ public struct GGPOGameState : IGame
             Players[i].velocity.Set(1, 0, 0);
         }
 
-        if ((inputs & INPUT_FORWARD) != 0)
-        {
-            Players[i].velocity.Set(0, 0, 1);
-        }
+        //if ((inputs & INPUT_FORWARD) != 0)
+        //{
+        //    Players[i].velocity.Set(0, 0, 1);
+        //}
 
-        if ((inputs & INPUT_BACKWARD) != 0)
-        {
-            Players[i].velocity.Set(0, 0, -1);
-        }
+        //if ((inputs & INPUT_BACKWARD) != 0)
+        //{
+        //    Players[i].velocity.Set(0, 0, -1);
+        //}
 
         Players[i].velocity = Players[i].velocity * _Speed;
     }
@@ -198,18 +166,19 @@ public struct GGPOGameState : IGame
     {
         long input = 0;
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            input |= INPUT_FORWARD;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            input |= INPUT_BACKWARD;
-        }
+        //if (Input.GetKey(KeyCode.W))
+        //{
+        //    input |= INPUT_FORWARD;
+        //}
+        //if (Input.GetKey(KeyCode.S))
+        //{
+        //    input |= INPUT_BACKWARD;
+        //}
         if (Input.GetKey(KeyCode.A))
         {
             input |= INPUT_LEFT;
         }
+
         if (Input.GetKey(KeyCode.D))
         {
             input |= INPUT_RIGHT;
