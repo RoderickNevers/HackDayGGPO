@@ -7,31 +7,34 @@ using UnityEngine;
 [Serializable]
 public struct Player
 {
-    public Vector3 position;
-    public Vector3 velocity;
+    public Vector3 Position;
+    public Vector3 Velocity;
+    public bool IsGrounded;
 
     public void Serialize(BinaryWriter bw)
     {
-        bw.Write(position.x);
-        //bw.Write(position.z);
-        bw.Write(velocity.x);
-        //bw.Write(velocity.z);
+        bw.Write(Position.x);
+        bw.Write(Position.y);
+        bw.Write(Velocity.x);
+        bw.Write(Velocity.y);
+        bw.Write(IsGrounded);
     }
 
     public void Deserialize(BinaryReader br)
     {
-        position.x = br.ReadSingle();
-        //position.z = br.ReadSingle();
-        velocity.x = br.ReadSingle();
-        //velocity.z = br.ReadSingle();
+        Position.x = br.ReadSingle();
+        Position.y = br.ReadSingle();
+        Velocity.x = br.ReadSingle();
+        Velocity.y = br.ReadSingle();
+        IsGrounded = br.ReadBoolean();
     }
 
-    // @LOOK Not hashing bullets.
     public override int GetHashCode()
     {
         int hashCode = 1858597544;
-        hashCode = hashCode * -1521134295 + position.GetHashCode();
-        hashCode = hashCode * -1521134295 + velocity.GetHashCode();
+        hashCode = hashCode * -1521134295 + Position.GetHashCode();
+        hashCode = hashCode * -1521134295 + Velocity.GetHashCode();
+        hashCode = hashCode * -1521134295 + IsGrounded.GetHashCode();
         return hashCode;
     }
 };
