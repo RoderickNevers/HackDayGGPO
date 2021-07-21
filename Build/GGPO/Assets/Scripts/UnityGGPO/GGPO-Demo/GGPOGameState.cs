@@ -116,11 +116,8 @@ public struct GGPOGameState : IGame
 
         for (int i = 0; i < Players.Length; i++)
         {
-            Players[i].IsGrounded = Simulation.GroundCheck(Players[i]);
-            //Debug.Log(Players[i].IsGrounded);
-
-            Players[i].Velocity = Simulation.ParseInputs(Players[i], inputs[i]);
-            Players[i].Position = Simulation.MovePlayer(Players[i]);
+            Players[i] = Simulation.Run(Players[i], inputs[i]);
+            Debug.Log(Players[i].IsGrounded);
         }
     }
 

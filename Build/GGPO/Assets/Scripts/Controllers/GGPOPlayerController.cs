@@ -20,8 +20,9 @@ public class GGPOPlayerController : MonoBehaviour
 
     public void UpdatePlayerPosition(Player player)
     {
-        Debug.Log(player.Position);
-        transform.position = Vector3.Slerp(transform.position, player.Position, 1f);
+        //Debug.Log(player.Position);
+        transform.position = player.Position;
+        //transform.position = Vector3.Slerp(transform.position, player.Position, 1f);
 
         //transform.position = player.Position;
         //if (m_GGPOComponent.manualFrameIncrement)
