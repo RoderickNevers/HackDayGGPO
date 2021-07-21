@@ -13,6 +13,8 @@ public static class Simulation
     private const int JUMP_HEIGHT = 5;
     private const float GRAVITY = -9.8f;
 
+    private static float velocityY;
+
     /// <summary>
     /// The update loop that runs the simulation on the players
     /// </summary>
@@ -37,48 +39,50 @@ public static class Simulation
         if (player.IsGrounded && player.Velocity.y < 0)
         {
             player.Velocity.y = 0f;
-            //player.Position.y = 0f;
         }
 
         //player.Velocity.Set(0, 0, 0);
+        float x = 0;
 
         if ((input & INPUT_LEFT) != 0)
         {
-            player.Velocity.Set(-1, 0, 0);
+            x = -1; 
         }
 
         if ((input & INPUT_RIGHT) != 0)
         {
-            player.Velocity.Set(1, 0, 0);
+            x = 1;
         }
 
-        player.Velocity = player.Velocity * MOVE_SPEED * Time.fixedDeltaTime;
+        player.Velocity.Set(x, 0, 0);
+        player.Velocity = MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
 
         //jump stuff
+        Debug.Log($"A: {input} B: {INPUT_UP}");
+
+        if ((input & INPUT_UP) != 0 && player.IsGrounded)
+        {
+            var jumpVal = Mathf.Sqrt(JUMP_HEIGHT * -3.0f * GRAVITY);
+            Debug.Log($"Jump value: {jumpVal}");
+            player.Velocity.y += jumpVal;
+        }
+
         if (!player.IsGrounded && player.Position.y >= 0)
         {
             player.Velocity.y += GRAVITY * Time.fixedDeltaTime;
         }
 
-        if ((input & INPUT_UP) != 0 && player.IsGrounded)
-        {
-            player.Velocity.y += Mathf.Sqrt(JUMP_HEIGHT * -3.0f * GRAVITY);
-        }
         //end jump stuff
 
-        if ((input & INPUT_DOWN) != 0)
-        {
-            player.Velocity.Set(0, 0, 0);
-        }
+        //if ((input & INPUT_DOWN) != 0)
+        //{
+        //    player.Velocity.Set(0, 0, 0);
+        //}
 
+        // Move Player
         player.Position += player.Velocity;
 
         return player;
-    }
-
-    private static Vector3 MovePlayer(Player player)
-    {
-        return player.Position + player.Velocity;
     }
 
     //--------------------
