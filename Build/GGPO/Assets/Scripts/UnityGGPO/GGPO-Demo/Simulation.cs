@@ -10,7 +10,7 @@ public static class Simulation
 
     private const int MOVE_SPEED = 10;
     private const int JUMP_SPEED = 3;
-    private const int JUMP_HEIGHT = 5;
+    private const int JUMP_HEIGHT = 10;
     private const float GRAVITY = -9.8f;
 
     private static float velocityY;
@@ -41,7 +41,6 @@ public static class Simulation
             player.Velocity.y = 0f;
         }
 
-        //player.Velocity.Set(0, 0, 0);
         float x = 0;
 
         if ((input & INPUT_LEFT) != 0)
@@ -58,13 +57,19 @@ public static class Simulation
         player.Velocity = MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
 
         //jump stuff
-        Debug.Log($"A: {input} B: {INPUT_UP}");
-
-        if ((input & INPUT_UP) != 0 && player.IsGrounded)
+        if ((input & INPUT_UP) != 0 && player.IsGrounded && !player.IsJumping)
         {
-            var jumpVal = Mathf.Sqrt(JUMP_HEIGHT * -3.0f * GRAVITY);
-            Debug.Log($"Jump value: {jumpVal}");
-            player.Velocity.y += jumpVal;
+            player.IsJumping = true;
+        }
+
+        if (player.IsJumping)
+        {
+            player.Velocity.y += 25 * Time.fixedDeltaTime;
+        }
+
+        if (player.Position.y >= JUMP_HEIGHT)
+        {
+            player.IsJumping = false;
         }
 
         if (!player.IsGrounded && player.Position.y >= 0)
@@ -74,45 +79,14 @@ public static class Simulation
 
         //end jump stuff
 
-        //if ((input & INPUT_DOWN) != 0)
-        //{
-        //    player.Velocity.Set(0, 0, 0);
-        //}
+        if ((input & INPUT_DOWN) != 0)
+        {
+            // CROUCH
+        }
 
         // Move Player
         player.Position += player.Velocity;
 
         return player;
     }
-
-    //--------------------
-
-    //private static Vector3 UpdatePlayerA(Player player, long input)
-    //{
-    //    groundedPlayer = controller.isGrounded;
-    //    if (groundedPlayer && playerVelocity.y < 0)
-    //    {
-    //        playerVelocity.y = 0f;
-    //    }
-
-    //    Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-    //    controller.Move(move * Time.deltaTime * playerSpeed);
-
-    //    if (move != Vector3.zero)
-    //    {
-    //        gameObject.transform.forward = move;
-    //    }
-    //}
-
-    //private static Vector3 UpdatePlayerB(Player player, long input)
-    //{
-    //    // Changes the height position of the player..
-    //    if (Input.GetButtonDown("Jump") && groundedPlayer)
-    //    {
-    //        playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-    //    }
-
-    //    playerVelocity.y += gravityValue * Time.deltaTime;
-    //    controller.Move(playerVelocity * Time.deltaTime);
-    //}
 }

@@ -10,6 +10,7 @@ public struct Player
     public Vector3 Position;
     public Vector3 Velocity;
     public bool IsGrounded;
+    public bool IsJumping;
 
     public void Serialize(BinaryWriter bw)
     {
@@ -18,6 +19,7 @@ public struct Player
         bw.Write(Velocity.x);
         bw.Write(Velocity.y);
         bw.Write(IsGrounded);
+        bw.Write(IsJumping);
     }
 
     public void Deserialize(BinaryReader br)
@@ -27,6 +29,7 @@ public struct Player
         Velocity.x = br.ReadSingle();
         Velocity.y = br.ReadSingle();
         IsGrounded = br.ReadBoolean();
+        IsJumping = br.ReadBoolean();
     }
 
     public override int GetHashCode()
