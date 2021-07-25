@@ -30,6 +30,8 @@ namespace SharedGame {
         IGame Game { get; }
         GameInfo GameInfo { get; }
 
+        StateInputManager m_StateInputManager { get; }
+
         void Idle(int ms);
 
         void RunFrame();
