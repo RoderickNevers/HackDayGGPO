@@ -6,8 +6,8 @@ public class StateInputManager
 {
     public class PlayerInputs
     {
-        public long m_P1Input { get; set; } = 0;
-        public long m_P2Input { get; set; } = 0;
+        public long m_P1Input = -1;
+        public long m_P2Input = -1;
     }
 
     // Key: Framenumber

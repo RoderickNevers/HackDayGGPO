@@ -128,6 +128,22 @@ public struct GGPOGameState : IGame
         }
     }
 
+    public GGPOGameState Clone()
+    {
+        GGPOGameState newState = new GGPOGameState(Players.Length);
+        newState.Framenumber = Framenumber;
+        newState.UnserializedInputsP1 = UnserializedInputsP1;
+        newState.UnserializedInputsP2 = UnserializedInputsP2;
+
+        for (int i = 0; i < newState.Players.Length; ++i)
+        {
+            newState.Players[i].position = Players[i].position;
+            newState.Players[i].velocity = Players[i].velocity;
+        }
+
+        return newState;
+    }
+
     public void InitPlayer(int index, Vector3 startPosition)
     {
         Players[index].position = startPosition;
