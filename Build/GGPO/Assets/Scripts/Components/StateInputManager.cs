@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StateInputManager
 {
-    private class PlayerInputs
+    public class PlayerInputs
     {
         public long m_P1Input { get; set; } = 0;
         public long m_P2Input { get; set; } = 0;
@@ -12,7 +12,7 @@ public class StateInputManager
 
     // Key: Framenumber
     // Value: Player Inputs
-    private Dictionary<int, PlayerInputs> m_FrameInputs;
+    public Dictionary<int, PlayerInputs> m_FrameInputs { get; private set; }
 
     public StateInputManager()
     {
