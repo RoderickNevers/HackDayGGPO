@@ -14,11 +14,13 @@ public class GameController : MonoBehaviour, IGameView
     public void Awake()
     {
         _GGPOComponent.OnRunningChanged += OnRunningChanged;
+        _GGPOComponent.OnStateChanged += OnStateChanged;
     }
 
     public void OnDestroy()
     {
         _GGPOComponent.OnRunningChanged -= OnRunningChanged;
+        _GGPOComponent.OnStateChanged -= OnStateChanged;
     }
 
     private void OnRunningChanged(bool running)
@@ -74,6 +76,17 @@ public class GameController : MonoBehaviour, IGameView
         for (int i = 0; i < players.Length; ++i)
         {
             InstantiateNewPlayer(i);
+        }
+    }
+
+    private void OnStateChanged()
+    {
+        var gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
+
+        for (int i = 0; i < PlayerControllers.Length; ++i)
+        {
+            Player player = gameState.GetPlayer(i);
+            PlayerControllers[i].OnStateChanged(player);
         }
     }
 
