@@ -2,13 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class PlayerInputs
+{
+    public int m_FrameNumber = -1;
+    public long m_P1Input = -1;
+    public long m_P2Input = -1;
+
+    public void Reset()
+    {
+        m_FrameNumber = -1;
+        m_P1Input = -1;
+        m_P2Input = -1;
+    }
+
+    public PlayerInputs Clone()
+    {
+        PlayerInputs copy = new PlayerInputs();
+        copy.m_FrameNumber = m_FrameNumber;
+        copy.m_P1Input = m_P1Input;
+        copy.m_P2Input = m_P2Input;
+
+        return copy;
+    }
+}
+
 public class StateInputManager
 {
-    public class PlayerInputs
-    {
-        public long m_P1Input = -1;
-        public long m_P2Input = -1;
-    }
 
     // Key: Framenumber
     // Value: Player Inputs
@@ -28,6 +47,7 @@ public class StateInputManager
 
         if (m_FrameInputs.ContainsKey(frameNumber))
         {
+            m_FrameInputs[frameNumber].m_FrameNumber = frameNumber;
             m_FrameInputs[frameNumber].m_P1Input = inputs[0];
             m_FrameInputs[frameNumber].m_P2Input = inputs[1];
         }
@@ -35,6 +55,7 @@ public class StateInputManager
         {
             m_FrameInputs[frameNumber] = new PlayerInputs()
             {
+                m_FrameNumber = frameNumber,
                 m_P1Input = inputs[0],
                 m_P2Input = inputs[1]
             };

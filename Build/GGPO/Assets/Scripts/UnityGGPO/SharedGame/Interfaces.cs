@@ -28,9 +28,12 @@ namespace SharedGame {
 
     public interface IGameRunner {
         IGame Game { get; }
+        void SetGame(IGame game);
+
         GameInfo GameInfo { get; }
 
         StateInputManager m_StateInputManager { get; }
+
 
         void Idle(int ms);
 

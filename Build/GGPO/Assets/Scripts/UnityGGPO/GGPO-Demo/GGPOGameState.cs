@@ -130,6 +130,7 @@ public struct GGPOGameState : IGame
 
     public GGPOGameState Clone()
     {
+        // COPY OVER ALL 
         GGPOGameState newState = new GGPOGameState(Players.Length);
         newState.Framenumber = Framenumber;
         newState.UnserializedInputsP1 = UnserializedInputsP1;

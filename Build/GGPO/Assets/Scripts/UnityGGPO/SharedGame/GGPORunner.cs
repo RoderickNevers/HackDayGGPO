@@ -18,6 +18,8 @@ namespace SharedGame {
 
         public string Name { get; private set; }
         public IGame Game { get; private set; }
+        public void SetGame(IGame game) { Game = game; }
+
         public GameInfo GameInfo { get; private set; }
         public IPerfUpdate perf { get; private set; }
 

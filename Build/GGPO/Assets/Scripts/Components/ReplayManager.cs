@@ -5,34 +5,32 @@ using UnityEngine.Assertions;
 
 public class ReplayManager : MonoBehaviour
 {
-    public class ReplayInfo
-    {
-        public int m_FrameNumber = -1;
-        public StateInputManager.PlayerInputs m_CurrentInputs;
-    }
-
     private GGPOComponent _GGPOComponent;
 
     private bool m_IsRecording;
     private int m_CurrentFrameNum;
 
-    private GGPOGameState m_InitialState;
-    private List<ReplayInfo> m_PlayerInputs;
+    private ReplayData m_CurrentReplay;
+
+    private bool m_PlaybackForward;
+    private int m_CurrentPlaybackIndex;
     private List<GGPOGameState> m_GameStates;
 
     public ReplayManager()
     {
         m_IsRecording = false;
-        m_CurrentFrameNum = 0;
+        m_PlaybackForward = true;
 
         Reset();
     }
 
     public void Reset()
     {
-        m_InitialState = new GGPOGameState();
+        m_CurrentFrameNum = 0;
         m_GameStates = new List<GGPOGameState>();
-        m_PlayerInputs = new List<ReplayInfo>();
+
+        m_CurrentReplay = null;
+        m_CurrentPlaybackIndex = 0;
     }
 
     private void Awake()
@@ -46,19 +44,16 @@ public class ReplayManager : MonoBehaviour
 
         if (_GGPOComponent.Runner.Game is GGPOGameState)
         {
-            m_InitialState = (GGPOGameState)_GGPOComponent.Runner.Game;
-            m_CurrentFrameNum = m_InitialState.Framenumber;
+            m_CurrentReplay = new ReplayData();
+
+            m_CurrentReplay.m_InitialState = ((GGPOGameState)_GGPOComponent.Runner.Game).Clone();
+            m_CurrentFrameNum = m_CurrentReplay.m_InitialState.Framenumber;
         }
     }
 
     public void StopRecording()
     {
         m_IsRecording = false;
-    }
-
-    public void SetInitialState(GGPOGameState initialState)
-    {
-        m_InitialState = initialState;
     }
 
     // Once we've got our inputs, we can regenerate all game states
@@ -70,34 +65,32 @@ public class ReplayManager : MonoBehaviour
             return;
         }
 
-        if (m_PlayerInputs.Count == 0)
+        if (m_CurrentReplay == null)
         {
             Debug.LogError("Player Inputs have not been loaded!");
             return;
         }
 
         // Sanitize initial inputs
-        if (m_PlayerInputs[0].m_FrameNumber != 0)
+        List<PlayerInputs> playerInputs = m_CurrentReplay.m_PlayerInputs;
+        if (playerInputs[0].m_FrameNumber != 0)
         {
-            m_PlayerInputs.Insert(0, new ReplayInfo()
+            playerInputs.Insert(0, new PlayerInputs()
             {
                 m_FrameNumber = 0,
-                m_CurrentInputs = new StateInputManager.PlayerInputs()
-                {
-                    m_P1Input = 0,
-                    m_P2Input = 0
-                }
+                m_P1Input = 0,
+                m_P2Input = 0
             });
         }
 
-        int finalFrameNumber = m_PlayerInputs[m_PlayerInputs.Count - 1].m_FrameNumber;
+        int finalFrameNumber = playerInputs[playerInputs.Count - 1].m_FrameNumber;
         int currentInputIndex = 0;
 
-        m_GameStates.Add(m_InitialState);
+        m_GameStates.Add(m_CurrentReplay.m_InitialState);
         for (int i = 0; i < finalFrameNumber; ++i)
         {
             GGPOGameState currentGameState = m_GameStates[i].Clone();
-            StateInputManager.PlayerInputs nextInputs = m_PlayerInputs[currentInputIndex].m_CurrentInputs;
+            PlayerInputs nextInputs = playerInputs[currentInputIndex];
 
             long[] inputs = new long[2];
 
@@ -109,19 +102,18 @@ public class ReplayManager : MonoBehaviour
             }
             else if (i > 0)
             {
-                StateInputManager.PlayerInputs prevInputs = m_PlayerInputs[currentInputIndex - 1].m_CurrentInputs;
-                if (m_PlayerInputs[currentInputIndex].m_FrameNumber == i)
+                PlayerInputs prevInputs = playerInputs[currentInputIndex - 1];
+                if (playerInputs[currentInputIndex].m_FrameNumber == i)
                 {
                     // Set inputs
-                    inputs[0] = ResolveInputs(i, nextInputs.m_P1Input, prevInputs.m_P1Input);
-                    inputs[1] = ResolveInputs(i, nextInputs.m_P2Input, prevInputs.m_P2Input);
+                    inputs[0] = ResolveInputs(nextInputs.m_P1Input, prevInputs.m_P1Input);
+                    inputs[1] = ResolveInputs(nextInputs.m_P2Input, prevInputs.m_P2Input);
                 }
                 else
                 {
                     inputs[0] = prevInputs.m_P1Input;
                     inputs[1] = prevInputs.m_P2Input;
                 }
-
             }
 
             // Advance current gamestate to next gamestate
@@ -131,7 +123,55 @@ public class ReplayManager : MonoBehaviour
         }
     }
 
-    private long ResolveInputs(int frame, long currentInput, long previousInput)
+    private ReplayData ConvertGameStatesToReplayData()
+    {
+        if (m_GameStates?.Count == 0)
+        {
+            return null;
+        }
+
+        ReplayData replay = new ReplayData();
+        replay.m_InitialState = m_GameStates[0];
+
+        PlayerInputs inputsToSave = new PlayerInputs();
+        PlayerInputs mostRecentInputs = new PlayerInputs()
+        {
+            m_P1Input = 0,
+            m_P2Input = 0
+        };
+
+        // Iterate through loaded game states and only record changes in input
+        for (int i = 1; i < m_GameStates.Count; ++i)
+        {
+            GGPOGameState currGameState = m_GameStates[i];
+            inputsToSave.Reset();
+
+            if (mostRecentInputs.m_P1Input != currGameState.UnserializedInputsP1)
+            {
+                mostRecentInputs.m_P1Input = currGameState.UnserializedInputsP1;
+
+                inputsToSave.m_FrameNumber = currGameState.Framenumber;
+                inputsToSave.m_P1Input = mostRecentInputs.m_P1Input;
+            }
+            if (mostRecentInputs.m_P2Input != currGameState.UnserializedInputsP2)
+            {
+                mostRecentInputs.m_P2Input = currGameState.UnserializedInputsP2;
+
+                inputsToSave.m_FrameNumber = currGameState.Framenumber;
+                inputsToSave.m_P2Input = mostRecentInputs.m_P2Input;
+            }
+
+            // if there were any change in inputs, load it into list
+            if (inputsToSave.m_FrameNumber != -1)
+            {
+                replay.m_PlayerInputs.Add(inputsToSave.Clone());
+            }
+        }
+
+        return replay;
+    }
+
+    private long ResolveInputs(long currentInput, long previousInput)
     {
         if (currentInput < 0)
         {
@@ -141,6 +181,38 @@ public class ReplayManager : MonoBehaviour
         {
             return currentInput;
         }
+    }
+
+    public void StartPlayback()
+    {
+        if (m_GameStates.Count == 0)
+        {
+            Debug.LogError("No GameStates loaded!");
+            return;
+        }
+
+        // Notify GGPOComponent that 
+        _GGPOComponent.StartPlayback(m_GameStates[0], this);
+        m_CurrentPlaybackIndex = 0;
+    }
+
+    public void StopPlayback()
+    {
+        _GGPOComponent.StopPlayback();
+    }
+
+    public GGPOGameState GetNextGameState()
+    {
+        if (m_PlaybackForward)
+        {
+           m_CurrentPlaybackIndex = Mathf.Min(++m_CurrentPlaybackIndex, m_GameStates.Count - 1);
+        }
+        else
+        {
+            m_CurrentPlaybackIndex = Mathf.Max(0, --m_CurrentPlaybackIndex);
+        }
+
+        return m_GameStates[m_CurrentPlaybackIndex];
     }
 
     private void Update()
