@@ -24,6 +24,10 @@ public class ReplayManager : MonoBehaviour
     [SerializeField] private Button m_StepForwardBtn;
     [SerializeField] private Button m_StepBackwardsBtn;
 
+    [SerializeField] private Slider m_Slider;
+    [SerializeField] private Text m_MinSliderText;
+    [SerializeField] private Text m_MaxSliderText;
+
     public ReplayManager()
     {
         m_IsRecording = false;
@@ -66,6 +70,7 @@ public class ReplayManager : MonoBehaviour
         m_RewindPauseBtn.onClick.AddListener(OnRewindPausePressed);
         m_StepForwardBtn.onClick.AddListener(StepForwardPressed);
         m_StepBackwardsBtn.onClick.AddListener(StepBackwardsPressed);
+        m_Slider.onValueChanged.AddListener(OnSliderValueChanged);
     }
 
     private void RemoveListeners()
@@ -75,12 +80,16 @@ public class ReplayManager : MonoBehaviour
         m_RewindPauseBtn.onClick.RemoveListener(OnRewindPausePressed);
         m_StepForwardBtn.onClick.RemoveListener(StepForwardPressed);
         m_StepBackwardsBtn.onClick.RemoveListener(StepBackwardsPressed);
+        m_Slider.onValueChanged.RemoveListener(OnSliderValueChanged);
     }
 
     private void SetActivePlaybackButtons(bool enable)
     {
         m_RewindPauseBtn.gameObject.SetActive(enable);
         m_StepBackwardsBtn.gameObject.SetActive(enable);
+        m_Slider.gameObject.SetActive(enable);
+        m_MinSliderText.gameObject.SetActive(enable);
+        m_MaxSliderText.gameObject.SetActive(enable);
     }
 
     private void OnRecordPressed()
@@ -128,13 +137,6 @@ public class ReplayManager : MonoBehaviour
         _GGPOComponent.manualFrameIncrement = !_GGPOComponent.manualFrameIncrement;
 
         UpdatePlayRewindButtonText();
-
-        if (m_CurrentPlaybackIndex == -1)
-        {
-            m_CurrentPlaybackIndex = 0;
-        }
-
-        StartPlayback();
     }
 
     private void OnRewindPausePressed()
@@ -143,16 +145,6 @@ public class ReplayManager : MonoBehaviour
         _GGPOComponent.manualFrameIncrement = !_GGPOComponent.manualFrameIncrement;
 
         UpdatePlayRewindButtonText();
-
-        if (m_GameStates.Count > 0)
-        {
-            if (m_CurrentPlaybackIndex == -1)
-            {
-                m_CurrentPlaybackIndex = m_GameStates.Count - 1;
-            }
-
-            _GGPOComponent.StartPlayback(m_GameStates[m_CurrentPlaybackIndex], this);
-        }
     }
 
     private void UpdatePlayRewindButtonText()
@@ -185,6 +177,20 @@ public class ReplayManager : MonoBehaviour
         _GGPOComponent.IncrementFrame();
     }
 
+    private void OnSliderValueChanged(float value)
+    {
+        if (m_GameStates.Count > 0)
+        {
+            // Check to see if we changed this manually or through code
+            if (m_CurrentPlaybackIndex != (int)value - m_GameStates[0].Framenumber)
+            {
+                m_CurrentPlaybackIndex = (int)value - m_GameStates[0].Framenumber;
+
+                _GGPOComponent.Runner.SetGame(m_GameStates[m_CurrentPlaybackIndex]);
+            }
+        }
+    }
+
     public void StartRecording()
     {
         Reset();
@@ -208,7 +214,25 @@ public class ReplayManager : MonoBehaviour
         m_IsRecording = false;
 
         _GGPOComponent.manualFrameIncrement = true;
+
+        // Start playback mode
+        if (m_GameStates.Count > 0)
+        {
+            if (m_CurrentPlaybackIndex == -1)
+            {
+                m_CurrentPlaybackIndex = m_GameStates.Count - 1;
+            }
+
+            StartPlayback();
+        }
+
         UpdatePlayRewindButtonText();
+
+        m_Slider.minValue = m_GameStates[0].Framenumber;
+        m_Slider.maxValue = m_GameStates[m_GameStates.Count - 1].Framenumber;
+        m_Slider.value = m_Slider.maxValue;
+        m_MinSliderText.text = m_Slider.minValue.ToString();
+        m_MaxSliderText.text = m_Slider.maxValue.ToString();
     }
 
     // Once we've got our inputs, we can regenerate all game states
@@ -364,6 +388,8 @@ public class ReplayManager : MonoBehaviour
         {
             m_CurrentPlaybackIndex = Mathf.Max(0, --m_CurrentPlaybackIndex);
         }
+
+        m_Slider.value = m_GameStates[m_CurrentPlaybackIndex].Framenumber;
 
         return m_GameStates[m_CurrentPlaybackIndex];
     }
