@@ -9,6 +9,7 @@ public class LocalSessionManager : MonoBehaviour
     [SerializeField] private GGPOComponent m_GameManager;
     [SerializeField] private LobbyComponent m_LobbyComponent;
     [SerializeField] private GameSpeedManager m_GameSpeedManager;
+    [SerializeField] private ReplayManager m_ReplayManager;
 
     [Header("UI")]
     [SerializeField] private Button m_StartOnlySessionBtn;
@@ -61,6 +62,7 @@ public class LocalSessionManager : MonoBehaviour
     private void SetEnableLocalSessionFeatures(bool enabled)
     {
         m_GameSpeedManager.enabled = enabled;
+        m_ReplayManager.enabled = enabled;
     }
 
     private void OnStartStopSession()

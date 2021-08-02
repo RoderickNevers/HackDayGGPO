@@ -25,16 +25,12 @@ public class GameSpeedManager : MonoBehaviour
     {
         m_SpeedModifier.onValueChanged.AddListener(OnGameSpeedChanged);
         m_ResetSpeedModifierBtn.onClick.AddListener(OnGameSpeedResetPressed);
-        m_PlayPauseBtn.onClick.AddListener(OnPlayPausePressed);
-        m_StepBtn.onClick.AddListener(OnStepPressed);
     }
 
     private void RemoveListeners()
     {
         m_SpeedModifier.onValueChanged.RemoveListener(OnGameSpeedChanged);
         m_ResetSpeedModifierBtn.onClick.RemoveListener(OnGameSpeedResetPressed);
-        m_PlayPauseBtn.onClick.RemoveListener(OnPlayPausePressed);
-        m_StepBtn.onClick.RemoveListener(OnStepPressed);
     }
 
     private void OnGameSpeedChanged(string newValue)
@@ -50,25 +46,5 @@ public class GameSpeedManager : MonoBehaviour
     {
         m_SpeedModifier.text = "1.0";
         m_GameManager.ResetFrameLengthToDefault();
-    }
-
-    private void OnPlayPausePressed()
-    {
-        m_GameManager.manualFrameIncrement = !m_GameManager.manualFrameIncrement;
-
-        var text = m_PlayPauseBtn.GetComponentInChildren<Text>();
-        if (m_GameManager.manualFrameIncrement)
-        {
-            text.text = "Play";
-        }
-        else
-        {
-            text.text = "Pause";
-        }
-    }
-
-    private void OnStepPressed()
-    {
-        m_GameManager.IncrementFrame();
     }
 }

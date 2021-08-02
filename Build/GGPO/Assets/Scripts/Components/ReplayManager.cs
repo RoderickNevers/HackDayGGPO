@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Assertions;
 
 public class ReplayManager : MonoBehaviour
@@ -16,6 +17,13 @@ public class ReplayManager : MonoBehaviour
     private int m_CurrentPlaybackIndex;
     private List<GGPOGameState> m_GameStates;
 
+    [SerializeField] private Button m_RecordBtn;
+
+    [SerializeField] private Button m_PlayPauseBtn;
+    [SerializeField] private Button m_RewindPauseBtn;
+    [SerializeField] private Button m_StepForwardBtn;
+    [SerializeField] private Button m_StepBackwardsBtn;
+
     public ReplayManager()
     {
         m_IsRecording = false;
@@ -30,30 +38,177 @@ public class ReplayManager : MonoBehaviour
         m_GameStates = new List<GGPOGameState>();
 
         m_CurrentReplay = null;
-        m_CurrentPlaybackIndex = 0;
+        m_CurrentPlaybackIndex = -1;
     }
 
     private void Awake()
     {
         _GGPOComponent = FindObjectOfType<GGPOComponent>();
+
+        SetActivePlaybackButtons(false);
+    }
+
+    private void Start()
+    {
+        AddListeners();
+    }
+
+    private void OnDestroy()
+    {
+        RemoveListeners();
+    }
+
+    // ----------------------- BUTTON HANDLERS ------------------------------
+    private void AddListeners()
+    {
+        m_RecordBtn.onClick.AddListener(OnRecordPressed);
+        m_PlayPauseBtn.onClick.AddListener(OnPlayPausePressed);
+        m_RewindPauseBtn.onClick.AddListener(OnRewindPausePressed);
+        m_StepForwardBtn.onClick.AddListener(StepForwardPressed);
+        m_StepBackwardsBtn.onClick.AddListener(StepBackwardsPressed);
+    }
+
+    private void RemoveListeners()
+    {
+        m_RecordBtn.onClick.RemoveListener(OnRecordPressed);
+        m_PlayPauseBtn.onClick.RemoveListener(OnPlayPausePressed);
+        m_RewindPauseBtn.onClick.RemoveListener(OnRewindPausePressed);
+        m_StepForwardBtn.onClick.RemoveListener(StepForwardPressed);
+        m_StepBackwardsBtn.onClick.RemoveListener(StepBackwardsPressed);
+    }
+
+    private void SetActivePlaybackButtons(bool enable)
+    {
+        m_RewindPauseBtn.gameObject.SetActive(enable);
+        m_StepBackwardsBtn.gameObject.SetActive(enable);
+    }
+
+    private void OnRecordPressed()
+    {
+        var recText = m_RecordBtn.GetComponentInChildren<Text>();
+
+        if (m_GameStates.Count == 0)
+        {
+            // start recording
+            StartRecording();
+
+            // update text
+            recText.text = "Stop Recording";
+
+        }
+        else if (m_IsRecording)
+        {
+            // stop recording
+            StopRecording();
+
+            // Enable playback buttons
+            SetActivePlaybackButtons(true);
+
+            // update text
+            recText.text = "Clear Recording";
+        }
+        else if (!m_IsRecording && m_GameStates.Count != 0)
+        {
+            // clear
+            Reset();
+
+            // Disable playback buttons
+            SetActivePlaybackButtons(false);
+
+            StopPlayback();
+
+            // update text
+            recText.text = "Start Recording";
+        }
+    }
+
+    private void OnPlayPausePressed()
+    {
+        m_PlaybackForward = true;
+        _GGPOComponent.manualFrameIncrement = !_GGPOComponent.manualFrameIncrement;
+
+        UpdatePlayRewindButtonText();
+
+        if (m_CurrentPlaybackIndex == -1)
+        {
+            m_CurrentPlaybackIndex = 0;
+        }
+
+        StartPlayback();
+    }
+
+    private void OnRewindPausePressed()
+    {
+        m_PlaybackForward = false;
+        _GGPOComponent.manualFrameIncrement = !_GGPOComponent.manualFrameIncrement;
+
+        UpdatePlayRewindButtonText();
+
+        if (m_GameStates.Count > 0)
+        {
+            if (m_CurrentPlaybackIndex == -1)
+            {
+                m_CurrentPlaybackIndex = m_GameStates.Count - 1;
+            }
+
+            _GGPOComponent.StartPlayback(m_GameStates[m_CurrentPlaybackIndex], this);
+        }
+    }
+
+    private void UpdatePlayRewindButtonText()
+    {
+        var playText = m_PlayPauseBtn.GetComponentInChildren<Text>();
+        var rewindText = m_RewindPauseBtn.GetComponentInChildren<Text>();
+        if (_GGPOComponent.manualFrameIncrement)
+        {
+            rewindText.text = "Rewind";
+            playText.text = "Play";
+        }
+        else
+        {
+            rewindText.text = "Pause";
+            playText.text = "Pause";
+        }
+    }
+
+    private void StepForwardPressed()
+    {
+        m_PlaybackForward = true;
+
+        _GGPOComponent.IncrementFrame();
+    }
+
+    private void StepBackwardsPressed()
+    {
+        m_PlaybackForward = false;
+
+        _GGPOComponent.IncrementFrame();
     }
 
     public void StartRecording()
     {
+        Reset();
+
         m_IsRecording = true;
+
+        _GGPOComponent.manualFrameIncrement = false;
+        UpdatePlayRewindButtonText();
 
         if (_GGPOComponent.Runner.Game is GGPOGameState)
         {
-            m_CurrentReplay = new ReplayData();
+            GGPOGameState startingGameState = (GGPOGameState)_GGPOComponent.Runner.Game;
 
-            m_CurrentReplay.m_InitialState = ((GGPOGameState)_GGPOComponent.Runner.Game).Clone();
-            m_CurrentFrameNum = m_CurrentReplay.m_InitialState.Framenumber;
+            m_CurrentFrameNum = startingGameState.Framenumber;
+            m_GameStates.Add(startingGameState.Clone());
         }
     }
 
     public void StopRecording()
     {
         m_IsRecording = false;
+
+        _GGPOComponent.manualFrameIncrement = true;
+        UpdatePlayRewindButtonText();
     }
 
     // Once we've got our inputs, we can regenerate all game states
@@ -191,9 +346,7 @@ public class ReplayManager : MonoBehaviour
             return;
         }
 
-        // Notify GGPOComponent that 
-        _GGPOComponent.StartPlayback(m_GameStates[0], this);
-        m_CurrentPlaybackIndex = 0;
+        _GGPOComponent.StartPlayback(m_GameStates[m_CurrentPlaybackIndex], this);
     }
 
     public void StopPlayback()
@@ -225,6 +378,15 @@ public class ReplayManager : MonoBehaviour
 
                 // Record State
                 m_GameStates.Add(((GGPOGameState)_GGPOComponent.Runner.Game).Clone());
+            }
+        }
+        if (m_CurrentPlaybackIndex != -1)
+        {
+            if (m_CurrentPlaybackIndex == 0 || m_CurrentPlaybackIndex == m_GameStates.Count - 1)
+            {
+                _GGPOComponent.manualFrameIncrement = true;
+
+                UpdatePlayRewindButtonText();
             }
         }
     }
