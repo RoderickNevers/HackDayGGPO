@@ -3,17 +3,30 @@ using UnityEngine;
 
 public static class Simulation
 {
+    private enum MoveDirection
+    {
+        Standing,
+        Towards,
+        Back,
+        Crouching,
+        JumpUp,
+        JumpTowards,
+        JumpBack
+    }
+
     public const int INPUT_UP = 1 << 0;
     public const int INPUT_DOWN = 1 << 1;
     public const int INPUT_LEFT = 1 << 2;
     public const int INPUT_RIGHT = 1 << 3;
 
     private const int MOVE_SPEED = 10;
-    private const int JUMP_SPEED = 3;
+    private const int JUMP_FORCE = 15;
     private const int JUMP_HEIGHT = 10;
-    private const float GRAVITY = -9.8f;
+    private const float RAISING_GRAVITY = -9.8f;
+    private const float FALLING_GRAVITY = -20.0f;
 
-    private static float velocityY;
+    private static float x = 0;
+    private static MoveDirection movedirection;
 
     /// <summary>
     /// The update loop that runs the simulation on the players
@@ -36,52 +49,95 @@ public static class Simulation
     {
         GGPORunner.LogGame($"parsing player {player} inputs: {input}.");
 
-        if (player.IsGrounded && player.Velocity.y < 0)
+        if (player.IsGrounded && !player.IsJumping)
         {
-            player.Velocity.y = 0f;
-        }
-
-        float x = 0;
-
-        if ((input & INPUT_LEFT) != 0)
-        {
-            x = -1; 
-        }
-
-        if ((input & INPUT_RIGHT) != 0)
-        {
-            x = 1;
+            if ((input & INPUT_UP) != 0 && (input & INPUT_LEFT) != 0)
+            {
+                player.IsJumping = true;
+                movedirection = MoveDirection.JumpBack;
+            }
+            else if ((input & INPUT_UP) != 0 && (input & INPUT_RIGHT) != 0)
+            {
+                player.IsJumping = true;
+                movedirection = MoveDirection.JumpTowards;
+            }
+            else if ((input & INPUT_UP) != 0)
+            {
+                player.IsJumping = true;
+                movedirection = MoveDirection.JumpUp;
+            }
+            else if ((input & INPUT_LEFT) != 0)
+            {
+                x = -1;
+                movedirection = MoveDirection.Back;
+            }
+            else if ((input & INPUT_RIGHT) != 0)
+            {
+                x = 1;
+                movedirection = MoveDirection.Towards;
+            }
+            else if((input & INPUT_DOWN) != 0)
+            {
+                // CROUCH
+                movedirection = MoveDirection.Crouching;
+            }
+            else if ( (input & INPUT_LEFT) == 0 && (input & INPUT_RIGHT) == 0)
+            {
+                x = 0;
+                movedirection = MoveDirection.Standing;
+            }
         }
 
         player.Velocity.Set(x, 0, 0);
         player.Velocity = MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
 
         //jump stuff
-        if ((input & INPUT_UP) != 0 && player.IsGrounded && !player.IsJumping)
-        {
-            player.IsJumping = true;
-        }
-
         if (player.IsJumping)
         {
-            player.Velocity.y += 25 * Time.fixedDeltaTime;
+            player.Velocity.y += Mathf.Sqrt(JUMP_FORCE * Time.fixedDeltaTime);
+
+            switch(movedirection)
+            {
+                case MoveDirection.JumpUp:
+                    player.Velocity.x = 0;
+                    break;
+                case MoveDirection.JumpTowards:
+                    player.Velocity.x = 0;
+                    player.Velocity.x += 5 * Time.fixedDeltaTime;
+                    break;
+                case MoveDirection.JumpBack:
+                    player.Velocity.x = 0;
+                    player.Velocity.x += -5 * Time.fixedDeltaTime;
+                    break;
+            }
         }
 
+        // Trigger falling
         if (player.Position.y >= JUMP_HEIGHT)
         {
             player.IsJumping = false;
         }
 
+        // Apply gravity
         if (!player.IsGrounded && player.Position.y >= 0)
         {
-            player.Velocity.y += GRAVITY * Time.fixedDeltaTime;
-        }
+            float gravityModifier = player.Velocity.y == 0 ? FALLING_GRAVITY : RAISING_GRAVITY;
+            player.Velocity.y += gravityModifier * Time.fixedDeltaTime;
 
-        //end jump stuff
-
-        if ((input & INPUT_DOWN) != 0)
-        {
-            // CROUCH
+            switch (movedirection)
+            {
+                case MoveDirection.JumpUp:
+                    player.Velocity.x = 0;
+                    break;
+                case MoveDirection.JumpTowards:
+                    player.Velocity.x = 0;
+                    player.Velocity.x += 5 * Time.fixedDeltaTime;
+                    break;
+                case MoveDirection.JumpBack:
+                    player.Velocity.x = 0;
+                    player.Velocity.x += -5 * Time.fixedDeltaTime;
+                    break;
+            }
         }
 
         // Move Player

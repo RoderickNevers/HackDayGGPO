@@ -38,6 +38,7 @@ public struct Player
         hashCode = hashCode * -1521134295 + Position.GetHashCode();
         hashCode = hashCode * -1521134295 + Velocity.GetHashCode();
         hashCode = hashCode * -1521134295 + IsGrounded.GetHashCode();
+        hashCode = hashCode * -1521134295 + IsJumping.GetHashCode();
         return hashCode;
     }
 };

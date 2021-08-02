@@ -1,0 +1,20 @@
+﻿public enum CharacterStateTrigger
+{
+    TriggerStanding,
+    TriggerAdvancing,
+    TriggerRetreating,
+    TriggerCrouching,
+    TriggerJumpUp,
+    TriggerJumpBack,
+    TriggerJumpTowards,
+    TriggerAttackGround,
+    TriggerAttackInAir,
+    TriggerFalling,
+    TriggerHitStanding,
+    TriggerHitInAir,
+    TriggerKO,
+    TriggerSweep,
+    TriggerOnTheGround,
+    TriggerGetUp,
+    TriggerDizzy
+}
