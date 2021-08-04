@@ -8,8 +8,6 @@ public class GameSpeedManager : MonoBehaviour
     [SerializeField] private GGPOComponent m_GameManager;
     [SerializeField] private InputField m_SpeedModifier;
     [SerializeField] private Button m_ResetSpeedModifierBtn;
-    [SerializeField] private Button m_PlayPauseBtn;
-    [SerializeField] private Button m_StepBtn;
 
     private void Start()
     {

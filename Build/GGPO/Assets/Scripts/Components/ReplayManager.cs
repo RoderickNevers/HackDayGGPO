@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEditor;
 
 public class ReplayManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class ReplayManager : MonoBehaviour
     private List<GGPOGameState> m_GameStates;
 
     [SerializeField] private Button m_RecordBtn;
+    [SerializeField] private Button m_LoadBtn;
 
     [SerializeField] private Button m_PlayPauseBtn;
     [SerializeField] private Button m_RewindPauseBtn;
@@ -66,6 +68,8 @@ public class ReplayManager : MonoBehaviour
     private void AddListeners()
     {
         m_RecordBtn.onClick.AddListener(OnRecordPressed);
+        m_LoadBtn.onClick.AddListener(OnLoadPressed);
+
         m_PlayPauseBtn.onClick.AddListener(OnPlayPausePressed);
         m_RewindPauseBtn.onClick.AddListener(OnRewindPausePressed);
         m_StepForwardBtn.onClick.AddListener(StepForwardPressed);
@@ -76,6 +80,8 @@ public class ReplayManager : MonoBehaviour
     private void RemoveListeners()
     {
         m_RecordBtn.onClick.RemoveListener(OnRecordPressed);
+        m_LoadBtn.onClick.RemoveListener(OnLoadPressed);
+
         m_PlayPauseBtn.onClick.RemoveListener(OnPlayPausePressed);
         m_RewindPauseBtn.onClick.RemoveListener(OnRewindPausePressed);
         m_StepForwardBtn.onClick.RemoveListener(StepForwardPressed);
@@ -129,6 +135,11 @@ public class ReplayManager : MonoBehaviour
             // update text
             recText.text = "Start Recording";
         }
+    }
+
+    private void OnLoadPressed()
+    {
+        // EditorUtility.OpenFilePanel()
     }
 
     private void OnPlayPausePressed()
