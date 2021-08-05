@@ -49,6 +49,7 @@ public static class Simulation
     private static Player UpdatePlayer(Player player, long input)
     {
         GGPORunner.LogGame($"parsing player {player} inputs: {input}.");
+        Debug.Log($" move direction {movedirection}");
 
         if (player.IsGrounded && !player.IsJumping)
         {
@@ -112,7 +113,7 @@ public static class Simulation
             }
         }
 
-        Debug.Log($"{player.Velocity}");
+        //Debug.Log($"{player.Velocity}");
 
         // Trigger falling
         if (player.Position.y >= JUMP_HEIGHT)
