@@ -11,6 +11,7 @@ public struct Player
     public Vector3 Velocity;
     public bool IsGrounded;
     public bool IsJumping;
+    public MoveDirection MoveDirection;
 
     public void Serialize(BinaryWriter bw)
     {
@@ -20,6 +21,7 @@ public struct Player
         bw.Write(Velocity.y);
         bw.Write(IsGrounded);
         bw.Write(IsJumping);
+        bw.Write((int)MoveDirection);
     }
 
     public void Deserialize(BinaryReader br)
@@ -30,6 +32,7 @@ public struct Player
         Velocity.y = br.ReadSingle();
         IsGrounded = br.ReadBoolean();
         IsJumping = br.ReadBoolean();
+        MoveDirection = (MoveDirection)br.ReadInt32();
     }
 
     public override int GetHashCode()
@@ -39,6 +42,7 @@ public struct Player
         hashCode = hashCode * -1521134295 + Velocity.GetHashCode();
         hashCode = hashCode * -1521134295 + IsGrounded.GetHashCode();
         hashCode = hashCode * -1521134295 + IsJumping.GetHashCode();
+        hashCode = hashCode * -1521134295 + MoveDirection.GetHashCode();
         return hashCode;
     }
 };

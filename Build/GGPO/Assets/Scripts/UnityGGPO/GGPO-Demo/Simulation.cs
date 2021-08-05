@@ -1,19 +1,19 @@
 using SharedGame;
 using UnityEngine;
 
+public enum MoveDirection
+{
+    Standing = 0,
+    Towards = 1,
+    Back = 2,
+    Crouching = 3,
+    JumpUp = 4,
+    JumpTowards = 5,
+    JumpBack = 6
+}
+
 public static class Simulation
 {
-    private enum MoveDirection
-    {
-        Standing,
-        Towards,
-        Back,
-        Crouching,
-        JumpUp,
-        JumpTowards,
-        JumpBack
-    }
-
     public const int INPUT_UP = 1 << 0;
     public const int INPUT_DOWN = 1 << 1;
     public const int INPUT_LEFT = 1 << 2;
@@ -27,7 +27,6 @@ public static class Simulation
     private const float FALLING_GRAVITY = -20.0f;
 
     private static float x = 0;
-    private static MoveDirection movedirection;
 
     /// <summary>
     /// The update loop that runs the simulation on the players
@@ -49,43 +48,43 @@ public static class Simulation
     private static Player UpdatePlayer(Player player, long input)
     {
         GGPORunner.LogGame($"parsing player {player} inputs: {input}.");
-        Debug.Log($" move direction {movedirection}");
+        Debug.Log($" move direction {player.MoveDirection}");
 
         if (player.IsGrounded && !player.IsJumping)
         {
             if ((input & INPUT_UP) != 0 && (input & INPUT_LEFT) != 0)
             {
                 player.IsJumping = true;
-                movedirection = MoveDirection.JumpBack;
+                player.MoveDirection = MoveDirection.JumpBack;
             }
             else if ((input & INPUT_UP) != 0 && (input & INPUT_RIGHT) != 0)
             {
                 player.IsJumping = true;
-                movedirection = MoveDirection.JumpTowards;
+                player.MoveDirection = MoveDirection.JumpTowards;
             }
             else if ((input & INPUT_UP) != 0)
             {
                 player.IsJumping = true;
-                movedirection = MoveDirection.JumpUp;
+                player.MoveDirection = MoveDirection.JumpUp;
             }
             else if ((input & INPUT_LEFT) != 0)
             {
                 x = -1;
-                movedirection = MoveDirection.Back;
+                player.MoveDirection = MoveDirection.Back;
             }
             else if ((input & INPUT_RIGHT) != 0)
             {
                 x = 1;
-                movedirection = MoveDirection.Towards;
+                player.MoveDirection = MoveDirection.Towards;
             }
             else if((input & INPUT_DOWN) != 0)
             {
-                movedirection = MoveDirection.Crouching;
+                player.MoveDirection = MoveDirection.Crouching;
             }
             else if ( (input & INPUT_LEFT) == 0 && (input & INPUT_RIGHT) == 0)
             {
                 x = 0;
-                movedirection = MoveDirection.Standing;
+                player.MoveDirection = MoveDirection.Standing;
             }
         }
 
@@ -97,7 +96,7 @@ public static class Simulation
         {
             player.Velocity.y += Mathf.Sqrt(JUMP_FORCE_VERT * Time.fixedDeltaTime);
 
-            switch(movedirection)
+            switch(player.MoveDirection)
             {
                 case MoveDirection.JumpUp:
                     player.Velocity.x = 0;
@@ -127,7 +126,7 @@ public static class Simulation
             float gravityModifier = player.Velocity.y == 0 ? FALLING_GRAVITY : RAISING_GRAVITY;
             player.Velocity.y += gravityModifier * Time.fixedDeltaTime;
 
-            switch (movedirection)
+            switch (player.MoveDirection)
             {
                 case MoveDirection.JumpUp:
                     player.Velocity.x = 0;
