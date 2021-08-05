@@ -26,6 +26,8 @@ public static class Simulation
     private const float RAISING_GRAVITY = -9.8f;
     private const float FALLING_GRAVITY = -20.0f;
 
+    private const float time = 0.02f;
+
     private static float x = 0;
     private static MoveDirection movedirection;
 
@@ -89,12 +91,12 @@ public static class Simulation
         }
 
         player.Velocity.Set(x, 0, 0);
-        player.Velocity = MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+        player.Velocity = MOVE_SPEED * time * player.Velocity;
 
         //jump stuff
         if (player.IsJumping)
         {
-            player.Velocity.y += Mathf.Sqrt(JUMP_FORCE_VERT * Time.fixedDeltaTime);
+            player.Velocity.y += Mathf.Sqrt(JUMP_FORCE_VERT * time);
 
             switch(movedirection)
             {
@@ -103,11 +105,11 @@ public static class Simulation
                     break;
                 case MoveDirection.JumpTowards:
                     player.Velocity.x = 0;
-                    player.Velocity.x += JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
+                    player.Velocity.x += JUMP_FORCE_HORIZ * time;
                     break;
                 case MoveDirection.JumpBack:
                     player.Velocity.x = 0;
-                    player.Velocity.x += -JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
+                    player.Velocity.x += -JUMP_FORCE_HORIZ * time;
                     break;
             }
         }
@@ -123,8 +125,9 @@ public static class Simulation
         // Apply gravity
         if (!player.IsGrounded && player.Position.y >= 0)
         {
+            Debug.Log(Time.fixedDeltaTime);
             float gravityModifier = player.Velocity.y == 0 ? FALLING_GRAVITY : RAISING_GRAVITY;
-            player.Velocity.y += gravityModifier * Time.fixedDeltaTime;
+            player.Velocity.y += gravityModifier * time;
 
             switch (movedirection)
             {
@@ -133,11 +136,11 @@ public static class Simulation
                     break;
                 case MoveDirection.JumpTowards:
                     player.Velocity.x = 0;
-                    player.Velocity.x += JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
+                    player.Velocity.x += JUMP_FORCE_HORIZ * time;
                     break;
                 case MoveDirection.JumpBack:
                     player.Velocity.x = 0;
-                    player.Velocity.x += -JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
+                    player.Velocity.x += -JUMP_FORCE_HORIZ * time;
                     break;
             }
         }
