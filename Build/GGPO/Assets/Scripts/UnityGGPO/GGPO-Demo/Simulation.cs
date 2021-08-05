@@ -1,17 +1,6 @@
 using SharedGame;
 using UnityEngine;
 
-public enum MoveDirection
-{
-    Standing = 0,
-    Towards = 1,
-    Back = 2,
-    Crouching = 3,
-    JumpUp = 4,
-    JumpTowards = 5,
-    JumpBack = 6
-}
-
 public static class Simulation
 {
     public const int INPUT_UP = 1 << 0;
@@ -60,12 +49,24 @@ public static class Simulation
             else if ((input & INPUT_UP) != 0 && (input & INPUT_RIGHT) != 0)
             {
                 player.IsJumping = true;
-                player.MoveDirection = MoveDirection.JumpTowards;
+                player.MoveDirection = MoveDirection.JumpForward;
             }
             else if ((input & INPUT_UP) != 0)
             {
                 player.IsJumping = true;
                 player.MoveDirection = MoveDirection.JumpUp;
+            }
+            else if ((input & INPUT_DOWN) != 0 && (input & INPUT_LEFT) != 0)
+            {
+                player.MoveDirection = MoveDirection.DownBack;
+            }
+            else if ((input & INPUT_DOWN) != 0 && (input & INPUT_RIGHT) != 0)
+            {
+                player.MoveDirection = MoveDirection.DownForward;
+            }
+            else if ((input & INPUT_DOWN) != 0)
+            {
+                player.MoveDirection = MoveDirection.Crouching;
             }
             else if ((input & INPUT_LEFT) != 0)
             {
@@ -75,11 +76,7 @@ public static class Simulation
             else if ((input & INPUT_RIGHT) != 0)
             {
                 x = 1;
-                player.MoveDirection = MoveDirection.Towards;
-            }
-            else if((input & INPUT_DOWN) != 0)
-            {
-                player.MoveDirection = MoveDirection.Crouching;
+                player.MoveDirection = MoveDirection.Forward;
             }
             else if ( (input & INPUT_LEFT) == 0 && (input & INPUT_RIGHT) == 0)
             {
@@ -101,7 +98,7 @@ public static class Simulation
                 case MoveDirection.JumpUp:
                     player.Velocity.x = 0;
                     break;
-                case MoveDirection.JumpTowards:
+                case MoveDirection.JumpForward:
                     player.Velocity.x = 0;
                     player.Velocity.x += JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
                     break;
@@ -131,7 +128,7 @@ public static class Simulation
                 case MoveDirection.JumpUp:
                     player.Velocity.x = 0;
                     break;
-                case MoveDirection.JumpTowards:
+                case MoveDirection.JumpForward:
                     player.Velocity.x = 0;
                     player.Velocity.x += JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
                     break;
