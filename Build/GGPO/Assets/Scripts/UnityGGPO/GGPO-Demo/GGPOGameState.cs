@@ -7,16 +7,11 @@ using UnityEngine;
 [Serializable]
 public struct GGPOGameState : IGame
 {
-    //public const int INPUT_FORWARD = (1 << 0);
-    //public const int INPUT_BACKWARD = (1 << 1);
-    //public const int INPUT_LEFT = (1 << 2);
-    //public const int INPUT_RIGHT = (1 << 3);
-
     public Player[] Players;
+    private CharacterControllerStateMachine _StateMachineSim;
 
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
-
     public int Framenumber { get; private set; }
     public int Checksum => GetHashCode();
 
@@ -84,6 +79,7 @@ public struct GGPOGameState : IGame
         UnserializedInputsP2 = 0;
 
         Players = new Player[num_players];
+        _StateMachineSim = new CharacterControllerStateMachine();
 
         for (int i = 0; i < Players.Length; i++)
         {
@@ -116,7 +112,8 @@ public struct GGPOGameState : IGame
 
         for (int i = 0; i < Players.Length; i++)
         {
-            Players[i] = Simulation.Run(Players[i], inputs[i]);
+            //Players[i] = Simulation.Run(Players[i], inputs[i]);
+            Players[i] = _StateMachineSim.Run(Players[i], inputs[i]);
         }
     }
 
@@ -126,22 +123,22 @@ public struct GGPOGameState : IGame
 
         if (Input.GetKey(KeyCode.W))
         {
-            input |= Simulation.INPUT_UP;
+            input |= PlayerConstants.INPUT_UP;
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            input |= Simulation.INPUT_DOWN;
+            input |= PlayerConstants.INPUT_DOWN;
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            input |= Simulation.INPUT_LEFT;
+            input |= PlayerConstants.INPUT_LEFT;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            input |= Simulation.INPUT_RIGHT;
+            input |= PlayerConstants.INPUT_RIGHT;
         }
 
         return input;

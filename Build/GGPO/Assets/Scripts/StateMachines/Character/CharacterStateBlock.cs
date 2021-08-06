@@ -5,9 +5,8 @@ using Stateless;
 public class CharacterStateBlockInitData
 {
     public StateMachine<CharacterState, CharacterStateTrigger> StateMachine;
-    public Player Player;
 
-    public CharacterStateBlockInitData(StateMachine<CharacterState, CharacterStateTrigger> stateMachine, Player player)
+    public CharacterStateBlockInitData(StateMachine<CharacterState, CharacterStateTrigger> stateMachine)
     {
         StateMachine = stateMachine;
     }
