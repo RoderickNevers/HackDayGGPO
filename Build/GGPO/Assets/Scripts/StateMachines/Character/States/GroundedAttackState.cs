@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class GroundedAttackState : CharacterStateBlock
+public class GroundedAttackState : CharacterStateBlock, IStateSimulator
 {
     public GroundedAttackState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -64,6 +64,11 @@ public class GroundedAttackState : CharacterStateBlock
     protected override void RemoveListeners()
     {
         base.RemoveListeners();
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
     }
 
     //protected override void HandleAnimationComplete()

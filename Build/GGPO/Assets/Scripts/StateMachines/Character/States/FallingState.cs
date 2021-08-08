@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Stateless;
 
-public class FallingState : CharacterStateBlock
+public class FallingState : CharacterStateBlock, IStateSimulator
 {
     public FallingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -37,6 +37,11 @@ public class FallingState : CharacterStateBlock
     protected override void RemoveListeners()
     {
         base.RemoveListeners();
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
     }
 
     //protected override void OnUpdate()

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class SweepState : CharacterStateBlock
+public class SweepState : CharacterStateBlock, IStateSimulator
 {
     public SweepState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -24,6 +24,11 @@ public class SweepState : CharacterStateBlock
     protected override void OnExitState()
     {
         base.OnExitState();
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
     }
 
     //protected override void HandleAnimationComplete()

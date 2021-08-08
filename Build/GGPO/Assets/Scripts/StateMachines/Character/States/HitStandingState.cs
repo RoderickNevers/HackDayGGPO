@@ -5,7 +5,7 @@ using UnityEngine;
 //using System.Collections.Generic;
 //using EZCameraShake;
 
-public class HitStandingState : CharacterStateBlock
+public class HitStandingState : CharacterStateBlock, IStateSimulator
 {
     private const float SCREEN_FREEZE_TIME = 0.11f;
     public HitStandingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
@@ -55,6 +55,11 @@ public class HitStandingState : CharacterStateBlock
         base.RemoveListeners();
 
         //characterController.HealthComponent.OnDizzy -= HandleDizzy;
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
     }
 
     //protected override void HandleAnimationComplete()

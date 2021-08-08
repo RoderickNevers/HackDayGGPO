@@ -1,7 +1,7 @@
 ﻿using Stateless.Graph;
 using UnityEngine;
 
-public class KOState : CharacterStateBlock
+public class KOState : CharacterStateBlock, IStateSimulator
 {
     public KOState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -21,6 +21,11 @@ public class KOState : CharacterStateBlock
     protected override void OnExitState()
     {
         base.OnExitState();
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
     }
 
     //private void PlayAnimation()

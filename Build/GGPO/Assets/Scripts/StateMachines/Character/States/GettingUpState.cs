@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Stateless;
 
-public class GettingUpState : CharacterStateBlock
+public class GettingUpState : CharacterStateBlock, IStateSimulator
 {
     public GettingUpState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -22,6 +22,11 @@ public class GettingUpState : CharacterStateBlock
     protected override void OnExitState()
     {
         base.OnExitState();
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
     }
 
     //protected override void HandleAnimationComplete()

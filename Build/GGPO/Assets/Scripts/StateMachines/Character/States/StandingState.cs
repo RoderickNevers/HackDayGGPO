@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.InputSystem;
 
-public class StandingState : CharacterStateBlock
+public class StandingState : CharacterStateBlock, IStateSimulator
 {
     public StandingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -61,6 +61,13 @@ public class StandingState : CharacterStateBlock
     {
         base.RemoveListeners();
         //characterController.InputController.OnInputCommand -= HandleInputCommand;
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        player.Velocity.Set(0, 0, 0);
+        player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+        return player;
     }
 
     internal void Update()

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.InputSystem;
-public class JumpUpState : CharacterStateBlock
+public class JumpUpState : CharacterStateBlock, IStateSimulator
 {
     public JumpUpState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -38,6 +38,18 @@ public class JumpUpState : CharacterStateBlock
     {
         base.RemoveListeners();
         //characterController.InputController.OnInputCommand -= HandleInputCommand;
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        if (player.IsJumping)
+        {
+            player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+            player.Velocity.y += Mathf.Sqrt(PlayerConstants.JUMP_FORCE_VERT * Time.fixedDeltaTime);
+            player.Velocity.x = 0;
+        }
+
+        return player;
     }
 
     //protected override void OnUpdate()

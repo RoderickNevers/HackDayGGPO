@@ -51,6 +51,11 @@ public class CrouchingState : CharacterStateBlock
         //characterController.InputController.OnInputCommand -= HandleInputCommand;
     }
 
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
+    }
+
     //protected override void OnUpdate()
     //{
     //    base.OnUpdate();

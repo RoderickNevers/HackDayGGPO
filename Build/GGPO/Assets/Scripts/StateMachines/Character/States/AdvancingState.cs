@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class AdvancingState : CharacterStateBlock
+public class AdvancingState : CharacterStateBlock, IStateSimulator
 {
     private const float advanceSpeed = 3.5f;
 
@@ -62,6 +62,14 @@ public class AdvancingState : CharacterStateBlock
     internal void Update()
     {
         Debug.Log("advancing lol");
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        //Debug.Log(player.Position);
+        player.Velocity.Set(1, 0, 0);
+        player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+        return player;
     }
 
     //private void HandleInputCommand(object sender, InputCommandArgs e)

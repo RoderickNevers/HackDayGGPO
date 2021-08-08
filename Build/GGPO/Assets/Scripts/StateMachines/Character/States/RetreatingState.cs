@@ -64,6 +64,13 @@ public class RetreatingState : CharacterStateBlock
         //characterController.InputController.OnInputCommand -= HandleInputCommand;
     }
 
+    public Player UpdatePlayer(Player player, long input)
+    {
+        player.Velocity.Set(-1, 0, 0);
+        player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+        return player;
+    }
+
     //private void HandleInputCommand(object sender, InputCommandArgs e)
     //{
     //    //Debug.Log($"Retreating Attack: {e.Attack}");

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.InputSystem;
-public class JumpTowardsState : CharacterStateBlock
+public class JumpTowardsState : CharacterStateBlock, IStateSimulator
 {
     public JumpTowardsState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -53,6 +53,18 @@ public class JumpTowardsState : CharacterStateBlock
     {
         base.RemoveListeners();
         //characterController.InputController.OnInputCommand -= HandleInputCommand;
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        if (player.IsJumping)
+        {
+            player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+            player.Velocity.y += Mathf.Sqrt(PlayerConstants.JUMP_FORCE_VERT * Time.fixedDeltaTime);
+            player.Velocity.x += PlayerConstants.JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
+        }
+ 
+        return player;
     }
 
     //private void HandleInputCommand(object sender, InputCommandArgs e)

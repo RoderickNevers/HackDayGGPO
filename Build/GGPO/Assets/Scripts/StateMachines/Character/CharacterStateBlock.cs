@@ -15,6 +15,8 @@ public class CharacterStateBlockInitData
 public class CharacterStateBlock : AbstractStateBlock, IDisposable
 {
     protected StateMachine<CharacterState, CharacterStateTrigger> _StateMachine;
+    protected Player _Player;
+
     //protected FighterController characterController;
     //protected Animator animator;
     //protected PlayerIDs _PlayerID;

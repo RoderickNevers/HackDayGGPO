@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class InAirAttackState : CharacterStateBlock
+public class InAirAttackState : CharacterStateBlock, IStateSimulator
 {
     public InAirAttackState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -54,6 +54,11 @@ public class InAirAttackState : CharacterStateBlock
     protected override void RemoveListeners()
     {
         base.RemoveListeners();
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
     }
 
     //protected override void HandleAnimationComplete()

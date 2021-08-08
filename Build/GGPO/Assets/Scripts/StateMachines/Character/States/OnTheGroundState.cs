@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Stateless;
 
-public class OnTheGroundState : CharacterStateBlock
+public class OnTheGroundState : CharacterStateBlock, IStateSimulator
 {
     float onTheGroundTime = 0;
 
@@ -25,6 +25,11 @@ public class OnTheGroundState : CharacterStateBlock
     protected override void OnExitState()
     {
         base.OnExitState();
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
     }
 
     //protected override void OnUpdate()

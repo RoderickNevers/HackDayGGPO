@@ -8,7 +8,7 @@ using UnityEngine;
 public struct GGPOGameState : IGame
 {
     public Player[] Players;
-    private CharacterControllerStateMachine _StateMachineSim;
+    private CharacterControllerStateMachine _StateSimulator;
 
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
@@ -79,7 +79,7 @@ public struct GGPOGameState : IGame
         UnserializedInputsP2 = 0;
 
         Players = new Player[num_players];
-        _StateMachineSim = new CharacterControllerStateMachine();
+        _StateSimulator = new CharacterControllerStateMachine();
 
         for (int i = 0; i < Players.Length; i++)
         {
@@ -113,7 +113,7 @@ public struct GGPOGameState : IGame
         for (int i = 0; i < Players.Length; i++)
         {
             //Players[i] = Simulation.Run(Players[i], inputs[i]);
-            Players[i] = _StateMachineSim.Run(Players[i], inputs[i]);
+            Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class DizzyState : CharacterStateBlock
+public class DizzyState : CharacterStateBlock, IStateSimulator
 {
     private const float dizzyTime = 2;
     private float dizzyTimer = 0;
@@ -23,6 +23,11 @@ public class DizzyState : CharacterStateBlock
         //Debug.Log("Dizzy");
         //dizzyTimer = 0;
         //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.DIZZY));
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        return player;
     }
 
     //protected override void HandleGetHit(object sender, HurtboxArgs e)

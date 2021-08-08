@@ -2,7 +2,7 @@
 using UnityEngine;
 //using UnityEngine.InputSystem;
 
-public class JumpBackState : CharacterStateBlock
+public class JumpBackState : CharacterStateBlock, IStateSimulator
 {
     public JumpBackState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -54,6 +54,18 @@ public class JumpBackState : CharacterStateBlock
     {
         base.RemoveListeners();
         //characterController.InputController.OnInputCommand -= HandleInputCommand;
+    }
+
+    public Player UpdatePlayer(Player player, long input)
+    {
+        if (player.IsJumping)
+        {
+            player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+            player.Velocity.y += Mathf.Sqrt(PlayerConstants.JUMP_FORCE_VERT * Time.fixedDeltaTime);
+            player.Velocity.x += -PlayerConstants.JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
+        }
+
+        return player;
     }
 
     //private void HandleInputCommand(object sender, InputCommandArgs e)

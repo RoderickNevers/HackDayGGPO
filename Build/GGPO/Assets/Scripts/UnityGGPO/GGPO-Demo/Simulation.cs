@@ -37,51 +37,51 @@ public static class Simulation
     private static Player UpdatePlayer(Player player, long input)
     {
         GGPORunner.LogGame($"parsing player {player} inputs: {input}.");
-        Debug.Log($" move direction {player.MoveDirection}");
+        Debug.Log($" move direction {player.State}");
 
         if (player.IsGrounded && !player.IsJumping)
         {
             if ((input & INPUT_UP) != 0 && (input & INPUT_LEFT) != 0)
             {
                 player.IsJumping = true;
-                player.MoveDirection = MoveDirection.JumpBack;
+                player.State = PlayerState.JumpBack;
             }
             else if ((input & INPUT_UP) != 0 && (input & INPUT_RIGHT) != 0)
             {
                 player.IsJumping = true;
-                player.MoveDirection = MoveDirection.JumpForward;
+                player.State = PlayerState.JumpForward;
             }
             else if ((input & INPUT_UP) != 0)
             {
                 player.IsJumping = true;
-                player.MoveDirection = MoveDirection.JumpUp;
+                player.State = PlayerState.JumpUp;
             }
             else if ((input & INPUT_DOWN) != 0 && (input & INPUT_LEFT) != 0)
             {
-                player.MoveDirection = MoveDirection.DownBack;
+                player.State = PlayerState.DownBack;
             }
             else if ((input & INPUT_DOWN) != 0 && (input & INPUT_RIGHT) != 0)
             {
-                player.MoveDirection = MoveDirection.DownForward;
+                player.State = PlayerState.DownForward;
             }
             else if ((input & INPUT_DOWN) != 0)
             {
-                player.MoveDirection = MoveDirection.Crouching;
+                player.State = PlayerState.Crouching;
             }
             else if ((input & INPUT_LEFT) != 0)
             {
                 x = -1;
-                player.MoveDirection = MoveDirection.Back;
+                player.State = PlayerState.Back;
             }
             else if ((input & INPUT_RIGHT) != 0)
             {
                 x = 1;
-                player.MoveDirection = MoveDirection.Forward;
+                player.State = PlayerState.Forward;
             }
             else if ( (input & INPUT_LEFT) == 0 && (input & INPUT_RIGHT) == 0)
             {
                 x = 0;
-                player.MoveDirection = MoveDirection.Standing;
+                player.State = PlayerState.Standing;
             }
         }
 
@@ -93,16 +93,16 @@ public static class Simulation
         {
             player.Velocity.y += Mathf.Sqrt(JUMP_FORCE_VERT * Time.fixedDeltaTime);
 
-            switch(player.MoveDirection)
+            switch(player.State)
             {
-                case MoveDirection.JumpUp:
+                case PlayerState.JumpUp:
                     player.Velocity.x = 0;
                     break;
-                case MoveDirection.JumpForward:
+                case PlayerState.JumpForward:
                     player.Velocity.x = 0;
                     player.Velocity.x += JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
                     break;
-                case MoveDirection.JumpBack:
+                case PlayerState.JumpBack:
                     player.Velocity.x = 0;
                     player.Velocity.x += -JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
                     break;
@@ -123,16 +123,16 @@ public static class Simulation
             float gravityModifier = player.Velocity.y == 0 ? FALLING_GRAVITY : RAISING_GRAVITY;
             player.Velocity.y += gravityModifier * Time.fixedDeltaTime;
 
-            switch (player.MoveDirection)
+            switch (player.State)
             {
-                case MoveDirection.JumpUp:
+                case PlayerState.JumpUp:
                     player.Velocity.x = 0;
                     break;
-                case MoveDirection.JumpForward:
+                case PlayerState.JumpForward:
                     player.Velocity.x = 0;
                     player.Velocity.x += JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
                     break;
-                case MoveDirection.JumpBack:
+                case PlayerState.JumpBack:
                     player.Velocity.x = 0;
                     player.Velocity.x += -JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
                     break;
