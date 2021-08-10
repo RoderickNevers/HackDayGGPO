@@ -12,6 +12,9 @@ public struct Player
     public bool IsGrounded;
     public bool IsJumping;
     public PlayerState State;
+    public string AnimationClip;
+    public float CurrentFrame;
+    public float AnimationIndex;
 
     public void Serialize(BinaryWriter bw)
     {
@@ -22,6 +25,9 @@ public struct Player
         bw.Write(IsGrounded);
         bw.Write(IsJumping);
         bw.Write((int)State);
+        bw.Write(AnimationClip);
+        bw.Write(CurrentFrame);
+        bw.Write(AnimationIndex);
     }
 
     public void Deserialize(BinaryReader br)
@@ -33,6 +39,9 @@ public struct Player
         IsGrounded = br.ReadBoolean();
         IsJumping = br.ReadBoolean();
         State = (PlayerState)br.ReadInt32();
+        AnimationClip = br.ReadString();
+        CurrentFrame = br.ReadSingle();
+        AnimationIndex = br.ReadSingle();
     }
 
     public override int GetHashCode()
@@ -43,6 +52,9 @@ public struct Player
         hashCode = hashCode * -1521134295 + IsGrounded.GetHashCode();
         hashCode = hashCode * -1521134295 + IsJumping.GetHashCode();
         hashCode = hashCode * -1521134295 + State.GetHashCode();
+        hashCode = hashCode * -1521134295 + AnimationClip.GetHashCode();
+        hashCode = hashCode * -1521134295 + CurrentFrame.GetHashCode();
+        hashCode = hashCode * -1521134295 + AnimationIndex.GetHashCode();
         return hashCode;
     }
 };

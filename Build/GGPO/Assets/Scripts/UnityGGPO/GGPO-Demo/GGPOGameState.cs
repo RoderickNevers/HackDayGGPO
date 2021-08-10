@@ -112,7 +112,6 @@ public struct GGPOGameState : IGame
 
         for (int i = 0; i < Players.Length; i++)
         {
-            //Players[i] = Simulation.Run(Players[i], inputs[i]);
             Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
         }
     }

@@ -4,19 +4,15 @@ using UnityEngine;
 
 public class GGPOPlayerController : MonoBehaviour
 {
+    private const int BASE_LAYER = -1;
+    [SerializeField] private Animator m_Animator;
+
     private CharacterController m_CharacterController;
     private GGPOComponent m_GGPOComponent;
-    private Animator m_Animator;
-    private float m_Index = 0;
-    private float m_CurrentFrame;
-    private float m_TotalFrames;
 
     void Start()
     {
-        m_Animator = GetComponent<Animator>();
         m_Animator.speed = 0.0f;
-        AnimatorClipInfo[] clipInfo = m_Animator.GetCurrentAnimatorClipInfo(0);
-        m_TotalFrames = (int)(clipInfo[0].clip.length * clipInfo[0].clip.frameRate);
     }
 
     private void Awake()
@@ -37,12 +33,7 @@ public class GGPOPlayerController : MonoBehaviour
         transform.position = player.Position;
 
         // set the animator to the correct frame
-        m_CurrentFrame = m_Index / m_TotalFrames;
-
-        m_Animator.Play("Idle", -1, m_CurrentFrame);
-
-        if (m_Index >= m_TotalFrames)
-            m_Index = 1;
+        m_Animator.Play(player.AnimationClip, BASE_LAYER, player.CurrentFrame);
     }
 
     public void UpdatePlayerPosition(Player player)

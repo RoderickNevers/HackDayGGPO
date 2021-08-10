@@ -16,6 +16,9 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 {
     protected StateMachine<CharacterState, CharacterStateTrigger> _StateMachine;
     protected Player _Player;
+    //protected float _Index = 0;
+    //protected float _CurrentFrame;
+    //protected float _TotalFrames;
 
     //protected FighterController characterController;
     //protected Animator animator;
