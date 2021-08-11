@@ -71,6 +71,40 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         RemoveListeners();
     }
 
+    protected void PlayAnimationLoop(ref Player player, string animationID)
+    {
+        if (player.AnimationClip != animationID)
+        {
+            player.AnimationIndex = 1;
+        }
+
+        player.AnimationClip = animationID;
+        player.AnimationIndex++;
+        player.CurrentFrame = player.AnimationIndex / AnimationData.IDLE_TOTAL_FRAMES;
+
+        if (player.AnimationIndex >= AnimationData.IDLE_TOTAL_FRAMES)
+        {
+            player.AnimationIndex = 1;
+        }
+    }
+
+    protected void PlayAnimationOneShot(ref Player player, string animationID)
+    {
+        if (player.AnimationClip != animationID)
+        {
+            player.AnimationIndex = 1;
+        }
+
+        player.AnimationClip = animationID;
+
+        if (player.AnimationIndex < AnimationData.IDLE_TOTAL_FRAMES)
+        {
+            player.AnimationIndex++;
+        }
+
+        player.CurrentFrame = player.AnimationIndex / AnimationData.IDLE_TOTAL_FRAMES;
+    }
+
     //protected override void OnUpdate()
     //{
 

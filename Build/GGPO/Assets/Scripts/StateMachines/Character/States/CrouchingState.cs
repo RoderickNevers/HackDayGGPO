@@ -53,6 +53,10 @@ public class CrouchingState : CharacterStateBlock
 
     public Player UpdatePlayer(Player player, long input)
     {
+        PlayAnimationLoop(ref player, "Crouch");
+
+        player.Velocity.Set(0, 0, 0);
+        player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
         return player;
     }
 

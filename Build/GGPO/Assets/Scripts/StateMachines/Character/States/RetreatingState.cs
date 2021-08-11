@@ -66,6 +66,8 @@ public class RetreatingState : CharacterStateBlock
 
     public Player UpdatePlayer(Player player, long input)
     {
+        PlayAnimationLoop(ref player, "WalkBackward");
+
         player.Velocity.Set(-1, 0, 0);
         player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
         return player;

@@ -44,6 +44,8 @@ public class JumpUpState : CharacterStateBlock, IStateSimulator
     {
         if (player.IsJumping)
         {
+            PlayAnimationOneShot(ref player, "JumpUp");
+
             player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
             player.Velocity.y += Mathf.Sqrt(PlayerConstants.JUMP_FORCE_VERT * Time.fixedDeltaTime);
             player.Velocity.x = 0;
