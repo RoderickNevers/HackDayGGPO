@@ -86,8 +86,16 @@ public class CharacterControllerStateMachine: IDisposable
     public Player Run(Player player, long input)
     {
         player.IsGrounded = GroundCheck(player);
+
+        // Ensure the players feet are always on the ground
+        if (player.IsGrounded)
+        {
+            player.Position.y = 0;
+        }
+
         player = CheckInputs(player, input);
 
+        // Grounded states
         if (player.IsGrounded && !player.IsJumping)
         {
             switch (player.State)
@@ -127,6 +135,7 @@ public class CharacterControllerStateMachine: IDisposable
                     break;
             }
         }
+        // Air states
         else if (player.IsJumping)
         {
             switch(player.State)
