@@ -66,7 +66,7 @@ public class StandingState : CharacterStateBlock, IStateSimulator
     public Player UpdatePlayer(Player player, long input)
     {
         // Reset the animation index if the player if the previous state is different
-        PlayAnimationLoop(ref player, "Idle");
+        PlayAnimationLoop(ref player, AnimationData.AnimatorKeys.IDLE);
 
         player.Velocity.Set(0, 0, 0);
         player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;

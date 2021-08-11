@@ -27,7 +27,7 @@ public struct Player
         bw.Write((int)State);
 
         if (AnimationClip == null)
-            AnimationClip = "Idle";
+            AnimationClip = AnimationData.AnimatorKeys.IDLE;
 
         bw.Write(AnimationClip);
         bw.Write(CurrentFrame);

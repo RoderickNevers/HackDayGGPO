@@ -60,7 +60,7 @@ public class JumpBackState : CharacterStateBlock, IStateSimulator
     {
         if (player.IsJumping)
         {
-            PlayAnimationOneShot(ref player, "JumpDirection");
+            PlayAnimationOneShot(ref player, AnimationData.AnimatorKeys.JUMP_BACKWARD);
 
             player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
             player.Velocity.y += Mathf.Sqrt(PlayerConstants.JUMP_FORCE_VERT * Time.fixedDeltaTime);

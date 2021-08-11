@@ -66,7 +66,7 @@ public class AdvancingState : CharacterStateBlock, IStateSimulator
 
     public Player UpdatePlayer(Player player, long input)
     {
-        PlayAnimationLoop(ref player, "WalkForward");
+        PlayAnimationLoop(ref player, AnimationData.AnimatorKeys.WALK_FORWARD);
 
         //Debug.Log(player.Position);
         player.Velocity.Set(1, 0, 0);

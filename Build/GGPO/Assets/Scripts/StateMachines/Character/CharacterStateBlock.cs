@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Stateless;
 
 public class CharacterStateBlockInitData
@@ -15,9 +16,17 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 {
     protected StateMachine<CharacterState, CharacterStateTrigger> _StateMachine;
     protected Player _Player;
-    //protected float _Index = 0;
-    //protected float _CurrentFrame;
-    //protected float _TotalFrames;
+
+    private Dictionary<string, float> _totalFrameLookup = new Dictionary<string, float>()
+    {
+        {AnimationData.AnimatorKeys.IDLE, AnimationData.IDLE_TOTAL_FRAMES},
+        {AnimationData.AnimatorKeys.WALK_FORWARD, AnimationData.WALK_FORWARD_TOTAL_FRAMES},
+        {AnimationData.AnimatorKeys.WALK_BACKWARD, AnimationData.WALK_BACKWARD_TOTAL_FRAMES},
+        {AnimationData.AnimatorKeys.CROUCH, AnimationData.CROUCH_TOTAL_FRAMES},
+        {AnimationData.AnimatorKeys.JUMP_UP, AnimationData.JUMP_UP_TOTAL_FRAMES},
+        {AnimationData.AnimatorKeys.JUMP_FORWARD, AnimationData.JUMP_FORWARD_TOTAL_FRAMES},
+        {AnimationData.AnimatorKeys.JUMP_BACKWARD, AnimationData.JUMP_BACKWARD_TOTAL_FRAMES}
+    };
 
     //protected FighterController characterController;
     //protected Animator animator;
