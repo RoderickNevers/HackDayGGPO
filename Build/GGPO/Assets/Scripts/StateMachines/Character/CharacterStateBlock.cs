@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 using Stateless;
 
 public class CharacterStateBlockInitData
@@ -79,7 +78,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
 
         player.AnimationClip = animationID;
-        player.AnimationIndex++;
+        player.AnimationIndex += AnimationData.FRAME_COUNTER;
         player.CurrentFrame = player.AnimationIndex / AnimationData.IDLE_TOTAL_FRAMES;
 
         if (player.AnimationIndex >= AnimationData.IDLE_TOTAL_FRAMES)
@@ -99,7 +98,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
         if (player.AnimationIndex < AnimationData.IDLE_TOTAL_FRAMES)
         {
-            player.AnimationIndex++;
+            player.AnimationIndex += AnimationData.FRAME_COUNTER;
         }
 
         player.CurrentFrame = player.AnimationIndex / AnimationData.IDLE_TOTAL_FRAMES;
