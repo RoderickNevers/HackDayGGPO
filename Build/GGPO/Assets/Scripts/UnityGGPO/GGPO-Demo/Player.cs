@@ -25,6 +25,10 @@ public struct Player
         bw.Write(IsGrounded);
         bw.Write(IsJumping);
         bw.Write((int)State);
+
+        if (AnimationClip == null)
+            AnimationClip = "Idle";
+
         bw.Write(AnimationClip);
         bw.Write(CurrentFrame);
         bw.Write(AnimationIndex);
