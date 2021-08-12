@@ -47,7 +47,10 @@ public struct GGPOGameState : IGame
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
 
-    public int Framenumber { get; private set; }
+    [SerializeField]
+    private int frameNumber;
+    public int Framenumber { get { return frameNumber; } private set { frameNumber = value; } }
+
     public int Checksum => GetHashCode();
 
     public Player[] Players;
@@ -116,7 +119,7 @@ public struct GGPOGameState : IGame
         // consts
         _Speed = 2;
 
-        Framenumber = 0;
+        frameNumber = 0;
         UnserializedInputsP1 = 0;
         UnserializedInputsP2 = 0;
 

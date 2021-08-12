@@ -57,6 +57,7 @@ namespace SharedGame {
         public void StartPlayback(GGPOGameState initialGameState, ReplayManager replayManager)
         {
             m_ReplayManager = replayManager;
+            Runner.SetGame(initialGameState);
         }
 
         public void StopPlayback()

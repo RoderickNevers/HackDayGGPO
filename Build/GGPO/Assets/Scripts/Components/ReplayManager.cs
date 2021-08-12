@@ -1,5 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
@@ -101,15 +102,18 @@ public class ReplayManager : MonoBehaviour
     private void OnRecordPressed()
     {
         var recText = m_RecordBtn.GetComponentInChildren<Text>();
+        var loadText = m_LoadBtn.GetComponentInChildren<Text>();
 
         if (m_GameStates.Count == 0)
         {
             // start recording
             StartRecording();
 
+            // Disable save/load button during recording
+            m_LoadBtn.gameObject.SetActive(false);
+
             // update text
             recText.text = "Stop Recording";
-
         }
         else if (m_IsRecording)
         {
@@ -119,8 +123,12 @@ public class ReplayManager : MonoBehaviour
             // Enable playback buttons
             SetActivePlaybackButtons(true);
 
+            // Enable save/load button during recording
+            m_LoadBtn.gameObject.SetActive(true);
+
             // update text
             recText.text = "Clear Recording";
+            loadText.text = "Save Recording";
         }
         else if (!m_IsRecording && m_GameStates.Count != 0)
         {
@@ -134,12 +142,50 @@ public class ReplayManager : MonoBehaviour
 
             // update text
             recText.text = "Start Recording";
+            loadText.text = "Load Save Data";
         }
     }
 
     private void OnLoadPressed()
     {
-        // EditorUtility.OpenFilePanel()
+        var recText = m_RecordBtn.GetComponentInChildren<Text>();
+        var loadText = m_LoadBtn.GetComponentInChildren<Text>();
+
+        if (m_GameStates.Count > 0)
+        {
+            // Saving
+            string path = EditorUtility.SaveFilePanel("Save replay", "", "GGPODemo.json", "json");
+            if (path.Length != 0)
+            {
+                ReplayData replayData = ConvertGameStatesToReplayData();
+                string jsonData = JsonUtility.ToJson(replayData, true);
+                File.WriteAllText(path, jsonData);
+            }
+        }
+        else
+        {
+            // Loading
+            string path = EditorUtility.OpenFilePanel("Load a save file", "", "json");
+            if (path.Length != 0)
+            {
+                string jsonData = File.ReadAllText(path);
+
+                m_CurrentReplay = JsonUtility.FromJson<ReplayData>(jsonData);
+
+                GenerateGameStates();
+
+                m_CurrentPlaybackIndex = 0;
+
+                // Update game mode
+                StartPlayback();
+
+                // Enable playback buttons
+                SetActivePlaybackButtons(true);
+
+                recText.text = "Clear Recording";
+                loadText.text = "Save Recording";
+            }
+        }
     }
 
     private void OnPlayPausePressed()
@@ -224,26 +270,7 @@ public class ReplayManager : MonoBehaviour
     {
         m_IsRecording = false;
 
-        _GGPOComponent.manualFrameIncrement = true;
-
-        // Start playback mode
-        if (m_GameStates.Count > 0)
-        {
-            if (m_CurrentPlaybackIndex == -1)
-            {
-                m_CurrentPlaybackIndex = m_GameStates.Count - 1;
-            }
-
-            StartPlayback();
-        }
-
-        UpdatePlayRewindButtonText();
-
-        m_Slider.minValue = m_GameStates[0].Framenumber;
-        m_Slider.maxValue = m_GameStates[m_GameStates.Count - 1].Framenumber;
-        m_Slider.value = m_Slider.maxValue;
-        m_MinSliderText.text = m_Slider.minValue.ToString();
-        m_MaxSliderText.text = m_Slider.maxValue.ToString();
+        StartPlayback();
     }
 
     // Once we've got our inputs, we can regenerate all game states
@@ -261,13 +288,15 @@ public class ReplayManager : MonoBehaviour
             return;
         }
 
+        int initialFrameNumber = m_CurrentReplay.m_InitialState.Framenumber;
+
         // Sanitize initial inputs
         List<PlayerInputs> playerInputs = m_CurrentReplay.m_PlayerInputs;
-        if (playerInputs[0].m_FrameNumber != 0)
+        if (playerInputs[0].m_FrameNumber != initialFrameNumber)
         {
             playerInputs.Insert(0, new PlayerInputs()
             {
-                m_FrameNumber = 0,
+                m_FrameNumber = initialFrameNumber,
                 m_P1Input = 0,
                 m_P2Input = 0
             });
@@ -277,9 +306,10 @@ public class ReplayManager : MonoBehaviour
         int currentInputIndex = 0;
 
         m_GameStates.Add(m_CurrentReplay.m_InitialState);
-        for (int i = 0; i < finalFrameNumber; ++i)
+        for (int i = initialFrameNumber; i < finalFrameNumber; ++i)
         {
-            GGPOGameState currentGameState = m_GameStates[i].Clone();
+            int gameStateIndex = i - initialFrameNumber;
+            GGPOGameState currentGameState = m_GameStates[gameStateIndex].Clone();
             PlayerInputs nextInputs = playerInputs[currentInputIndex];
 
             long[] inputs = new long[2];
@@ -289,15 +319,19 @@ public class ReplayManager : MonoBehaviour
             {
                 inputs[0] = nextInputs.m_P1Input;
                 inputs[1] = nextInputs.m_P2Input;
+                ++currentInputIndex;
             }
-            else if (i > 0)
+            else
             {
                 PlayerInputs prevInputs = playerInputs[currentInputIndex - 1];
-                if (playerInputs[currentInputIndex].m_FrameNumber == i)
+
+                // we do framenumber-1 here because frame n was actually n-1 before we called update.
+                if (playerInputs[currentInputIndex].m_FrameNumber - 1 == i)
                 {
                     // Set inputs
                     inputs[0] = ResolveInputs(nextInputs.m_P1Input, prevInputs.m_P1Input);
                     inputs[1] = ResolveInputs(nextInputs.m_P2Input, prevInputs.m_P2Input);
+                    ++currentInputIndex;
                 }
                 else
                 {
@@ -381,7 +415,23 @@ public class ReplayManager : MonoBehaviour
             return;
         }
 
+        _GGPOComponent.manualFrameIncrement = true;
+
+        // Start playback mode
+        if (m_CurrentPlaybackIndex == -1)
+        {
+            m_CurrentPlaybackIndex = m_GameStates.Count - 1;
+        }
+
         _GGPOComponent.StartPlayback(m_GameStates[m_CurrentPlaybackIndex], this);
+
+        UpdatePlayRewindButtonText();
+
+        m_Slider.minValue = m_GameStates[0].Framenumber;
+        m_Slider.maxValue = m_GameStates[m_GameStates.Count - 1].Framenumber;
+        m_Slider.value = m_GameStates[m_CurrentPlaybackIndex].Framenumber;
+        m_MinSliderText.text = m_Slider.minValue.ToString();
+        m_MaxSliderText.text = m_Slider.maxValue.ToString();
     }
 
     public void StopPlayback()

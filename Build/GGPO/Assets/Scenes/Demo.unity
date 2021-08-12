@@ -858,6 +858,8 @@ MonoBehaviour:
   m_ReplayManager: {fileID: 155527098}
   m_StartOnlySessionBtn: {fileID: 1682240402}
   m_StartStopSessionBtn: {fileID: 1812112401}
+  m_MainMenuPanel: {fileID: 604742629}
+  m_DebugPanel: {fileID: 908509833}
 --- !u!4 &155527102
 Transform:
   m_ObjectHideFlags: 0

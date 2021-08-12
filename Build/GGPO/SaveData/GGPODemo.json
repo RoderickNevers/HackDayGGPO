@@ -1,0 +1,118 @@
+{
+    "m_InitialState": {
+        "frameNumber": 792,
+        "Players": [
+            {
+                "position": {
+                    "x": -10.0,
+                    "y": 1.0,
+                    "z": -16.0
+                },
+                "velocity": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            {
+                "position": {
+                    "x": 10.0,
+                    "y": 1.0,
+                    "z": -16.0
+                },
+                "velocity": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            }
+        ]
+    },
+    "m_PlayerInputs": [
+        {
+            "m_FrameNumber": 800,
+            "m_P1Input": 1,
+            "m_P2Input": 1
+        },
+        {
+            "m_FrameNumber": 814,
+            "m_P1Input": 0,
+            "m_P2Input": 0
+        },
+        {
+            "m_FrameNumber": 816,
+            "m_P1Input": 8,
+            "m_P2Input": 8
+        },
+        {
+            "m_FrameNumber": 821,
+            "m_P1Input": 0,
+            "m_P2Input": 0
+        },
+        {
+            "m_FrameNumber": 823,
+            "m_P1Input": 4,
+            "m_P2Input": 4
+        },
+        {
+            "m_FrameNumber": 830,
+            "m_P1Input": 0,
+            "m_P2Input": 0
+        },
+        {
+            "m_FrameNumber": 831,
+            "m_P1Input": 8,
+            "m_P2Input": 8
+        },
+        {
+            "m_FrameNumber": 836,
+            "m_P1Input": 2,
+            "m_P2Input": 2
+        },
+        {
+            "m_FrameNumber": 842,
+            "m_P1Input": 6,
+            "m_P2Input": 6
+        },
+        {
+            "m_FrameNumber": 844,
+            "m_P1Input": 4,
+            "m_P2Input": 4
+        },
+        {
+            "m_FrameNumber": 850,
+            "m_P1Input": 0,
+            "m_P2Input": 0
+        },
+        {
+            "m_FrameNumber": 851,
+            "m_P1Input": 8,
+            "m_P2Input": 8
+        },
+        {
+            "m_FrameNumber": 856,
+            "m_P1Input": 9,
+            "m_P2Input": 9
+        },
+        {
+            "m_FrameNumber": 857,
+            "m_P1Input": 1,
+            "m_P2Input": 1
+        },
+        {
+            "m_FrameNumber": 862,
+            "m_P1Input": 5,
+            "m_P2Input": 5
+        },
+        {
+            "m_FrameNumber": 864,
+            "m_P1Input": 4,
+            "m_P2Input": 4
+        },
+        {
+            "m_FrameNumber": 867,
+            "m_P1Input": 0,
+            "m_P2Input": 0
+        }
+    ]
+}
