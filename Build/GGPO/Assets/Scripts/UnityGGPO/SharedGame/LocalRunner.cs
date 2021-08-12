@@ -8,8 +8,10 @@ namespace SharedGame {
         private NativeArray<byte> buffer;
 
         public IGame Game { get; private set; }
+        public void SetGame(IGame game) { Game = game; }
 
         public GameInfo GameInfo { get; private set; }
+        public StateInputManager m_StateInputManager { get; private set; }
 
         public void Idle(int ms) {
         }
@@ -55,6 +57,8 @@ namespace SharedGame {
                 controllerId = controllerId++
             };
             GameInfo.SetConnectState(handle, PlayerConnectState.Connecting);
+
+            m_StateInputManager = new StateInputManager();
         }
 
         public string GetStatus(Stopwatch updateWatch) {

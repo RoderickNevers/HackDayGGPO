@@ -18,8 +18,12 @@ namespace SharedGame {
 
         public string Name { get; private set; }
         public IGame Game { get; private set; }
+        public void SetGame(IGame game) { Game = game; }
+
         public GameInfo GameInfo { get; private set; }
         public IPerfUpdate perf { get; private set; }
+
+        public StateInputManager m_StateInputManager { get; private set; }
 
         public static event Action<string> OnGameLog;
 
@@ -161,6 +165,8 @@ namespace SharedGame {
             LogPlugin("GameState Set " + Game);
             GameInfo = new GameInfo();
             perf = perfPanel;
+
+            m_StateInputManager = new StateInputManager();
         }
 
         public void Init(IList<Connections> connections, int playerIndex) {
@@ -338,6 +344,8 @@ namespace SharedGame {
             if (Game == null) {
                 LogPlugin("GameState is null what?");
             }
+            m_StateInputManager.UpdateFrameInputs(Game.Framenumber, inputs);
+
             Game.Update(inputs, disconnect_flags);
 
             // update the checksums to display in the top of the window. this helps to detect desyncs.

@@ -9,10 +9,14 @@ public class LocalSessionManager : MonoBehaviour
     [SerializeField] private GGPOComponent m_GameManager;
     [SerializeField] private LobbyComponent m_LobbyComponent;
     [SerializeField] private GameSpeedManager m_GameSpeedManager;
+    [SerializeField] private ReplayManager m_ReplayManager;
 
     [Header("UI")]
     [SerializeField] private Button m_StartOnlySessionBtn;
     [SerializeField] private Button m_StartStopSessionBtn;
+
+    [SerializeField] private GameObject m_MainMenuPanel;
+    [SerializeField] private GameObject m_DebugPanel;
 
 
     private void Awake()
@@ -58,9 +62,22 @@ public class LocalSessionManager : MonoBehaviour
         m_StartStopSessionBtn.gameObject.SetActive(enabled);
     }
 
+    public void ShowMainMenu()
+    {
+        m_MainMenuPanel.SetActive(true);
+        m_DebugPanel.SetActive(false);
+    }
+
+    public void ShowGame()
+    {
+        m_MainMenuPanel.SetActive(false);
+        m_DebugPanel.SetActive(true);
+    }
+
     private void SetEnableLocalSessionFeatures(bool enabled)
     {
         m_GameSpeedManager.enabled = enabled;
+        m_ReplayManager.enabled = enabled;
     }
 
     private void OnStartStopSession()
@@ -76,6 +93,8 @@ public class LocalSessionManager : MonoBehaviour
 
             SetEnableLocalSessionFeatures(true);
 
+            ShowGame();
+
             btnText.text = "Stop Local Session";
         }
         else
@@ -86,6 +105,8 @@ public class LocalSessionManager : MonoBehaviour
             m_LobbyComponent.enabled = true;
 
             SetEnableLocalSessionFeatures(false);
+
+            ShowMainMenu();
 
             btnText.text = "Start Local Session";
         }
