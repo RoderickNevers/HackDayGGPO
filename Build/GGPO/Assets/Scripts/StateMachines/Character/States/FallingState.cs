@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Stateless;
 
-public class FallingState : CharacterStateBlock, IStateSimulator
+public class FallingState : CharacterStateBlock
 {
     public FallingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {

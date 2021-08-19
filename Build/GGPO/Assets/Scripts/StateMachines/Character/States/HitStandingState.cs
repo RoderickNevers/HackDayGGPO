@@ -5,7 +5,7 @@ using UnityEngine;
 //using System.Collections.Generic;
 //using EZCameraShake;
 
-public class HitStandingState : CharacterStateBlock, IStateSimulator
+public class HitStandingState : CharacterStateBlock
 {
     private const float SCREEN_FREEZE_TIME = 0.11f;
     public HitStandingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)

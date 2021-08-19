@@ -2,7 +2,7 @@ using SharedGame;
 using System;
 using UnityEngine;
 
-public class GameController : MonoBehaviour, IGameView
+public class GameController : MonoBehaviour//, IGameView
 {
     [SerializeField] private GGPOComponent _GGPOComponent;
     public GameObject playerPrefab;
@@ -90,22 +90,24 @@ public class GameController : MonoBehaviour, IGameView
         }
     }
 
+    // dont think we need this anymore
     private void Update()
     {
-        if (_GGPOComponent.IsRunning && _GGPOComponent.Runner != null)
-        {
-            UpdateGameView(_GGPOComponent.Runner);
-        }
+        //if (_GGPOComponent.IsRunning && _GGPOComponent.Runner != null)
+        //{
+        //    UpdateGameView(_GGPOComponent.Runner);
+        //}
     }
 
-    public void UpdateGameView(IGameRunner runner)
-    {
-        var gameState = (GGPOGameState)runner.Game;
+    // dont think we need this anymore
+    //public void UpdateGameView(IGameRunner runner)
+    //{
+    //    var gameState = (GGPOGameState)runner.Game;
 
-        for (int i = 0; i < PlayerControllers.Length; ++i)
-        {
-            Player player = gameState.GetPlayer(i);
-            PlayerControllers[i].UpdatePlayerPosition(player);
-        }
-    }
+    //    for (int i = 0; i < PlayerControllers.Length; ++i)
+    //    {
+    //        Player player = gameState.GetPlayer(i);
+    //        PlayerControllers[i].UpdatePlayerPosition(player);
+    //    }
+    //}
 }

@@ -53,10 +53,69 @@ public class CrouchingState : CharacterStateBlock
 
     public Player UpdatePlayer(Player player, long input)
     {
-        PlayAnimationLoop(ref player, AnimationData.AnimatorKeys.CROUCH);
+        float velocity = 0;
 
-        player.Velocity.Set(0, 0, 0);
+        if (player.IsHit)
+        {
+            Debug.Log("IM HIT CAPTAIN!!!!!!!!!!!!!!!");
+        }
+        //Returning attack
+        else if (player.IsAttacking)
+        {
+            switch (player.Attack)
+            {
+                case AttackState.LightPunch:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.LIGHT_PUNCH);
+                    break;
+                case AttackState.MediumPunch:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.MEDIUM_PUNCH);
+                    break;
+                case AttackState.HeavyPunch:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.HEAVY_PUNCH);
+                    break;
+                case AttackState.LightKick:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.LIGHT_KICK);
+                    break;
+                case AttackState.MediumKick:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.MEDIUM_KICK);
+                    break;
+                case AttackState.HeavyKick:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.HEAVY_KICK);
+                    break;
+            }
+        }
+        //New attack or nothing
+        else
+        {
+            switch (CheckAttacking(input))
+            {
+                case AttackState.LightPunch:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.LIGHT_PUNCH);
+                    break;
+                case AttackState.MediumPunch:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.MEDIUM_PUNCH);
+                    break;
+                case AttackState.HeavyPunch:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.HEAVY_PUNCH);
+                    break;
+                case AttackState.LightKick:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.LIGHT_KICK);
+                    break;
+                case AttackState.MediumKick:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.MEDIUM_KICK);
+                    break;
+                case AttackState.HeavyKick:
+                    PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.HEAVY_KICK);
+                    break;
+                case AttackState.None:
+                    PlayAnimationLoop(ref player, AnimationData.Movememt.CROUCH);
+                    break;
+            }
+        }
+
+        player.Velocity.Set(velocity, 0, 0);
         player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+
         return player;
     }
 

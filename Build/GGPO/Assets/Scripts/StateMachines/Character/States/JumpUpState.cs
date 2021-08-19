@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.InputSystem;
-public class JumpUpState : CharacterStateBlock, IStateSimulator
+public class JumpUpState : CharacterStateBlock
 {
     public JumpUpState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -44,7 +44,63 @@ public class JumpUpState : CharacterStateBlock, IStateSimulator
     {
         if (player.IsJumping)
         {
-            PlayAnimationOneShot(ref player, AnimationData.AnimatorKeys.JUMP_UP);
+            if (player.IsHit)
+            {
+                Debug.Log("IM HIT CAPTAIN!!!!!!!!!!!!!!!");
+            }
+            //Returning attack
+            else if (player.IsAttacking)
+            {
+                switch (player.Attack)
+                {
+                    case AttackState.LightPunch:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_PUNCH);
+                        break;
+                    case AttackState.MediumPunch:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_PUNCH);
+                        break;
+                    case AttackState.HeavyPunch:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_PUNCH);
+                        break;
+                    case AttackState.LightKick:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_KICK);
+                        break;
+                    case AttackState.MediumKick:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_KICK);
+                        break;
+                    case AttackState.HeavyKick:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_KICK);
+                        break;
+                }
+            }
+            //New attack or nothing
+            else
+            {
+                switch (CheckAttacking(input))
+                {
+                    case AttackState.LightPunch:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_PUNCH);
+                        break;
+                    case AttackState.MediumPunch:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_PUNCH);
+                        break;
+                    case AttackState.HeavyPunch:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_PUNCH);
+                        break;
+                    case AttackState.LightKick:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_KICK);
+                        break;
+                    case AttackState.MediumKick:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_KICK);
+                        break;
+                    case AttackState.HeavyKick:
+                        PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_KICK);
+                        break;
+                    case AttackState.None:
+                        PlayAnimationOneShot(ref player, AnimationData.Movememt.JUMP_UP);
+                        break;
+                }
+            }
 
             player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
             player.Velocity.y += Mathf.Sqrt(PlayerConstants.JUMP_FORCE_VERT * Time.fixedDeltaTime);

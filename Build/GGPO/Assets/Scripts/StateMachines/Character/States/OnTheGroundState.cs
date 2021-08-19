@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Stateless;
 
-public class OnTheGroundState : CharacterStateBlock, IStateSimulator
+public class OnTheGroundState : CharacterStateBlock
 {
     float onTheGroundTime = 0;
 

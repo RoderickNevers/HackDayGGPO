@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class InAirAttackState : CharacterStateBlock, IStateSimulator
+public class InAirAttackState : CharacterStateBlock
 {
     public InAirAttackState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {

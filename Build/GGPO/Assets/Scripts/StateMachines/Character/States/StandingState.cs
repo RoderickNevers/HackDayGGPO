@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.InputSystem;
 
-public class StandingState : CharacterStateBlock, IStateSimulator
+public class StandingState : CharacterStateBlock
 {
     public StandingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
@@ -65,11 +65,66 @@ public class StandingState : CharacterStateBlock, IStateSimulator
 
     public Player UpdatePlayer(Player player, long input)
     {
-        // Reset the animation index if the player if the previous state is different
-        PlayAnimationLoop(ref player, AnimationData.AnimatorKeys.IDLE);
+        if (player.IsHit)
+        {
+            Debug.Log("IM HIT CAPTAIN!!!!!!!!!!!!!!!");
+        }
+        //Returning attack
+        else if (player.IsAttacking)
+        {
+            switch (player.Attack)
+            {
+                case AttackState.LightPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_PUNCH);
+                    break;
+                case AttackState.MediumPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_PUNCH);
+                    break;
+                case AttackState.HeavyPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_PUNCH);
+                    break;
+                case AttackState.LightKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_KICK);
+                    break;
+                case AttackState.MediumKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_KICK);
+                    break;
+                case AttackState.HeavyKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_KICK);
+                    break;
+            }
+        }
+        //New attack or nothing
+        else
+        {
+            switch (CheckAttacking(input))
+            {
+                case AttackState.LightPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_PUNCH);
+                    break;
+                case AttackState.MediumPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_PUNCH);
+                    break;
+                case AttackState.HeavyPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_PUNCH);
+                    break;
+                case AttackState.LightKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_KICK);
+                    break;
+                case AttackState.MediumKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_KICK);
+                    break;
+                case AttackState.HeavyKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_KICK);
+                    break;
+                case AttackState.None:
+                    PlayAnimationLoop(ref player, AnimationData.Movememt.IDLE);
+                    player.Velocity.Set(0, 0, 0);
+                    player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+                    break;
+            }
+        }
 
-        player.Velocity.Set(0, 0, 0);
-        player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
         return player;
     }
 

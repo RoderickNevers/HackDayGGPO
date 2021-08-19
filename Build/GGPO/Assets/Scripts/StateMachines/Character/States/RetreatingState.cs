@@ -66,10 +66,70 @@ public class RetreatingState : CharacterStateBlock
 
     public Player UpdatePlayer(Player player, long input)
     {
-        PlayAnimationLoop(ref player, AnimationData.AnimatorKeys.WALK_BACKWARD);
+        float velocity = 0;
 
-        player.Velocity.Set(-1, 0, 0);
+        if (player.IsHit)
+        {
+            Debug.Log("IM HIT CAPTAIN!!!!!!!!!!!!!!!");
+        }
+        //Returning attack
+        else if (player.IsAttacking)
+        {
+            switch (player.Attack)
+            {
+                case AttackState.LightPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_PUNCH);
+                    break;
+                case AttackState.MediumPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_PUNCH);
+                    break;
+                case AttackState.HeavyPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_PUNCH);
+                    break;
+                case AttackState.LightKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_KICK);
+                    break;
+                case AttackState.MediumKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_KICK);
+                    break;
+                case AttackState.HeavyKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_KICK);
+                    break;
+            }
+        }
+        //New attack or nothing
+        else
+        {
+            switch (CheckAttacking(input))
+            {
+                case AttackState.LightPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_PUNCH);
+                    break;
+                case AttackState.MediumPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_PUNCH);
+                    break;
+                case AttackState.HeavyPunch:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_PUNCH);
+                    break;
+                case AttackState.LightKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_KICK);
+                    break;
+                case AttackState.MediumKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_KICK);
+                    break;
+                case AttackState.HeavyKick:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_KICK);
+                    break;
+                case AttackState.None:
+                    PlayAnimationLoop(ref player, AnimationData.Movememt.WALK_BACKWARD);
+                    velocity = -1;
+                    break;
+            }
+        }
+
+        player.Velocity.Set(velocity, 0, 0);
         player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
+
         return player;
     }
 

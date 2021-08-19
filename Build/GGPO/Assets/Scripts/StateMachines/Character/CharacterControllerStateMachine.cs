@@ -7,24 +7,24 @@ public class CharacterControllerStateMachine: IDisposable
 {
     private readonly StateMachine<CharacterState, CharacterStateTrigger> _Machine;
 
-    private readonly IntroState _IntroState;
-    private readonly StandingState _StandingState;
-    private readonly AdvancingState _AdvancingState;
-    private readonly RetreatingState _RetreatingState;
-    private readonly CrouchingState _CrouchingState;
-    private readonly GroundedAttackState _AttackGroundState;
-    private readonly InAirAttackState _AttackInAirState;
-    private readonly JumpUpState _JumpUpState;
-    private readonly JumpTowardsState _JumpTowardsState;
-    private readonly JumpBackState _JumpAwayState;
-    private readonly FallingState _FallingState;
-    private readonly LandingState _LandingState;
-    private readonly HitStandingState _HitStandingState;
-    private readonly SweepState _SweepState;
-    private readonly OnTheGroundState _OnTheGroundState;
-    private readonly GettingUpState _GettingUpState;
-    private readonly DizzyState _DizzyState;
-    private readonly KOState _KOState;
+    public readonly IntroState _IntroState;
+    public readonly StandingState _StandingState;
+    public readonly AdvancingState _AdvancingState;
+    public readonly RetreatingState _RetreatingState;
+    public readonly CrouchingState _CrouchingState;
+    public readonly GroundedAttackState _AttackGroundState;
+    public readonly InAirAttackState _AttackInAirState;
+    public readonly JumpUpState _JumpUpState;
+    public readonly JumpTowardsState _JumpTowardsState;
+    public readonly JumpBackState _JumpAwayState;
+    public readonly FallingState _FallingState;
+    public readonly LandingState _LandingState;
+    public readonly HitStandingState _HitStandingState;
+    public readonly SweepState _SweepState;
+    public readonly OnTheGroundState _OnTheGroundState;
+    public readonly GettingUpState _GettingUpState;
+    public readonly DizzyState _DizzyState;
+    public readonly KOState _KOState;
 
     public CharacterState CurrentTrigger => _Machine.State;
 
@@ -119,8 +119,10 @@ public class CharacterControllerStateMachine: IDisposable
                     player = _CrouchingState.UpdatePlayer(player, input);
                     break;
                 case PlayerState.StandingAttack:
+                    player = _AttackGroundState.UpdatePlayer(player, input);
                     break;
                 case PlayerState.CrouchngAttack:
+                    player = _AttackGroundState.UpdatePlayer(player, input);
                     break;
                 case PlayerState.StandHit:
                     break;
@@ -199,49 +201,83 @@ public class CharacterControllerStateMachine: IDisposable
 
     private Player CheckInputs(Player player, long input)
     {
+        CheckDirectionInput(ref player, input);
+        //CheckAttackInput(ref player, input);
+
+        return player;
+    }
+
+    public void CheckDirectionInput(ref Player player, long input)
+    {
         if (player.IsGrounded && !player.IsJumping)
         {
-            if ((input & PlayerConstants.INPUT_UP) != 0 && (input & PlayerConstants.INPUT_LEFT) != 0)
+            if ((input & InputConstants.INPUT_UP) != 0 && (input & InputConstants.INPUT_LEFT) != 0)
             {
                 player.IsJumping = true;
                 player.State = PlayerState.JumpBack;
             }
-            else if ((input & PlayerConstants.INPUT_UP) != 0 && (input & PlayerConstants.INPUT_RIGHT) != 0)
+            else if ((input & InputConstants.INPUT_UP) != 0 && (input & InputConstants.INPUT_RIGHT) != 0)
             {
                 player.IsJumping = true;
                 player.State = PlayerState.JumpForward;
             }
-            else if ((input & PlayerConstants.INPUT_UP) != 0)
+            else if ((input & InputConstants.INPUT_UP) != 0)
             {
                 player.IsJumping = true;
                 player.State = PlayerState.JumpUp;
             }
-            else if ((input & PlayerConstants.INPUT_DOWN) != 0 && (input & PlayerConstants.INPUT_LEFT) != 0)
+            else if ((input & InputConstants.INPUT_DOWN) != 0 && (input & InputConstants.INPUT_LEFT) != 0)
             {
                 player.State = PlayerState.DownBack;
             }
-            else if ((input & PlayerConstants.INPUT_DOWN) != 0 && (input & PlayerConstants.INPUT_RIGHT) != 0)
+            else if ((input & InputConstants.INPUT_DOWN) != 0 && (input & InputConstants.INPUT_RIGHT) != 0)
             {
                 player.State = PlayerState.DownForward;
             }
-            else if ((input & PlayerConstants.INPUT_DOWN) != 0)
+            else if ((input & InputConstants.INPUT_DOWN) != 0)
             {
                 player.State = PlayerState.Crouching;
             }
-            else if ((input & PlayerConstants.INPUT_LEFT) != 0)
+            else if ((input & InputConstants.INPUT_LEFT) != 0)
             {
                 player.State = PlayerState.Back;
             }
-            else if ((input & PlayerConstants.INPUT_RIGHT) != 0)
+            else if ((input & InputConstants.INPUT_RIGHT) != 0)
             {
                 player.State = PlayerState.Forward;
             }
-            else if ((input & PlayerConstants.INPUT_LEFT) == 0 && (input & PlayerConstants.INPUT_RIGHT) == 0)
+            else if ((input & InputConstants.INPUT_LEFT) == 0 && (input & InputConstants.INPUT_RIGHT) == 0)
             {
                 player.State = PlayerState.Standing;
             }
         }
-
-        return player;
     }
+
+    //public void CheckAttackInput(ref Player player, long input)
+    //{
+    //    if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
+    //    {
+
+    //    }
+    //    else if ((input & InputConstants.INPUT_MEDIUM_PUNCH) != 0)
+    //    {
+
+    //    }
+    //    else if ((input & InputConstants.INPUT_HEAVY_PUNCH) != 0)
+    //    {
+
+    //    }
+    //    else if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
+    //    {
+
+    //    }
+    //    else if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
+    //    {
+
+    //    }
+    //    else if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
+    //    {
+
+    //    }
+    //}
 }

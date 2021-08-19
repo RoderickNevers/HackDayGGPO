@@ -17,16 +17,26 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
     protected StateMachine<CharacterState, CharacterStateTrigger> _StateMachine;
     protected Player _Player;
 
-    private Dictionary<string, float> _totalFrameLookup = new Dictionary<string, float>()
-    {
-        {AnimationData.AnimatorKeys.IDLE, AnimationData.IDLE_TOTAL_FRAMES},
-        {AnimationData.AnimatorKeys.WALK_FORWARD, AnimationData.WALK_FORWARD_TOTAL_FRAMES},
-        {AnimationData.AnimatorKeys.WALK_BACKWARD, AnimationData.WALK_BACKWARD_TOTAL_FRAMES},
-        {AnimationData.AnimatorKeys.CROUCH, AnimationData.CROUCH_TOTAL_FRAMES},
-        {AnimationData.AnimatorKeys.JUMP_UP, AnimationData.JUMP_UP_TOTAL_FRAMES},
-        {AnimationData.AnimatorKeys.JUMP_FORWARD, AnimationData.JUMP_FORWARD_TOTAL_FRAMES},
-        {AnimationData.AnimatorKeys.JUMP_BACKWARD, AnimationData.JUMP_BACKWARD_TOTAL_FRAMES}
-    };
+    //private Dictionary<AttackState, int> _AttackFrames = new Dictionary<AttackState, int>()
+    //{
+    //    {AttackState.LightPunch, AnimationData.StandingAttacks.LIGHT_PUNCH_FRAMES},
+    //    {AttackState.MediumPunch, AnimationData.AnimatorKeys.StandingAttacks.MEDIUM_PUNCH_FRAMES},
+    //    {AttackState.HeavyPunch, AnimationData.AnimatorKeys.StandingAttacks.HEAVY_PUNCH_FRAMES},
+    //    {AttackState.LightKick, AnimationData.AnimatorKeys.StandingAttacks.LIGHT_KICK_FRAMES},
+    //    {AttackState.MediumKick, AnimationData.AnimatorKeys.StandingAttacks.MEDIUM_KICK_FRAMES},
+    //    {AttackState.HeavyKick, AnimationData.AnimatorKeys.StandingAttacks.HEAVY_KICK_FRAMES}
+    //};
+
+    //private Dictionary<string, float> _TotalFrameLookup = new Dictionary<string, float>()
+    //{
+    //    {AnimationData.AnimatorKeys.IDLE, AnimationData.AnimatorKeys.IDLE_TOTAL_FRAMES},
+    //    {AnimationData.AnimatorKeys.WALK_FORWARD, AnimationData.AnimatorKeys.WALK_FORWARD_TOTAL_FRAMES},
+    //    {AnimationData.AnimatorKeys.WALK_BACKWARD, AnimationData.AnimatorKeys.WALK_BACKWARD_TOTAL_FRAMES},
+    //    {AnimationData.AnimatorKeys.CROUCH, AnimationData.AnimatorKeys.CROUCH_TOTAL_FRAMES},
+    //    {AnimationData.AnimatorKeys.JUMP_UP, AnimationData.AnimatorKeys.JUMP_UP_TOTAL_FRAMES},
+    //    {AnimationData.AnimatorKeys.JUMP_FORWARD, AnimationData.AnimatorKeys.JUMP_FORWARD_TOTAL_FRAMES},
+    //    {AnimationData.AnimatorKeys.JUMP_BACKWARD, AnimationData.AnimatorKeys.JUMP_BACKWARD_TOTAL_FRAMES}
+    //};
 
     //protected FighterController characterController;
     //protected Animator animator;
@@ -79,39 +89,101 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         RemoveListeners();
     }
 
-    protected void PlayAnimationLoop(ref Player player, string animationID)
+    protected void PlayAnimationLoop(ref Player player, FrameData frameData)
     {
-        if (player.AnimationClip != animationID)
+        if (player.AnimationKey != frameData.AnimationKey)
         {
             player.AnimationIndex = 1;
         }
 
-        player.AnimationClip = animationID;
+        player.AnimationKey = frameData.AnimationKey;
         player.AnimationIndex += AnimationData.FRAME_COUNTER;
-        player.CurrentFrame = player.AnimationIndex / AnimationData.IDLE_TOTAL_FRAMES;
+        player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;
 
-        if (player.AnimationIndex >= AnimationData.IDLE_TOTAL_FRAMES)
+        if (player.AnimationIndex >= frameData.TotalFrames)
         {
             player.AnimationIndex = 1;
         }
     }
 
-    protected void PlayAnimationOneShot(ref Player player, string animationID)
+    protected void PlayAnimationOneShot(ref Player player, FrameData frameData)
     {
-        if (player.AnimationClip != animationID)
+        if (player.AnimationKey != frameData.AnimationKey)
         {
             player.AnimationIndex = 1;
         }
 
-        player.AnimationClip = animationID;
+        player.AnimationKey = frameData.AnimationKey;
 
-        if (player.AnimationIndex < AnimationData.IDLE_TOTAL_FRAMES)
+        if (player.AnimationIndex < frameData.TotalFrames)
         {
             player.AnimationIndex += AnimationData.FRAME_COUNTER;
         }
 
-        player.CurrentFrame = player.AnimationIndex / AnimationData.IDLE_TOTAL_FRAMES;
+        player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;
     }
+
+    protected void PlayAttackAnimation(ref Player player, FrameData frameData)
+    {
+        if (player.AnimationKey != frameData.AnimationKey)
+        {
+            player.AnimationIndex = 1;
+        }
+
+        player.AnimationKey = frameData.AnimationKey;
+
+        if (player.AnimationIndex < frameData.TotalFrames)
+        {
+            player.AnimationIndex += AnimationData.FRAME_COUNTER;
+        }
+        //else reset to the base state...
+
+        player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;
+
+        player.IsAttacking = player.AnimationIndex < frameData.TotalFrames;
+
+        if (player.IsAttacking)
+        {
+            player.State = frameData.State;
+            player.Attack = frameData.Attack;
+        }
+    }
+
+    protected AttackState CheckAttacking(long input)
+    {
+        if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
+        {
+            return AttackState.LightPunch;
+        }
+
+        if ((input & InputConstants.INPUT_MEDIUM_PUNCH) != 0)
+        {
+            return AttackState.MediumPunch;
+        }
+
+        if ((input & InputConstants.INPUT_HEAVY_PUNCH) != 0)
+        {
+            return AttackState.HeavyPunch;
+        }
+
+        if ((input & InputConstants.INPUT_LIGHT_KICK) != 0)
+        {
+            return AttackState.LightKick;
+        }
+
+        if ((input & InputConstants.INPUT_MEDIUM_KICK) != 0)
+        {
+            return AttackState.MediumKick;
+        }
+
+        if ((input & InputConstants.INPUT_HEAVY_KICK) != 0)
+        {
+            return AttackState.HeavyKick;
+        }
+
+        return AttackState.None;
+    }
+
 
     //protected override void OnUpdate()
     //{

@@ -11,8 +11,11 @@ public struct Player
     public Vector3 Velocity;
     public bool IsGrounded;
     public bool IsJumping;
+    public bool IsAttacking;
+    public bool IsHit;
     public PlayerState State;
-    public string AnimationClip;
+    public AttackState Attack;
+    public string AnimationKey;
     public float CurrentFrame;
     public float AnimationIndex;
 
@@ -24,12 +27,15 @@ public struct Player
         bw.Write(Velocity.y);
         bw.Write(IsGrounded);
         bw.Write(IsJumping);
+        bw.Write(IsAttacking);
+        bw.Write(IsHit);
         bw.Write((int)State);
+        bw.Write((int)Attack);
 
-        if (AnimationClip == null)
-            AnimationClip = AnimationData.AnimatorKeys.IDLE;
+        if (AnimationKey == null)
+            AnimationKey = AnimationData.Movememt.IDLE.AnimationKey;
 
-        bw.Write(AnimationClip);
+        bw.Write(AnimationKey);
         bw.Write(CurrentFrame);
         bw.Write(AnimationIndex);
     }
@@ -42,8 +48,11 @@ public struct Player
         Velocity.y = br.ReadSingle();
         IsGrounded = br.ReadBoolean();
         IsJumping = br.ReadBoolean();
+        IsAttacking = br.ReadBoolean();
+        IsHit = br.ReadBoolean();
         State = (PlayerState)br.ReadInt32();
-        AnimationClip = br.ReadString();
+        Attack = (AttackState)br.ReadInt32();
+        AnimationKey = br.ReadString();
         CurrentFrame = br.ReadSingle();
         AnimationIndex = br.ReadSingle();
     }
@@ -55,8 +64,11 @@ public struct Player
         hashCode = hashCode * -1521134295 + Velocity.GetHashCode();
         hashCode = hashCode * -1521134295 + IsGrounded.GetHashCode();
         hashCode = hashCode * -1521134295 + IsJumping.GetHashCode();
+        hashCode = hashCode * -1521134295 + IsAttacking.GetHashCode();
+        hashCode = hashCode * -1521134295 + IsHit.GetHashCode();
         hashCode = hashCode * -1521134295 + State.GetHashCode();
-        hashCode = hashCode * -1521134295 + AnimationClip.GetHashCode();
+        hashCode = hashCode * -1521134295 + Attack.GetHashCode();
+        hashCode = hashCode * -1521134295 + AnimationKey.GetHashCode();
         hashCode = hashCode * -1521134295 + CurrentFrame.GetHashCode();
         hashCode = hashCode * -1521134295 + AnimationIndex.GetHashCode();
         return hashCode;

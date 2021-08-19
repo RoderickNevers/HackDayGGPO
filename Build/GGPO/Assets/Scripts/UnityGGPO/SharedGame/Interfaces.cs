@@ -41,8 +41,8 @@ namespace SharedGame {
         void Shutdown();
     }
 
-    public interface IGameView {
+    //public interface IGameView {
 
-        void UpdateGameView(IGameRunner runner);
-    }
+    //    void UpdateGameView(IGameRunner runner);
+    //}
 }

@@ -122,22 +122,54 @@ public struct GGPOGameState : IGame
 
         if (Input.GetKey(KeyCode.W))
         {
-            input |= PlayerConstants.INPUT_UP;
+            input |= InputConstants.INPUT_UP;
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            input |= PlayerConstants.INPUT_DOWN;
+            input |= InputConstants.INPUT_DOWN;
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            input |= PlayerConstants.INPUT_LEFT;
+            input |= InputConstants.INPUT_LEFT;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            input |= PlayerConstants.INPUT_RIGHT;
+            input |= InputConstants.INPUT_RIGHT;
+        }
+
+        // Attacks
+
+        if (Input.GetKey(KeyCode.U))
+        {
+            input |= InputConstants.INPUT_LIGHT_PUNCH;
+        }
+
+        if (Input.GetKey(KeyCode.I))
+        {
+            input |= InputConstants.INPUT_MEDIUM_PUNCH;
+        }
+
+        if (Input.GetKey(KeyCode.O))
+        {
+            input |= InputConstants.INPUT_HEAVY_PUNCH;
+        }
+
+        if (Input.GetKey(KeyCode.J))
+        {
+            input |= InputConstants.INPUT_LIGHT_KICK;
+        }
+
+        if (Input.GetKey(KeyCode.K))
+        {
+            input |= InputConstants.INPUT_MEDIUM_KICK;
+        }
+
+        if (Input.GetKey(KeyCode.L))
+        {
+            input |= InputConstants.INPUT_HEAVY_KICK;
         }
 
         return input;

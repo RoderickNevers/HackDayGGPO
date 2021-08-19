@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class GroundedAttackState : CharacterStateBlock, IStateSimulator
+public class GroundedAttackState : CharacterStateBlock
 {
     public GroundedAttackState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {

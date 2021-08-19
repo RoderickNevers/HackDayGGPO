@@ -1,7 +1,7 @@
 ﻿using Stateless.Graph;
 using UnityEngine;
 
-public class KOState : CharacterStateBlock, IStateSimulator
+public class KOState : CharacterStateBlock
 {
     public KOState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {

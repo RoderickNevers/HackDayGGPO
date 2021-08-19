@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class SweepState : CharacterStateBlock, IStateSimulator
+public class SweepState : CharacterStateBlock
 {
     public SweepState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {

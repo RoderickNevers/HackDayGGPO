@@ -33,31 +33,17 @@ public class GGPOPlayerController : MonoBehaviour
         transform.position = player.Position;
 
         // set the animator to the correct frame
-        m_Animator.Play(player.AnimationClip, BASE_LAYER, player.CurrentFrame);
+        m_Animator.Play(player.AnimationKey, BASE_LAYER, player.CurrentFrame);
     }
 
-    public void UpdatePlayerPosition(Player player)
-    {
-        //Debug.Log(player.Position);
-        //transform.position = player.Position;
-        //transform.position = Vector3.Slerp(transform.position, player.Position, 1f);
+    // dont think we need this anymore
 
-        //transform.position = player.Position;
-        //if (m_GGPOComponent.manualFrameIncrement)
-        //{
-        //    transform.position = player.Position;
-        //}
-        //else
-        //{
-        //    float SpeedModifier = SharedGame.GameManager.FRAME_LENGTH_SEC / m_GGPOComponent.currentFrameLength;
-        //    transform.position = player.Position;
-        //    m_CharacterController.Move(player.Velocity * SpeedModifier);
-        //}
-
-        if (!m_GGPOComponent.manualFrameIncrement)
-        {
-            float SpeedModifier = SharedGame.GameManager.FRAME_LENGTH_SEC / m_GGPOComponent.currentFrameLength;
-            m_CharacterController.Move(player.Velocity * SpeedModifier);
-        }
-    }
+    //public void UpdatePlayerPosition(Player player)
+    //{
+    //    if (!m_GGPOComponent.manualFrameIncrement)
+    //    {
+    //        float SpeedModifier = SharedGame.GameManager.FRAME_LENGTH_SEC / m_GGPOComponent.currentFrameLength;
+    //        m_CharacterController.Move(player.Velocity * SpeedModifier);
+    //    }
+    //}
 }

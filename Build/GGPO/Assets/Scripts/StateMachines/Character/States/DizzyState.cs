@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class DizzyState : CharacterStateBlock, IStateSimulator
+public class DizzyState : CharacterStateBlock
 {
     private const float dizzyTime = 2;
     private float dizzyTimer = 0;
