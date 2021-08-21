@@ -64,7 +64,6 @@ public class GameController : MonoBehaviour//, IGameView
 
         GameObject player = Instantiate(playerPrefab, start.position, start.rotation);
         GGPOPlayerController playerController = player.GetComponent<GGPOPlayerController>();
-        playerController.Init(_GGPOComponent);
         PlayerControllers[playerIndex] = playerController;
     }
 

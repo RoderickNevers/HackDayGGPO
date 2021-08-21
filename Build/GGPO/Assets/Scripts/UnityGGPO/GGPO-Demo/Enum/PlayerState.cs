@@ -17,5 +17,6 @@
     JumpHit = 14,
     StandBlock = 15,
     CrouchBlock = 16,
-    Falling = 17
+    Falling = 17,
+    Landing = 18
 }

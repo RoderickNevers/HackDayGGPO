@@ -136,7 +136,6 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         {
             player.AnimationIndex += AnimationData.FRAME_COUNTER;
         }
-        //else reset to the base state...
 
         player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;
 
@@ -145,7 +144,11 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         if (player.IsAttacking)
         {
             player.State = frameData.State;
-            player.Attack = frameData.Attack;
+            player.CurrentAttack = frameData.Attack;
+        }
+        else
+        {
+            player.CurrentAttack = AttackState.None;
         }
     }
 

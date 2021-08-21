@@ -142,32 +142,32 @@ public struct GGPOGameState : IGame
 
         // Attacks
 
-        if (Input.GetKey(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.U))
         {
             input |= InputConstants.INPUT_LIGHT_PUNCH;
         }
 
-        if (Input.GetKey(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I))
         {
             input |= InputConstants.INPUT_MEDIUM_PUNCH;
         }
 
-        if (Input.GetKey(KeyCode.O))
+        if (Input.GetKeyDown(KeyCode.O))
         {
             input |= InputConstants.INPUT_HEAVY_PUNCH;
         }
 
-        if (Input.GetKey(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.J))
         {
             input |= InputConstants.INPUT_LIGHT_KICK;
         }
 
-        if (Input.GetKey(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K))
         {
             input |= InputConstants.INPUT_MEDIUM_KICK;
         }
 
-        if (Input.GetKey(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L))
         {
             input |= InputConstants.INPUT_HEAVY_KICK;
         }

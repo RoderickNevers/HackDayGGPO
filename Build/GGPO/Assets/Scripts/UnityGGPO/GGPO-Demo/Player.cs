@@ -14,7 +14,8 @@ public struct Player
     public bool IsAttacking;
     public bool IsHit;
     public PlayerState State;
-    public AttackState Attack;
+    public PlayerState PreviousState;
+    public AttackState CurrentAttack;
     public string AnimationKey;
     public float CurrentFrame;
     public float AnimationIndex;
@@ -30,7 +31,8 @@ public struct Player
         bw.Write(IsAttacking);
         bw.Write(IsHit);
         bw.Write((int)State);
-        bw.Write((int)Attack);
+        bw.Write((int)PreviousState);
+        bw.Write((int)CurrentAttack);
 
         if (AnimationKey == null)
             AnimationKey = AnimationData.Movememt.IDLE.AnimationKey;
@@ -51,7 +53,8 @@ public struct Player
         IsAttacking = br.ReadBoolean();
         IsHit = br.ReadBoolean();
         State = (PlayerState)br.ReadInt32();
-        Attack = (AttackState)br.ReadInt32();
+        PreviousState = (PlayerState)br.ReadInt32();
+        CurrentAttack = (AttackState)br.ReadInt32();
         AnimationKey = br.ReadString();
         CurrentFrame = br.ReadSingle();
         AnimationIndex = br.ReadSingle();
@@ -67,7 +70,8 @@ public struct Player
         hashCode = hashCode * -1521134295 + IsAttacking.GetHashCode();
         hashCode = hashCode * -1521134295 + IsHit.GetHashCode();
         hashCode = hashCode * -1521134295 + State.GetHashCode();
-        hashCode = hashCode * -1521134295 + Attack.GetHashCode();
+        hashCode = hashCode * -1521134295 + PreviousState.GetHashCode();
+        hashCode = hashCode * -1521134295 + CurrentAttack.GetHashCode();
         hashCode = hashCode * -1521134295 + AnimationKey.GetHashCode();
         hashCode = hashCode * -1521134295 + CurrentFrame.GetHashCode();
         hashCode = hashCode * -1521134295 + AnimationIndex.GetHashCode();

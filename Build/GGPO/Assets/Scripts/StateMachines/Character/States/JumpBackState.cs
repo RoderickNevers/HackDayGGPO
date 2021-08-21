@@ -67,7 +67,7 @@ public class JumpBackState : CharacterStateBlock
             //Returning attack
             else if (player.IsAttacking)
             {
-                switch (player.Attack)
+                switch (player.CurrentAttack)
                 {
                     case AttackState.LightPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpBackAttacks.LIGHT_PUNCH);

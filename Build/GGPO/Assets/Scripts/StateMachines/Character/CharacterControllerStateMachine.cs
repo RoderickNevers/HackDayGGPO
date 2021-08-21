@@ -85,6 +85,14 @@ public class CharacterControllerStateMachine: IDisposable
 
     public Player Run(Player player, long input)
     {
+        // this is kinda of iffy but it currently works
+        if (!player.IsGrounded && Mathf.Approximately(player.Position.y, 0.5f) || player.Position.y < 0)
+        {
+            player.IsAttacking = false;
+            //player.State = PlayerState.Landing;
+            //player = _LandingState.UpdatePlayer(player, input);
+        }
+
         player.IsGrounded = GroundCheck(player);
 
         // Ensure the players feet are always on the ground
@@ -93,7 +101,7 @@ public class CharacterControllerStateMachine: IDisposable
             player.Position.y = 0;
         }
 
-        player = CheckInputs(player, input);
+        CheckDirectionInput(ref player, input);
 
         // Grounded states
         if (player.IsGrounded && !player.IsJumping)
@@ -155,8 +163,12 @@ public class CharacterControllerStateMachine: IDisposable
                     break;
                 case PlayerState.JumpHit:
                     break;
-                case PlayerState.Falling:
-                    break;
+                //case PlayerState.Falling:
+                //    player = _FallingState.UpdatePlayer(player, input);
+                //    break;
+                //case PlayerState.Landing:
+                //    player = _LandingState.UpdatePlayer(player, input);
+                //    break;
             }
         }
 
@@ -164,6 +176,8 @@ public class CharacterControllerStateMachine: IDisposable
         if (player.Position.y >= PlayerConstants.JUMP_HEIGHT)
         {
             player.IsJumping = false;
+            //player.State = PlayerState.Falling;
+            //player = _FallingState.UpdatePlayer(player, input);
         }
 
         // Apply gravity
@@ -199,17 +213,9 @@ public class CharacterControllerStateMachine: IDisposable
         return player.Position.y <= 0;
     }
 
-    private Player CheckInputs(Player player, long input)
-    {
-        CheckDirectionInput(ref player, input);
-        //CheckAttackInput(ref player, input);
-
-        return player;
-    }
-
     public void CheckDirectionInput(ref Player player, long input)
     {
-        if (player.IsGrounded && !player.IsJumping)
+        if (player.IsGrounded && !player.IsJumping && !player.IsAttacking)
         {
             if ((input & InputConstants.INPUT_UP) != 0 && (input & InputConstants.INPUT_LEFT) != 0)
             {
@@ -252,32 +258,4 @@ public class CharacterControllerStateMachine: IDisposable
             }
         }
     }
-
-    //public void CheckAttackInput(ref Player player, long input)
-    //{
-    //    if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
-    //    {
-
-    //    }
-    //    else if ((input & InputConstants.INPUT_MEDIUM_PUNCH) != 0)
-    //    {
-
-    //    }
-    //    else if ((input & InputConstants.INPUT_HEAVY_PUNCH) != 0)
-    //    {
-
-    //    }
-    //    else if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
-    //    {
-
-    //    }
-    //    else if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
-    //    {
-
-    //    }
-    //    else if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
-    //    {
-
-    //    }
-    //}
 }
