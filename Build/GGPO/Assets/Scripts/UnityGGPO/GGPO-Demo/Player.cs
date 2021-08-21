@@ -7,6 +7,7 @@ using UnityEngine;
 [Serializable]
 public struct Player
 {
+    public PlayerID ID;
     public Vector3 Position;
     public Vector3 Velocity;
     public bool IsGrounded;
@@ -14,14 +15,15 @@ public struct Player
     public bool IsAttacking;
     public bool IsHit;
     public PlayerState State;
-    public PlayerState PreviousState;
     public AttackState CurrentAttack;
+    public LookDirection LookDirection;
     public string AnimationKey;
     public float CurrentFrame;
     public float AnimationIndex;
 
     public void Serialize(BinaryWriter bw)
     {
+        bw.Write((int)ID);
         bw.Write(Position.x);
         bw.Write(Position.y);
         bw.Write(Velocity.x);
@@ -31,8 +33,8 @@ public struct Player
         bw.Write(IsAttacking);
         bw.Write(IsHit);
         bw.Write((int)State);
-        bw.Write((int)PreviousState);
         bw.Write((int)CurrentAttack);
+        bw.Write((int)LookDirection);
 
         if (AnimationKey == null)
             AnimationKey = AnimationData.Movememt.IDLE.AnimationKey;
@@ -44,6 +46,7 @@ public struct Player
 
     public void Deserialize(BinaryReader br)
     {
+        ID = (PlayerID)br.ReadInt32();
         Position.x = br.ReadSingle();
         Position.y = br.ReadSingle();
         Velocity.x = br.ReadSingle();
@@ -53,8 +56,8 @@ public struct Player
         IsAttacking = br.ReadBoolean();
         IsHit = br.ReadBoolean();
         State = (PlayerState)br.ReadInt32();
-        PreviousState = (PlayerState)br.ReadInt32();
         CurrentAttack = (AttackState)br.ReadInt32();
+        LookDirection = (LookDirection)br.ReadInt32();
         AnimationKey = br.ReadString();
         CurrentFrame = br.ReadSingle();
         AnimationIndex = br.ReadSingle();
@@ -63,6 +66,8 @@ public struct Player
     public override int GetHashCode()
     {
         int hashCode = 1858597544;
+
+        hashCode = hashCode * -1521134295 + ID.GetHashCode();
         hashCode = hashCode * -1521134295 + Position.GetHashCode();
         hashCode = hashCode * -1521134295 + Velocity.GetHashCode();
         hashCode = hashCode * -1521134295 + IsGrounded.GetHashCode();
@@ -70,11 +75,12 @@ public struct Player
         hashCode = hashCode * -1521134295 + IsAttacking.GetHashCode();
         hashCode = hashCode * -1521134295 + IsHit.GetHashCode();
         hashCode = hashCode * -1521134295 + State.GetHashCode();
-        hashCode = hashCode * -1521134295 + PreviousState.GetHashCode();
         hashCode = hashCode * -1521134295 + CurrentAttack.GetHashCode();
+        hashCode = hashCode * -1521134295 + LookDirection.GetHashCode();
         hashCode = hashCode * -1521134295 + AnimationKey.GetHashCode();
         hashCode = hashCode * -1521134295 + CurrentFrame.GetHashCode();
         hashCode = hashCode * -1521134295 + AnimationIndex.GetHashCode();
+
         return hashCode;
     }
 };

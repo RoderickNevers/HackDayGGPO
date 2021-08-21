@@ -85,7 +85,9 @@ public class CharacterControllerStateMachine: IDisposable
 
     public Player Run(Player player, long input)
     {
+        player.LookDirection = MatchComponent.Instance.CheckLookDirection(player);
         // this is kinda of iffy but it currently works
+        // Hacky landing state
         if (!player.IsGrounded && Mathf.Approximately(player.Position.y, 0.5f) || player.Position.y < 0)
         {
             player.IsAttacking = false;

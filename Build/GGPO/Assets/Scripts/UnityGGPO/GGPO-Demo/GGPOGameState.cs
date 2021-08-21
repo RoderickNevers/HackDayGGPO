@@ -90,6 +90,7 @@ public struct GGPOGameState : IGame
     public void InitPlayer(int index, Vector3 startPosition)
     {
         Players[index].Position = startPosition;
+        Players[index].ID = index == 0 ? PlayerID.Player1 : PlayerID.Player2;
     }
 
     public Player GetPlayer(int index)
@@ -99,7 +100,7 @@ public struct GGPOGameState : IGame
 
     public void LogInfo(string filename)
     {
-
+        Debug.Log(filename);
     }
 
     public void Update(long[] inputs, int disconnect_flags)
@@ -191,6 +192,7 @@ public struct GGPOGameState : IGame
         {
             hashCode = hashCode * -1521134295 + player.GetHashCode();
         }
+
         return hashCode;
     }
 }

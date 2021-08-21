@@ -2,7 +2,7 @@ using SharedGame;
 using System;
 using UnityEngine;
 
-public class GameController : MonoBehaviour//, IGameView
+public class GameController : MonoBehaviour
 {
     [SerializeField] private GGPOComponent _GGPOComponent;
     public GameObject playerPrefab;
@@ -54,6 +54,7 @@ public class GameController : MonoBehaviour//, IGameView
         {
             Destroy(PlayerControllers[i].gameObject);
         }
+
         PlayerControllers = Array.Empty<GGPOPlayerController>();
     }
 
@@ -65,6 +66,8 @@ public class GameController : MonoBehaviour//, IGameView
         GameObject player = Instantiate(playerPrefab, start.position, start.rotation);
         GGPOPlayerController playerController = player.GetComponent<GGPOPlayerController>();
         PlayerControllers[playerIndex] = playerController;
+        playerController.ID = playerIndex == 0 ? PlayerID.Player1 : PlayerID.Player2;
+        MatchComponent.Instance.Players.Add(playerController);
     }
 
     private void ResetView(GGPOGameState gs)
@@ -88,25 +91,4 @@ public class GameController : MonoBehaviour//, IGameView
             PlayerControllers[i].OnStateChanged(player);
         }
     }
-
-    // dont think we need this anymore
-    private void Update()
-    {
-        //if (_GGPOComponent.IsRunning && _GGPOComponent.Runner != null)
-        //{
-        //    UpdateGameView(_GGPOComponent.Runner);
-        //}
-    }
-
-    // dont think we need this anymore
-    //public void UpdateGameView(IGameRunner runner)
-    //{
-    //    var gameState = (GGPOGameState)runner.Game;
-
-    //    for (int i = 0; i < PlayerControllers.Length; ++i)
-    //    {
-    //        Player player = gameState.GetPlayer(i);
-    //        PlayerControllers[i].UpdatePlayerPosition(player);
-    //    }
-    //}
 }
