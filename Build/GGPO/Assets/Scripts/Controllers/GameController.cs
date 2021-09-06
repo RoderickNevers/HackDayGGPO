@@ -88,7 +88,8 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < PlayerControllers.Length; ++i)
         {
             Player player = gameState.GetPlayer(i);
-            PlayerControllers[i].OnStateChanged(player);
+            //Player playerRef = gameState.GetPlayerReference(i);
+            PlayerControllers[i].OnStateChanged(ref player);
         }
     }
 }

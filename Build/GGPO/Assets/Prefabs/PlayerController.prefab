@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 3140136856106479203}
   - component: {fileID: 524680591846779908}
   - component: {fileID: 7097816269378690511}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 9099761353267134679}
   - component: {fileID: 4239725507402239007}
   - component: {fileID: 8460610174082617378}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hurtbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,6 +371,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 1883755372}
+  m_HurtBox: {fileID: 5508349713254468293}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!143 &-4694408595174876255
 CharacterController:
   m_ObjectHideFlags: 0

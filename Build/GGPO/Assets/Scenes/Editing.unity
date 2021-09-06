@@ -186,5 +186,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerController
       objectReference: {fileID: 0}
+    - target: {fileID: 8900336027428571467, guid: 4ddf2122e7305c74ebb7ecd17847f37a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8900336027428571467, guid: 4ddf2122e7305c74ebb7ecd17847f37a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.46
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ddf2122e7305c74ebb7ecd17847f37a, type: 3}
