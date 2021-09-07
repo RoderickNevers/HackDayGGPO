@@ -3,12 +3,16 @@ using System;
 using System.IO;
 using Unity.Collections;
 using UnityEngine;
+using Rewired;
+using System.Collections.Generic;
 
 [Serializable]
 public struct GGPOGameState : IGame
 {
     public Player[] Players;
     private CharacterControllerStateMachine _StateSimulator;
+    //private Rewired.Player controllerInput;
+    private List<Rewired.Player> controls;
 
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
@@ -80,6 +84,13 @@ public struct GGPOGameState : IGame
 
         Players = new Player[num_players];
         _StateSimulator = new CharacterControllerStateMachine();
+        //controllerInput = ReInput.players.GetPlayer(0);
+
+        controls = new List<Rewired.Player>
+        {
+            ReInput.players.GetPlayer(0),
+            ReInput.players.GetPlayer(1)
+        };
 
         for (int i = 0; i < Players.Length; i++)
         {
@@ -125,55 +136,56 @@ public struct GGPOGameState : IGame
     public long ReadInputs(int id)
     {
         long input = 0;
+        Rewired.Player control = controls[id];
 
-        if (Input.GetKey(KeyCode.W))
+        if (control.GetButton(RewiredConsts.Action.UP))
         {
             input |= InputConstants.INPUT_UP;
         }
 
-        if (Input.GetKey(KeyCode.S))
+        if (control.GetButton(RewiredConsts.Action.DOWN))
         {
             input |= InputConstants.INPUT_DOWN;
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (control.GetButton(RewiredConsts.Action.LEFT))
         {
             input |= InputConstants.INPUT_LEFT;
         }
 
-        if (Input.GetKey(KeyCode.D))
+        if (control.GetButton(RewiredConsts.Action.RIGHT))
         {
             input |= InputConstants.INPUT_RIGHT;
         }
 
         // Attacks
 
-        if (Input.GetKeyDown(KeyCode.U))
+        if (control.GetButton(RewiredConsts.Action.LIGHTPUNCH))
         {
             input |= InputConstants.INPUT_LIGHT_PUNCH;
         }
 
-        if (Input.GetKeyDown(KeyCode.I))
+        if (control.GetButton(RewiredConsts.Action.MEDIUMPUNCH))
         {
             input |= InputConstants.INPUT_MEDIUM_PUNCH;
         }
 
-        if (Input.GetKeyDown(KeyCode.O))
+        if (control.GetButton(RewiredConsts.Action.HEAVYPUNCH))
         {
             input |= InputConstants.INPUT_HEAVY_PUNCH;
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
+        if (control.GetButton(RewiredConsts.Action.LIGHTKICK))
         {
             input |= InputConstants.INPUT_LIGHT_KICK;
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (control.GetButton(RewiredConsts.Action.MEDIUMKICK))
         {
             input |= InputConstants.INPUT_MEDIUM_KICK;
         }
 
-        if (Input.GetKeyDown(KeyCode.L))
+        if (control.GetButton(RewiredConsts.Action.HEAVYKICK))
         {
             input |= InputConstants.INPUT_HEAVY_KICK;
         }

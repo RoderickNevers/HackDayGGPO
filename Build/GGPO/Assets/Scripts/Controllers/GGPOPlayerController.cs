@@ -31,20 +31,13 @@ public class GGPOPlayerController : MonoBehaviour
         m_Animator.Play(player.AnimationKey, BASE_LAYER, player.CurrentFrame);
 
         //check for collisions
-        CheckCollisions(ref player);
-    }
-
-    private void CheckCollisions(ref Player player)
-    {
         Collider[] hitColliders = Physics.OverlapBox(m_HurtBox.position, m_HurtBox.localScale / 2, Quaternion.identity, m_LayerMask);
-        foreach (Collider col in hitColliders)
+        foreach (Collider hitbox in hitColliders)
         {
-            if (col.transform.root != this.transform)
+            if (hitbox.transform.root != this.transform)
             {
-                Debug.Log($"Hit :{col.transform.root.name}");
                 player.IsHit = true;
             }
-
         }
     }
 }
