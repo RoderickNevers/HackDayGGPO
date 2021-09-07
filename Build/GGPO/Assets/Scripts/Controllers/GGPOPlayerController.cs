@@ -39,8 +39,12 @@ public class GGPOPlayerController : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapBox(m_HurtBox.position, m_HurtBox.localScale / 2, Quaternion.identity, m_LayerMask);
         foreach (Collider col in hitColliders)
         {
-            Debug.Log($"Hit :{col.transform.root.name}");
-            player.IsHit = true;
+            if (col.transform.root != this.transform)
+            {
+                Debug.Log($"Hit :{col.transform.root.name}");
+                player.IsHit = true;
+            }
+
         }
     }
 }
