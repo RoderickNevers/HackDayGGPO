@@ -122,7 +122,7 @@ public class AdvancingState : CharacterStateBlock
                     break;
                 case AttackState.None:
                     PlayAnimationLoop(ref player, AnimationData.Movememt.WALK_FORWARD);
-                    velocity = 1;
+                    velocity = player.LookDirection == LookDirection.Right? 1 : -1;
                     break;
             }
         }

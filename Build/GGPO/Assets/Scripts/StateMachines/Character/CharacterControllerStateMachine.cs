@@ -248,11 +248,21 @@ public class CharacterControllerStateMachine: IDisposable
             {
                 player.State = PlayerState.Crouching;
             }
-            else if ((input & InputConstants.INPUT_LEFT) != 0)
+            //Looking left
+            else if ((input & InputConstants.INPUT_LEFT) != 0 && player.LookDirection == LookDirection.Left)
+            {
+                player.State = PlayerState.Forward;
+            }
+            else if ((input & InputConstants.INPUT_RIGHT) != 0 && player.LookDirection == LookDirection.Left)
             {
                 player.State = PlayerState.Back;
             }
-            else if ((input & InputConstants.INPUT_RIGHT) != 0)
+            //Looking right
+            else if ((input & InputConstants.INPUT_LEFT) != 0 && player.LookDirection == LookDirection.Right)
+            {
+                player.State = PlayerState.Back;
+            }
+            else if ((input & InputConstants.INPUT_RIGHT) != 0 && player.LookDirection == LookDirection.Right)
             {
                 player.State = PlayerState.Forward;
             }

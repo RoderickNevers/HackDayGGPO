@@ -113,7 +113,8 @@ public class JumpBackState : CharacterStateBlock
                         PlayAttackAnimation(ref player, AnimationData.JumpBackAttacks.HEAVY_KICK);
                         break;
                     case AttackState.None:
-                        PlayAnimationOneShot(ref player, AnimationData.Movememt.JUMP_BACKWARD);
+                        FrameData data = player.LookDirection == LookDirection.Right ? AnimationData.Movememt.JUMP_BACKWARD : AnimationData.Movememt.JUMP_FORWARD;
+                        PlayAnimationOneShot(ref player, data);
                         break;
                 }
             }
