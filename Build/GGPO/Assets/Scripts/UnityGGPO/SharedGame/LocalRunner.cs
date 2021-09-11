@@ -16,10 +16,12 @@ namespace SharedGame {
 
         public void RunFrame() {
             var inputs = new long[GameInfo.players.Length];
+
             for (int i = 0; i < inputs.Length; ++i) {
                 inputs[i] = Game.ReadInputs(GameInfo.players[i].controllerId);
             }
-            Game.Update(inputs, 0);
+
+            Game.UpdateSimulation(inputs, 0);
         }
 
         public void OnTestSave() {

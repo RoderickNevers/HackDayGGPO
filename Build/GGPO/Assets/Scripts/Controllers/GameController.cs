@@ -5,9 +5,9 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     [SerializeField] private GGPOComponent _GGPOComponent;
-    public GameObject playerPrefab;
-    public Transform _P1Spawn;
-    public Transform _P2Spawn;
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private Transform _P1Spawn;
+    [SerializeField] private Transform _P2Spawn;
 
     private GGPOPlayerController[] PlayerControllers = Array.Empty<GGPOPlayerController>();
 
@@ -83,12 +83,13 @@ public class GameController : MonoBehaviour
 
     private void OnStateChanged()
     {
+        Debug.Log("A");
+
         var gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
 
         for (int i = 0; i < PlayerControllers.Length; ++i)
         {
             Player player = gameState.GetPlayer(i);
-            //Player playerRef = gameState.GetPlayerReference(i);
             PlayerControllers[i].OnStateChanged(ref player);
         }
     }

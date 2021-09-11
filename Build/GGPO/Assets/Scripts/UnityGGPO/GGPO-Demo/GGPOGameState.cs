@@ -1,18 +1,17 @@
-using SharedGame;
 using System;
 using System.IO;
+using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using Rewired;
-using System.Collections.Generic;
+using SharedGame;
 
 [Serializable]
 public struct GGPOGameState : IGame
 {
     public Player[] Players;
     private CharacterControllerStateMachine _StateSimulator;
-    //private Rewired.Player controllerInput;
-    private List<Rewired.Player> controls;
+    private List<Rewired.Player> _Controls;
 
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
@@ -84,9 +83,8 @@ public struct GGPOGameState : IGame
 
         Players = new Player[num_players];
         _StateSimulator = new CharacterControllerStateMachine();
-        //controllerInput = ReInput.players.GetPlayer(0);
 
-        controls = new List<Rewired.Player>
+        _Controls = new List<Rewired.Player>
         {
             ReInput.players.GetPlayer(0),
             ReInput.players.GetPlayer(1)
@@ -109,17 +107,12 @@ public struct GGPOGameState : IGame
         return Players[index];
     }
 
-    public ref Player GetPlayerReference(int index)
-    {
-        return ref Players[index];
-    }
-
     public void LogInfo(string filename)
     {
         Debug.Log(filename);
     }
 
-    public void Update(long[] inputs, int disconnect_flags)
+    public void UpdateSimulation(long[] inputs, int disconnect_flags)
     {
         Framenumber++;
 
@@ -136,7 +129,7 @@ public struct GGPOGameState : IGame
     public long ReadInputs(int id)
     {
         long input = 0;
-        Rewired.Player control = controls[id];
+        Rewired.Player control = _Controls[id];
 
         if (control.GetButton(RewiredConsts.Action.UP))
         {

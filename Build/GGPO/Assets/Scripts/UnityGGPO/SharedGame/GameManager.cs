@@ -101,9 +101,10 @@ namespace SharedGame {
                     if (shouldIncrementFrame)
                     {
                         shouldIncrementFrame = false;
-
                         OnPreRunFrame();
+                        // update the sim
                         Runner.RunFrame();
+                        // update the game objects
                         OnStateChanged?.Invoke();
                     }
                 }

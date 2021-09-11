@@ -13,7 +13,7 @@ namespace SharedGame {
         int Framenumber { get; }
         int Checksum { get; }
 
-        void Update(long[] inputs, int disconnectFlags);
+        void UpdateSimulation(long[] inputs, int disconnectFlags);
 
         void FromBytes(NativeArray<byte> data);
 

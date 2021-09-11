@@ -338,7 +338,8 @@ namespace SharedGame {
             if (Game == null) {
                 LogPlugin("GameState is null what?");
             }
-            Game.Update(inputs, disconnect_flags);
+
+            Game.UpdateSimulation(inputs, disconnect_flags);
 
             // update the checksums to display in the top of the window. this helps to detect desyncs.
             GameInfo.now.framenumber = Game.Framenumber;

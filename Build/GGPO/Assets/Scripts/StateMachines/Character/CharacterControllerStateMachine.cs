@@ -85,6 +85,8 @@ public class CharacterControllerStateMachine: IDisposable
 
     public Player Run(Player player, long input)
     {
+        Debug.Log("B");
+
         player.LookDirection = MatchComponent.Instance.CheckLookDirection(player);
         // this is kinda of iffy but it currently works
         // Hacky landing state
