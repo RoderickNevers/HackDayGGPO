@@ -66,24 +66,24 @@ public class JumpTowardsState : CharacterStateBlock
             //Returning attack
             else if (player.IsAttacking)
             {
-                switch (player.CurrentAttack)
+                switch (player.CurrentButtonPressed)
                 {
-                    case AttackState.LightPunch:
+                    case AttackButtonState.LightPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.LIGHT_PUNCH);
                         break;
-                    case AttackState.MediumPunch:
+                    case AttackButtonState.MediumPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.MEDIUM_PUNCH);
                         break;
-                    case AttackState.HeavyPunch:
+                    case AttackButtonState.HeavyPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.HEAVY_PUNCH);
                         break;
-                    case AttackState.LightKick:
+                    case AttackButtonState.LightKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.LIGHT_KICK);
                         break;
-                    case AttackState.MediumKick:
+                    case AttackButtonState.MediumKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.MEDIUM_KICK);
                         break;
-                    case AttackState.HeavyKick:
+                    case AttackButtonState.HeavyKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.HEAVY_KICK);
                         break;
                 }
@@ -93,25 +93,25 @@ public class JumpTowardsState : CharacterStateBlock
             {
                 switch (CheckAttacking(input))
                 {
-                    case AttackState.LightPunch:
+                    case AttackButtonState.LightPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.LIGHT_PUNCH);
                         break;
-                    case AttackState.MediumPunch:
+                    case AttackButtonState.MediumPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.MEDIUM_PUNCH);
                         break;
-                    case AttackState.HeavyPunch:
+                    case AttackButtonState.HeavyPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.HEAVY_PUNCH);
                         break;
-                    case AttackState.LightKick:
+                    case AttackButtonState.LightKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.LIGHT_KICK);
                         break;
-                    case AttackState.MediumKick:
+                    case AttackButtonState.MediumKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.MEDIUM_KICK);
                         break;
-                    case AttackState.HeavyKick:
+                    case AttackButtonState.HeavyKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpForwardAttacks.HEAVY_KICK);
                         break;
-                    case AttackState.None:
+                    case AttackButtonState.None:
                         FrameData data = player.LookDirection == LookDirection.Right ? AnimationData.Movememt.JUMP_FORWARD : AnimationData.Movememt.JUMP_BACKWARD;
                         PlayAnimationOneShot(ref player, data);
                         break;

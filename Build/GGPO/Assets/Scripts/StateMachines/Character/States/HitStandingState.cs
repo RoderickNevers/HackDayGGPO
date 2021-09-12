@@ -59,6 +59,7 @@ public class HitStandingState : CharacterStateBlock
 
     public Player UpdatePlayer(Player player, long input)
     {
+        Debug.Log($"Standing hit and it hurts!!! I got hit by {AnimationData.AttackLookup[player.CurrentlyHitByID].AnimationKey}");
         return player;
     }
 

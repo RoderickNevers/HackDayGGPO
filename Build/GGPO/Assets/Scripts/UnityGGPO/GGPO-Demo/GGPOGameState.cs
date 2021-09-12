@@ -107,6 +107,11 @@ public struct GGPOGameState : IGame
         return Players[index];
     }
 
+    public ref Player GetPlayerRef(int index)
+    {
+        return ref Players[index];
+    }
+
     public void LogInfo(string filename)
     {
         Debug.Log(filename);

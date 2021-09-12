@@ -29,6 +29,8 @@ namespace SharedGame {
 
         public event Action OnStateChanged;
 
+        public event Action OnCheckCollision;
+
         // Game speed
         public const float FRAME_LENGTH_SEC = 1f / 60f;
         public float currentFrameLength { get; protected set; } = FRAME_LENGTH_SEC;
@@ -102,6 +104,8 @@ namespace SharedGame {
                     {
                         shouldIncrementFrame = false;
                         OnPreRunFrame();
+
+                        OnCheckCollision?.Invoke();
                         // update the sim
                         Runner.RunFrame();
                         // update the game objects
@@ -127,6 +131,7 @@ namespace SharedGame {
                         //updateWatch.Start();
 
                         OnPreRunFrame();
+                        OnCheckCollision?.Invoke();
                         Runner.RunFrame();
                         OnStateChanged?.Invoke();
 

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GGPOPlayerController : MonoBehaviour
@@ -9,14 +8,32 @@ public class GGPOPlayerController : MonoBehaviour
     [SerializeField] private Animator m_Animator;
 
     [Header("Collision Detection")]
+    [SerializeField] private HitBoxComponent m_HitBox;
     [SerializeField] private Transform m_HurtBox;
     [SerializeField] private LayerMask m_LayerMask;
 
-    public PlayerID ID {get;set;}
+    public PlayerID ID { get; set; }
 
     void Start()
     {
         m_Animator.speed = 0.0f;
+    }
+
+    public HitData OnCheckCollision()
+    {
+        HitData result = new HitData();
+
+        Collider[] hitColliders = Physics.OverlapBox(m_HurtBox.position, m_HurtBox.localScale / 2, Quaternion.identity, m_LayerMask);
+        foreach (Collider hitbox in hitColliders)
+        {
+            if (hitbox.transform.root != this.transform)
+            {
+                result.AttackData = hitbox.GetComponent<HitBoxComponent>().AttackData;
+                result.IsHit = true;
+            }
+        }
+
+        return result;
     }
 
     // Called from GameController.cs. Is called anytime the GameManager's Update calls the Runner's update (ie advances the frame)
@@ -30,14 +47,9 @@ public class GGPOPlayerController : MonoBehaviour
         // set the animator to the correct frame
         m_Animator.Play(player.AnimationKey, BASE_LAYER, player.CurrentFrame);
 
-        //check for collisions
-        Collider[] hitColliders = Physics.OverlapBox(m_HurtBox.position, m_HurtBox.localScale / 2, Quaternion.identity, m_LayerMask);
-        foreach (Collider hitbox in hitColliders)
-        {
-            if (hitbox.transform.root != this.transform)
-            {
-                player.IsHit = true;
-            }
-        }
+        if (player.CurrentAttackID == Guid.Empty)
+            return;
+
+        m_HitBox.AttackData = AnimationData.AttackLookup[player.CurrentAttackID];
     }
 }

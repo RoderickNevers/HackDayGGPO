@@ -1,4 +1,4 @@
-﻿public enum AttackState
+﻿public enum AttackButtonState
 {
     None = 0,
     LightPunch = 1,

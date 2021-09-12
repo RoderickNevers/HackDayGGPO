@@ -20,6 +20,8 @@ public class CharacterControllerStateMachine: IDisposable
     public readonly FallingState _FallingState;
     public readonly LandingState _LandingState;
     public readonly HitStandingState _HitStandingState;
+    public readonly HitCrouchingState _HitCrouchingState;
+    public readonly HitInAirState _HitInAirState;
     public readonly SweepState _SweepState;
     public readonly OnTheGroundState _OnTheGroundState;
     public readonly GettingUpState _GettingUpState;
@@ -49,6 +51,8 @@ public class CharacterControllerStateMachine: IDisposable
         _FallingState = new FallingState(stateBlockData);
         _LandingState = new LandingState(stateBlockData);
         _HitStandingState = new HitStandingState(stateBlockData);
+        _HitCrouchingState = new HitCrouchingState(stateBlockData);
+        _HitInAirState = new HitInAirState(stateBlockData);
         _SweepState = new SweepState(stateBlockData);
         _OnTheGroundState = new OnTheGroundState(stateBlockData);
         _GettingUpState = new GettingUpState(stateBlockData);
@@ -71,6 +75,8 @@ public class CharacterControllerStateMachine: IDisposable
         _FallingState?.Dispose();
         _LandingState?.Dispose();
         _HitStandingState?.Dispose();
+        _HitCrouchingState?.Dispose();
+        _HitInAirState?.Dispose();
         _SweepState?.Dispose();
         _OnTheGroundState?.Dispose();
         _GettingUpState?.Dispose();
@@ -85,8 +91,6 @@ public class CharacterControllerStateMachine: IDisposable
 
     public Player Run(Player player, long input)
     {
-        Debug.Log("B");
-
         player.LookDirection = MatchComponent.Instance.CheckLookDirection(player);
         // this is kinda of iffy but it currently works
         // Hacky landing state
@@ -103,6 +107,46 @@ public class CharacterControllerStateMachine: IDisposable
         if (player.IsGrounded)
         {
             player.Position.y = 0;
+        }
+
+        // Getting hit
+        if (player.IsHit)
+        {
+            if (player.IsGrounded && !player.IsJumping)
+            {
+                switch (player.State)
+                {
+                    case PlayerState.Standing:
+                    case PlayerState.Forward:
+                    case PlayerState.Back:
+                    case PlayerState.StandHit:
+                        player.State = PlayerState.StandHit;
+                        player = _HitStandingState.UpdatePlayer(player, input);
+                        break;
+
+                    case PlayerState.Crouching:
+                    case PlayerState.DownForward:
+                    case PlayerState.DownBack:
+                    case PlayerState.CrouchingHit:
+                        player.State = PlayerState.CrouchingHit;
+                        player = _HitCrouchingState.UpdatePlayer(player, input);
+                        break;
+                }
+            }
+            // Air states
+            else if (player.IsJumping)
+            {
+                switch (player.State)
+                {
+                    case PlayerState.JumpUp:
+                    case PlayerState.JumpForward:
+                    case PlayerState.JumpBack:
+                    case PlayerState.JumpAttack:
+                        player.State = PlayerState.JumpHit;
+                        player = _HitInAirState.UpdatePlayer(player, input);
+                        break;
+                }
+            }
         }
 
         CheckDirectionInput(ref player, input);

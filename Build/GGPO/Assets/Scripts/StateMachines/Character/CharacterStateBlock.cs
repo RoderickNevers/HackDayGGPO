@@ -144,47 +144,49 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         if (player.IsAttacking)
         {
             player.State = frameData.State;
-            player.CurrentAttack = frameData.Attack;
+            player.CurrentButtonPressed = frameData.Attack;
+            player.CurrentAttackID = frameData.ID;
         }
         else
         {
-            player.CurrentAttack = AttackState.None;
+            player.CurrentButtonPressed = AttackButtonState.None;
+            player.CurrentAttackID = Guid.Empty;
         }
     }
 
-    protected AttackState CheckAttacking(long input)
+    protected AttackButtonState CheckAttacking(long input)
     {
         if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
         {
-            return AttackState.LightPunch;
+            return AttackButtonState.LightPunch;
         }
 
         if ((input & InputConstants.INPUT_MEDIUM_PUNCH) != 0)
         {
-            return AttackState.MediumPunch;
+            return AttackButtonState.MediumPunch;
         }
 
         if ((input & InputConstants.INPUT_HEAVY_PUNCH) != 0)
         {
-            return AttackState.HeavyPunch;
+            return AttackButtonState.HeavyPunch;
         }
 
         if ((input & InputConstants.INPUT_LIGHT_KICK) != 0)
         {
-            return AttackState.LightKick;
+            return AttackButtonState.LightKick;
         }
 
         if ((input & InputConstants.INPUT_MEDIUM_KICK) != 0)
         {
-            return AttackState.MediumKick;
+            return AttackButtonState.MediumKick;
         }
 
         if ((input & InputConstants.INPUT_HEAVY_KICK) != 0)
         {
-            return AttackState.HeavyKick;
+            return AttackButtonState.HeavyKick;
         }
 
-        return AttackState.None;
+        return AttackButtonState.None;
     }
 
 

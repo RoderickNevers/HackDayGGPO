@@ -62,24 +62,24 @@ public class CrouchingState : CharacterStateBlock
         //Returning attack
         else if (player.IsAttacking)
         {
-            switch (player.CurrentAttack)
+            switch (player.CurrentButtonPressed)
             {
-                case AttackState.LightPunch:
+                case AttackButtonState.LightPunch:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.LIGHT_PUNCH);
                     break;
-                case AttackState.MediumPunch:
+                case AttackButtonState.MediumPunch:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.MEDIUM_PUNCH);
                     break;
-                case AttackState.HeavyPunch:
+                case AttackButtonState.HeavyPunch:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.HEAVY_PUNCH);
                     break;
-                case AttackState.LightKick:
+                case AttackButtonState.LightKick:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.LIGHT_KICK);
                     break;
-                case AttackState.MediumKick:
+                case AttackButtonState.MediumKick:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.MEDIUM_KICK);
                     break;
-                case AttackState.HeavyKick:
+                case AttackButtonState.HeavyKick:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.HEAVY_KICK);
                     break;
             }
@@ -89,25 +89,25 @@ public class CrouchingState : CharacterStateBlock
         {
             switch (CheckAttacking(input))
             {
-                case AttackState.LightPunch:
+                case AttackButtonState.LightPunch:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.LIGHT_PUNCH);
                     break;
-                case AttackState.MediumPunch:
+                case AttackButtonState.MediumPunch:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.MEDIUM_PUNCH);
                     break;
-                case AttackState.HeavyPunch:
+                case AttackButtonState.HeavyPunch:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.HEAVY_PUNCH);
                     break;
-                case AttackState.LightKick:
+                case AttackButtonState.LightKick:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.LIGHT_KICK);
                     break;
-                case AttackState.MediumKick:
+                case AttackButtonState.MediumKick:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.MEDIUM_KICK);
                     break;
-                case AttackState.HeavyKick:
+                case AttackButtonState.HeavyKick:
                     PlayAttackAnimation(ref player, AnimationData.CrouchingAttacks.HEAVY_KICK);
                     break;
-                case AttackState.None:
+                case AttackButtonState.None:
                     PlayAnimationLoop(ref player, AnimationData.Movememt.CROUCH);
                     break;
             }

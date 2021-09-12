@@ -26,8 +26,9 @@ public class HitInAirState : CharacterStateBlock
         base.OnExitState();
     }
 
-    //protected override void OnUpdate()
-    //{
-
-    //}
+    public Player UpdatePlayer(Player player, long input)
+    {
+        Debug.Log("Jumping hit and it sucks");
+        return player;
+    }
 }

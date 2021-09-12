@@ -1,77 +1,131 @@
-﻿public class AnimationData
+﻿using System;
+using System.Collections.Generic;
+
+public class AnimationData
 {
     public static float FRAME_COUNTER = 0.2f;
+    public readonly static Dictionary<Guid, FrameData> AttackLookup = new Dictionary<Guid, FrameData>()
+    {
+        {StandingAttacks.LIGHT_PUNCH.ID, StandingAttacks.LIGHT_PUNCH },
+        {StandingAttacks.MEDIUM_PUNCH.ID, StandingAttacks.MEDIUM_PUNCH },
+        {StandingAttacks.HEAVY_PUNCH.ID, StandingAttacks.HEAVY_PUNCH },
+        {StandingAttacks.LIGHT_KICK.ID, StandingAttacks.LIGHT_KICK },
+        {StandingAttacks.MEDIUM_KICK.ID, StandingAttacks.MEDIUM_KICK },
+        {StandingAttacks.HEAVY_KICK.ID, StandingAttacks.HEAVY_KICK },
+
+        {CrouchingAttacks.LIGHT_PUNCH.ID, CrouchingAttacks.LIGHT_PUNCH },
+        {CrouchingAttacks.MEDIUM_PUNCH.ID, CrouchingAttacks.MEDIUM_PUNCH },
+        {CrouchingAttacks.HEAVY_PUNCH.ID, CrouchingAttacks.HEAVY_PUNCH },
+        {CrouchingAttacks.LIGHT_KICK.ID, CrouchingAttacks.LIGHT_KICK },
+        {CrouchingAttacks.MEDIUM_KICK.ID, CrouchingAttacks.MEDIUM_KICK },
+        {CrouchingAttacks.HEAVY_KICK.ID, CrouchingAttacks.HEAVY_KICK },
+
+        {JumpUpAttacks.LIGHT_PUNCH.ID, JumpUpAttacks.LIGHT_PUNCH },
+        {JumpUpAttacks.MEDIUM_PUNCH.ID, JumpUpAttacks.MEDIUM_PUNCH },
+        {JumpUpAttacks.HEAVY_PUNCH.ID, JumpUpAttacks.HEAVY_PUNCH },
+        {JumpUpAttacks.LIGHT_KICK.ID, JumpUpAttacks.LIGHT_KICK },
+        {JumpUpAttacks.MEDIUM_KICK.ID, JumpUpAttacks.MEDIUM_KICK },
+        {JumpUpAttacks.HEAVY_KICK.ID, JumpUpAttacks.HEAVY_KICK },
+
+        {JumpForwardAttacks.LIGHT_PUNCH.ID, JumpForwardAttacks.LIGHT_PUNCH },
+        {JumpForwardAttacks.MEDIUM_PUNCH.ID, JumpForwardAttacks.MEDIUM_PUNCH },
+        {JumpForwardAttacks.HEAVY_PUNCH.ID, JumpForwardAttacks.HEAVY_PUNCH },
+        {JumpForwardAttacks.LIGHT_KICK.ID, JumpForwardAttacks.LIGHT_KICK },
+        {JumpForwardAttacks.MEDIUM_KICK.ID, JumpForwardAttacks.MEDIUM_KICK },
+        {JumpForwardAttacks.HEAVY_KICK.ID, JumpForwardAttacks.HEAVY_KICK },
+
+        {JumpBackAttacks.LIGHT_PUNCH.ID, JumpBackAttacks.LIGHT_PUNCH },
+        {JumpBackAttacks.MEDIUM_PUNCH.ID, JumpBackAttacks.MEDIUM_PUNCH },
+        {JumpBackAttacks.HEAVY_PUNCH.ID, JumpBackAttacks.HEAVY_PUNCH },
+        {JumpBackAttacks.LIGHT_KICK.ID, JumpBackAttacks.LIGHT_KICK },
+        {JumpBackAttacks.MEDIUM_KICK.ID, JumpBackAttacks.MEDIUM_KICK },
+        {JumpBackAttacks.HEAVY_KICK.ID, JumpBackAttacks.HEAVY_KICK },
+    };
 
     public class Movememt
     {
         public static FrameData IDLE = new FrameData()
         {
-            ID = 0,
             AnimationKey = "Idle",
             TotalFrames = 9f,
             FrameRate = 12f,
             State = PlayerState.Standing,
-            Attack = AttackState.None
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData WALK_FORWARD = new FrameData()
         {
-            ID = 0,
             AnimationKey = "WalkForward",
             TotalFrames = 11f,
             FrameRate = 12f,
             State = PlayerState.Forward,
-            Attack = AttackState.None
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData WALK_BACKWARD = new FrameData()
         {
-            ID = 0,
             AnimationKey = "WalkBackward",
             TotalFrames = 11f,
             FrameRate = 12f,
             State = PlayerState.Back,
-            Attack = AttackState.None
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData CROUCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "Crouch",
             TotalFrames = 4f,
             FrameRate = 12f,
             State = PlayerState.Crouching,
-            Attack = AttackState.None
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData JUMP_UP = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpUp",
             TotalFrames = 11f,
             FrameRate = 12f,
             State = PlayerState.JumpUp,
-            Attack = AttackState.None
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData JUMP_FORWARD = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpForward",
             TotalFrames = 13f,
             FrameRate = 12f,
             State = PlayerState.JumpForward,
-            Attack = AttackState.None
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData JUMP_BACKWARD = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpBackward",
             TotalFrames = 13f,
             FrameRate = 12f,
             State = PlayerState.JumpBack,
-            Attack = AttackState.None
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
     }
 
@@ -79,62 +133,74 @@
     {
         public static FrameData LIGHT_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "StandingLightPunch",
             TotalFrames = 5f,
             FrameRate = 12f,
             State = PlayerState.Standing,
-            Attack = AttackState.LightPunch
+            Attack = AttackButtonState.LightPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "StandingMediumPunch",
             TotalFrames = 7f,
             FrameRate = 12f,
             State = PlayerState.Standing,
-            Attack = AttackState.MediumPunch
+            Attack = AttackButtonState.MediumPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "StandingHeavyPunch",
             TotalFrames = 10f,
             FrameRate = 12f,
             State = PlayerState.Standing,
-            Attack = AttackState.HeavyPunch
+            Attack = AttackButtonState.HeavyPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "StandingLightKick",
             TotalFrames = 7f,
             FrameRate = 12f,
             State = PlayerState.Standing,
-            Attack = AttackState.LightKick
+            Attack = AttackButtonState.LightKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "StandingMediumKick",
             TotalFrames = 7f,
             FrameRate = 12f,
             State = PlayerState.Standing,
-            Attack = AttackState.MediumKick
+            Attack = AttackButtonState.MediumKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "StandingHeavyKick",
             TotalFrames = 13f,
             FrameRate = 12f,
             State = PlayerState.Standing,
-            Attack = AttackState.HeavyKick
+            Attack = AttackButtonState.HeavyKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
     }
 
@@ -142,62 +208,74 @@
     {
         public static FrameData LIGHT_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "CrouchingLightPunch",
             TotalFrames = 4f,
             FrameRate = 12f,
             State = PlayerState.Crouching,
-            Attack = AttackState.LightPunch
+            Attack = AttackButtonState.LightPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "CrouchingMediumPunch",
             TotalFrames = 4f,
             FrameRate = 12f,
             State = PlayerState.Crouching,
-            Attack = AttackState.MediumPunch
+            Attack = AttackButtonState.MediumPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "CrouchingHeavyPunch",
             TotalFrames = 10f,
             FrameRate = 12f,
             State = PlayerState.Crouching,
-            Attack = AttackState.HeavyPunch
+            Attack = AttackButtonState.HeavyPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "CrouchingLightKick",
             TotalFrames = 4f,
             FrameRate = 12f,
             State = PlayerState.Crouching,
-            Attack = AttackState.LightKick
+            Attack = AttackButtonState.LightKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "CrouchingMediumKick",
             TotalFrames = 6f,
             FrameRate = 12f,
             State = PlayerState.Crouching,
-            Attack = AttackState.MediumKick
+            Attack = AttackButtonState.MediumKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "CrouchingHeavyKick",
             TotalFrames = 10f,
             FrameRate = 12f,
             State = PlayerState.Crouching,
-            Attack = AttackState.HeavyKick
+            Attack = AttackButtonState.HeavyKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
     }
 
@@ -205,62 +283,74 @@
     {
         public static FrameData LIGHT_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingUpLightPunch",
             TotalFrames = 5f,
             FrameRate = 12f,
             State = PlayerState.JumpUp,
-            Attack = AttackState.LightPunch
+            Attack = AttackButtonState.LightPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingUpMediumPunch",
             TotalFrames = 8f,
             FrameRate = 12f,
             State = PlayerState.JumpUp,
-            Attack = AttackState.MediumPunch
+            Attack = AttackButtonState.MediumPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingUpHeavyPunch",
             TotalFrames = 7f,
             FrameRate = 12f,
             State = PlayerState.JumpUp,
-            Attack = AttackState.HeavyPunch
+            Attack = AttackButtonState.HeavyPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingUpLightKick",
             TotalFrames = 3f,
             FrameRate = 12f,
             State = PlayerState.JumpUp,
-            Attack = AttackState.LightKick
+            Attack = AttackButtonState.LightKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingUpMediumKick",
             TotalFrames = 8f,
             FrameRate = 12f,
             State = PlayerState.JumpUp,
-            Attack = AttackState.MediumKick
+            Attack = AttackButtonState.MediumKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingUpHeavyKick",
             TotalFrames = 6f,
             FrameRate = 12f,
             State = PlayerState.JumpUp,
-            Attack = AttackState.HeavyKick
+            Attack = AttackButtonState.HeavyKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
     }
 
@@ -268,62 +358,74 @@
     {
         public static FrameData LIGHT_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionLightPunch",
             TotalFrames = 5f,
             FrameRate = 12f,
             State = PlayerState.JumpForward,
-            Attack = AttackState.LightPunch
+            Attack = AttackButtonState.LightPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionMediumPunch",
             TotalFrames = 8f,
             FrameRate = 12f,
             State = PlayerState.JumpForward,
-            Attack = AttackState.MediumPunch
+            Attack = AttackButtonState.MediumPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionHeavyPunch",
             TotalFrames = 6f,
             FrameRate = 12f,
             State = PlayerState.JumpForward,
-            Attack = AttackState.HeavyPunch
+            Attack = AttackButtonState.HeavyPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionLightKick",
             TotalFrames = 3f,
             FrameRate = 12f,
             State = PlayerState.JumpForward,
-            Attack = AttackState.LightKick
+            Attack = AttackButtonState.LightKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionMediumKick",
             TotalFrames = 8f,
             FrameRate = 12f,
             State = PlayerState.JumpForward,
-            Attack = AttackState.MediumKick
+            Attack = AttackButtonState.MediumKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionHeavyKick",
             TotalFrames = 8f,
             FrameRate = 12f,
             State = PlayerState.JumpForward,
-            Attack = AttackState.HeavyKick
+            Attack = AttackButtonState.HeavyKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
     }
 
@@ -331,62 +433,74 @@
     {
         public static FrameData LIGHT_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionLightPunch",
             TotalFrames = 5f,
             FrameRate = 12f,
             State = PlayerState.JumpBack,
-            Attack = AttackState.LightPunch
+            Attack = AttackButtonState.LightPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionMediumPunch",
             TotalFrames = 8f,
             FrameRate = 12f,
             State = PlayerState.JumpBack,
-            Attack = AttackState.MediumPunch
+            Attack = AttackButtonState.MediumPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionHeavyPunch",
             TotalFrames = 6f,
             FrameRate = 12f,
             State = PlayerState.JumpBack,
-            Attack = AttackState.HeavyPunch
+            Attack = AttackButtonState.HeavyPunch,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionLightKick",
             TotalFrames = 3f,
             FrameRate = 12f,
             State = PlayerState.JumpBack,
-            Attack = AttackState.LightKick
+            Attack = AttackButtonState.LightKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionMediumKick",
             TotalFrames = 8f,
             FrameRate = 12f,
             State = PlayerState.JumpBack,
-            Attack = AttackState.MediumKick
+            Attack = AttackButtonState.MediumKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
         {
-            ID = 0,
             AnimationKey = "JumpingDirectionHeavyKick",
             TotalFrames = 8f,
             FrameRate = 12f,
             State = PlayerState.JumpBack,
-            Attack = AttackState.HeavyKick
+            Attack = AttackButtonState.HeavyKick,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
         };
     }
 }

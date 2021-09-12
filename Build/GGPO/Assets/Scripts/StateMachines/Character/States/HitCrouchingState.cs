@@ -23,8 +23,9 @@ public class HitCrouchingState : CharacterStateBlock
         base.OnExitState();
     }
 
-    //protected override void OnUpdate()
-    //{
-
-    //}
+    public Player UpdatePlayer(Player player, long input)
+    {
+        Debug.Log("Crouching hit and this is cheap");
+        return player;
+    }
 }

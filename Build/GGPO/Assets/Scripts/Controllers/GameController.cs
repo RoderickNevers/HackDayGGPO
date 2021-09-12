@@ -15,12 +15,14 @@ public class GameController : MonoBehaviour
     {
         _GGPOComponent.OnRunningChanged += OnRunningChanged;
         _GGPOComponent.OnStateChanged += OnStateChanged;
+        _GGPOComponent.OnCheckCollision += OnCheckCollision;
     }
 
     public void OnDestroy()
     {
         _GGPOComponent.OnRunningChanged -= OnRunningChanged;
         _GGPOComponent.OnStateChanged -= OnStateChanged;
+        _GGPOComponent.OnCheckCollision -= OnCheckCollision;
     }
 
     private void OnRunningChanged(bool running)
@@ -81,10 +83,22 @@ public class GameController : MonoBehaviour
         }
     }
 
+    //Checks the players controller for attack collisions
+    private void OnCheckCollision()
+    {
+        var gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
+
+        for (int i = 0; i < PlayerControllers.Length; ++i)
+        {
+            HitData result = PlayerControllers[i].OnCheckCollision();
+            gameState.GetPlayerRef(i).IsHit = result.IsHit;
+            gameState.GetPlayerRef(i).CurrentlyHitByID = result.AttackData?.ID ?? Guid.Empty;
+        }
+    }
+
+    // Triggers the Player Controller to update with new data
     private void OnStateChanged()
     {
-        Debug.Log("A");
-
         var gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
 
         for (int i = 0; i < PlayerControllers.Length; ++i)

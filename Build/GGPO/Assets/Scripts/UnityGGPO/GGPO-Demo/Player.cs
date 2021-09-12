@@ -15,7 +15,9 @@ public struct Player
     public bool IsAttacking;
     public bool IsHit;
     public PlayerState State;
-    public AttackState CurrentAttack;
+    public AttackButtonState CurrentButtonPressed;
+    public Guid CurrentAttackID;
+    public Guid CurrentlyHitByID;
     public LookDirection LookDirection;
     public string AnimationKey;
     public float CurrentFrame;
@@ -33,7 +35,9 @@ public struct Player
         bw.Write(IsAttacking);
         bw.Write(IsHit);
         bw.Write((int)State);
-        bw.Write((int)CurrentAttack);
+        bw.Write((int)CurrentButtonPressed);
+        bw.Write(CurrentAttackID.ToString());
+        bw.Write(CurrentlyHitByID.ToString());
         bw.Write((int)LookDirection);
 
         if (AnimationKey == null)
@@ -56,7 +60,9 @@ public struct Player
         IsAttacking = br.ReadBoolean();
         IsHit = br.ReadBoolean();
         State = (PlayerState)br.ReadInt32();
-        CurrentAttack = (AttackState)br.ReadInt32();
+        CurrentButtonPressed = (AttackButtonState)br.ReadInt32();
+        CurrentAttackID = Guid.Parse(br.ReadString());
+        CurrentlyHitByID = Guid.Parse(br.ReadString());
         LookDirection = (LookDirection)br.ReadInt32();
         AnimationKey = br.ReadString();
         CurrentFrame = br.ReadSingle();
@@ -75,7 +81,9 @@ public struct Player
         hashCode = hashCode * -1521134295 + IsAttacking.GetHashCode();
         hashCode = hashCode * -1521134295 + IsHit.GetHashCode();
         hashCode = hashCode * -1521134295 + State.GetHashCode();
-        hashCode = hashCode * -1521134295 + CurrentAttack.GetHashCode();
+        hashCode = hashCode * -1521134295 + CurrentButtonPressed.GetHashCode();
+        hashCode = hashCode * -1521134295 + CurrentAttackID.GetHashCode();
+        hashCode = hashCode * -1521134295 + CurrentlyHitByID.GetHashCode();
         hashCode = hashCode * -1521134295 + LookDirection.GetHashCode();
         hashCode = hashCode * -1521134295 + AnimationKey.GetHashCode();
         hashCode = hashCode * -1521134295 + CurrentFrame.GetHashCode();

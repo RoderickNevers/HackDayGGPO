@@ -51,24 +51,24 @@ public class JumpUpState : CharacterStateBlock
             //Returning attack
             else if (player.IsAttacking)
             {
-                switch (player.CurrentAttack)
+                switch (player.CurrentButtonPressed)
                 {
-                    case AttackState.LightPunch:
+                    case AttackButtonState.LightPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_PUNCH);
                         break;
-                    case AttackState.MediumPunch:
+                    case AttackButtonState.MediumPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_PUNCH);
                         break;
-                    case AttackState.HeavyPunch:
+                    case AttackButtonState.HeavyPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_PUNCH);
                         break;
-                    case AttackState.LightKick:
+                    case AttackButtonState.LightKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_KICK);
                         break;
-                    case AttackState.MediumKick:
+                    case AttackButtonState.MediumKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_KICK);
                         break;
-                    case AttackState.HeavyKick:
+                    case AttackButtonState.HeavyKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_KICK);
                         break;
                 }
@@ -78,25 +78,25 @@ public class JumpUpState : CharacterStateBlock
             {
                 switch (CheckAttacking(input))
                 {
-                    case AttackState.LightPunch:
+                    case AttackButtonState.LightPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_PUNCH);
                         break;
-                    case AttackState.MediumPunch:
+                    case AttackButtonState.MediumPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_PUNCH);
                         break;
-                    case AttackState.HeavyPunch:
+                    case AttackButtonState.HeavyPunch:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_PUNCH);
                         break;
-                    case AttackState.LightKick:
+                    case AttackButtonState.LightKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_KICK);
                         break;
-                    case AttackState.MediumKick:
+                    case AttackButtonState.MediumKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_KICK);
                         break;
-                    case AttackState.HeavyKick:
+                    case AttackButtonState.HeavyKick:
                         PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_KICK);
                         break;
-                    case AttackState.None:
+                    case AttackButtonState.None:
                         PlayAnimationOneShot(ref player, AnimationData.Movememt.JUMP_UP);
                         break;
                 }
