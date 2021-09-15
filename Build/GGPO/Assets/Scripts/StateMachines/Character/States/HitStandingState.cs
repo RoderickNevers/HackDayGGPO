@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 //using DG.Tweening;
 //using System.Windows.Markup;
@@ -57,9 +58,38 @@ public class HitStandingState : CharacterStateBlock
         //characterController.HealthComponent.OnDizzy -= HandleDizzy;
     }
 
+    private Dictionary<Guid, FrameData> _HitReactionLookup = new Dictionary<Guid, FrameData>()
+    {
+        {AnimationData.StandingAttacks.LIGHT_PUNCH.ID, AnimationData.StandingHit.HIGH_LIGHT}
+    };
+
     public Player UpdatePlayer(Player player, long input)
     {
         Debug.Log($"Standing hit and it hurts!!! I got hit by {AnimationData.AttackLookup[player.CurrentlyHitByID].AnimationKey}");
+
+        PlayHitAnimation(ref player, _HitReactionLookup[player.CurrentlyHitByID]);
+
+        //switch (player.CurrentButtonPressed)
+        //{
+        //    case AttackButtonState.LightPunch:
+        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_PUNCH);
+        //        break;
+        //    case AttackButtonState.MediumPunch:
+        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_PUNCH);
+        //        break;
+        //    case AttackButtonState.HeavyPunch:
+        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_PUNCH);
+        //        break;
+        //    case AttackButtonState.LightKick:
+        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_KICK);
+        //        break;
+        //    case AttackButtonState.MediumKick:
+        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_KICK);
+        //        break;
+        //    case AttackButtonState.HeavyKick:
+        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_KICK);
+        //        break;
+        //}
         return player;
     }
 

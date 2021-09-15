@@ -65,12 +65,7 @@ public class StandingState : CharacterStateBlock
 
     public Player UpdatePlayer(Player player, long input)
     {
-        if (player.IsHit)
-        {
-            Debug.Log("IM HIT CAPTAIN!!!!!!!!!!!!!!!");
-        }
-        //Returning attack
-        else if (player.IsAttacking)
+        if (player.IsAttacking)
         {
             switch (player.CurrentButtonPressed)
             {

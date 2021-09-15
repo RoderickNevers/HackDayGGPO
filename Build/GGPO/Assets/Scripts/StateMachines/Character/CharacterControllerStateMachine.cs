@@ -152,7 +152,7 @@ public class CharacterControllerStateMachine: IDisposable
         CheckDirectionInput(ref player, input);
 
         // Grounded states
-        if (player.IsGrounded && !player.IsJumping)
+        if (player.IsGrounded && !player.IsJumping && !player.IsHit)
         {
             switch (player.State)
             {

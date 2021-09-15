@@ -125,19 +125,20 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     protected void PlayAttackAnimation(ref Player player, FrameData frameData)
     {
-        if (player.AnimationKey != frameData.AnimationKey)
-        {
-            player.AnimationIndex = 1;
-        }
+        PlayAnimationOneShot(ref player, frameData);
+        //if (player.AnimationKey != frameData.AnimationKey)
+        //{
+        //    player.AnimationIndex = 1;
+        //}
 
-        player.AnimationKey = frameData.AnimationKey;
+        //player.AnimationKey = frameData.AnimationKey;
 
-        if (player.AnimationIndex < frameData.TotalFrames)
-        {
-            player.AnimationIndex += AnimationData.FRAME_COUNTER;
-        }
+        //if (player.AnimationIndex < frameData.TotalFrames)
+        //{
+        //    player.AnimationIndex += AnimationData.FRAME_COUNTER;
+        //}
 
-        player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;
+        //player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;
 
         player.IsAttacking = player.AnimationIndex < frameData.TotalFrames;
 
@@ -152,6 +153,11 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
             player.CurrentButtonPressed = AttackButtonState.None;
             player.CurrentAttackID = Guid.Empty;
         }
+    }
+
+    protected void PlayHitAnimation(ref Player player, FrameData frameData)
+    {
+        PlayAnimationOneShot(ref player, frameData);
     }
 
     protected AttackButtonState CheckAttacking(long input)

@@ -503,4 +503,19 @@ public class AnimationData
             MeterGain = 0
         };
     }
+
+    public class StandingHit
+    {
+        public static FrameData HIGH_LIGHT = new FrameData()
+        {
+            AnimationKey = "Hit_HighAndWeak",
+            TotalFrames = 3f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+    }
 }
