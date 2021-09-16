@@ -517,5 +517,161 @@ public class AnimationData
             Stun = 0,
             MeterGain = 0
         };
+
+        public static FrameData UPPER = new FrameData()
+        {
+            AnimationKey = "Hit_Upper",
+            TotalFrames = 3f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData HIGH_MEDIUM = new FrameData()
+        {
+            AnimationKey = "Hit_Medium",
+            TotalFrames = 3f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData HIGH_HEAVY = new FrameData()
+        {
+            AnimationKey = "Hit_Heavy",
+            TotalFrames = 9f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData HIGH_GUT_LIGHT = new FrameData()
+        {
+            AnimationKey = "Hit_Gut",
+            TotalFrames = 5f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData HIGH_GUT_HEAVY = new FrameData()
+        {
+            AnimationKey = "Hit_GutHeavy",
+            TotalFrames = 2f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData HIGH_GUT_RECOVERY = new FrameData()
+        {
+            AnimationKey = "Hit_GutRecovery",
+            TotalFrames = 7f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData HIGH_CROUCHING_HEAVY = new FrameData()
+        {
+            AnimationKey = "Hit_CrouchingHeavy",
+            TotalFrames = 3f,
+            FrameRate = 12f,
+            State = PlayerState.CrouchingHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData HIGH_CROUCHING_MEDIUM = new FrameData()
+        {
+            AnimationKey = "Hit_CrouchingMedium",
+            TotalFrames = 3f,
+            FrameRate = 12f,
+            State = PlayerState.CrouchingHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData HIGH_CROUCHING_LIGHT = new FrameData()
+        {
+            AnimationKey = "Hit_CrouchingLight",
+            TotalFrames = 4f,
+            FrameRate = 12f,
+            State = PlayerState.CrouchingHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData TURN = new FrameData()
+        {
+            AnimationKey = "Hit_Turn",
+            TotalFrames = 7f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData SWEEP = new FrameData()
+        {
+            AnimationKey = "Hit_Sweep",
+            TotalFrames = 5f,
+            FrameRate = 12f,
+            State = PlayerState.Sweep,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData FALL_OVER = new FrameData()
+        {
+            AnimationKey = "Hit_FallOver",
+            TotalFrames = 22f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
+
+        public static FrameData BLOW_BACK = new FrameData()
+        {
+            AnimationKey = "Hit_BlowBack",
+            TotalFrames = 5f,
+            FrameRate = 12f,
+            State = PlayerState.StandHit,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            Stun = 0,
+            MeterGain = 0
+        };
     }
 }

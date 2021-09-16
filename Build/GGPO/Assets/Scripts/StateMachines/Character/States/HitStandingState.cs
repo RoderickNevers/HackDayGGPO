@@ -60,11 +60,19 @@ public class HitStandingState : CharacterStateBlock
 
     private Dictionary<Guid, FrameData> _HitReactionLookup = new Dictionary<Guid, FrameData>()
     {
-        {AnimationData.StandingAttacks.LIGHT_PUNCH.ID, AnimationData.StandingHit.HIGH_LIGHT}
+        {AnimationData.StandingAttacks.LIGHT_PUNCH.ID, AnimationData.StandingHit.HIGH_LIGHT},
+        {AnimationData.StandingAttacks.MEDIUM_PUNCH.ID, AnimationData.StandingHit.HIGH_MEDIUM},
+        {AnimationData.StandingAttacks.HEAVY_PUNCH.ID, AnimationData.StandingHit.HIGH_HEAVY},
+        {AnimationData.StandingAttacks.LIGHT_KICK.ID, AnimationData.StandingHit.HIGH_GUT_LIGHT},
+        {AnimationData.StandingAttacks.MEDIUM_KICK.ID, AnimationData.StandingHit.HIGH_MEDIUM},
+        {AnimationData.StandingAttacks.HEAVY_KICK.ID, AnimationData.StandingHit.HIGH_HEAVY}
     };
 
     public Player UpdatePlayer(Player player, long input)
     {
+        if (player.CurrentlyHitByID == Guid.Empty)
+            return player;
+
         Debug.Log($"Standing hit and it hurts!!! I got hit by {AnimationData.AttackLookup[player.CurrentlyHitByID].AnimationKey}");
 
         PlayHitAnimation(ref player, _HitReactionLookup[player.CurrentlyHitByID]);
