@@ -205,7 +205,7 @@ MonoBehaviour:
       _descriptiveName: Player0
       _startPlaying: 1
       _defaultJoystickMaps:
-      - _enabled: 0
+      - _enabled: 1
         _categoryId: 0
         _layoutId: 0
       _defaultMouseMaps: []

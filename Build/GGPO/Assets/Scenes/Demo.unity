@@ -6810,6 +6810,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 508991616745615414, guid: b8049bb71e3ce364f8d8df959d371a20, type: 3}
+      propertyPath: _userData.players.Array.data[1]._defaultJoystickMaps.Array.data[0]._enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2692373544971705404, guid: b8049bb71e3ce364f8d8df959d371a20, type: 3}
       propertyPath: m_RootOrder
       value: 1
