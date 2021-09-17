@@ -26,38 +26,10 @@ public class JumpBackState : CharacterStateBlock
         //    _Animator.SetTrigger(AnimatorConstants.PARAMENTER_JUMP);
     }
 
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-        //Debug.Log("Exit Jump Back");
-    }
-
-    //protected override void OnUpdate()
-    //{
-    //    base.OnUpdate();
-
-    //    characterController.Jump(-1);
-
-    //    if (characterController.Controller.velocity.y < 0)
-    //    {
-    //        stateMachine.Fire(CharacterStateTrigger.TriggerFalling);
-    //    }
-    //}
-
-    protected override void AddListeners()
-    {
-        base.AddListeners();
-        //characterController.InputController.OnInputCommand += HandleInputCommand;
-    }
-
-    protected override void RemoveListeners()
-    {
-        base.RemoveListeners();
-        //characterController.InputController.OnInputCommand -= HandleInputCommand;
-    }
-
     public Player UpdatePlayer(Player player, long input)
     {
+        player.JumpType = PlayerState.JumpBack;
+
         if (player.IsJumping)
         {
             if (player.IsHit)

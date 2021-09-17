@@ -27,12 +27,12 @@ public class AnimationData
         {JumpUpAttacks.MEDIUM_KICK.ID, JumpUpAttacks.MEDIUM_KICK },
         {JumpUpAttacks.HEAVY_KICK.ID, JumpUpAttacks.HEAVY_KICK },
 
-        {JumpForwardAttacks.LIGHT_PUNCH.ID, JumpForwardAttacks.LIGHT_PUNCH },
-        {JumpForwardAttacks.MEDIUM_PUNCH.ID, JumpForwardAttacks.MEDIUM_PUNCH },
-        {JumpForwardAttacks.HEAVY_PUNCH.ID, JumpForwardAttacks.HEAVY_PUNCH },
-        {JumpForwardAttacks.LIGHT_KICK.ID, JumpForwardAttacks.LIGHT_KICK },
-        {JumpForwardAttacks.MEDIUM_KICK.ID, JumpForwardAttacks.MEDIUM_KICK },
-        {JumpForwardAttacks.HEAVY_KICK.ID, JumpForwardAttacks.HEAVY_KICK },
+        {JumpTowardAttacks.LIGHT_PUNCH.ID, JumpTowardAttacks.LIGHT_PUNCH },
+        {JumpTowardAttacks.MEDIUM_PUNCH.ID, JumpTowardAttacks.MEDIUM_PUNCH },
+        {JumpTowardAttacks.HEAVY_PUNCH.ID, JumpTowardAttacks.HEAVY_PUNCH },
+        {JumpTowardAttacks.LIGHT_KICK.ID, JumpTowardAttacks.LIGHT_KICK },
+        {JumpTowardAttacks.MEDIUM_KICK.ID, JumpTowardAttacks.MEDIUM_KICK },
+        {JumpTowardAttacks.HEAVY_KICK.ID, JumpTowardAttacks.HEAVY_KICK },
 
         {JumpBackAttacks.LIGHT_PUNCH.ID, JumpBackAttacks.LIGHT_PUNCH },
         {JumpBackAttacks.MEDIUM_PUNCH.ID, JumpBackAttacks.MEDIUM_PUNCH },
@@ -109,7 +109,7 @@ public class AnimationData
             AnimationKey = "JumpForward",
             TotalFrames = 13f,
             FrameRate = 12f,
-            State = PlayerState.JumpForward,
+            State = PlayerState.JumpToward,
             Attack = AttackButtonState.None,
             Damage = 0,
             Stun = 0,
@@ -354,14 +354,14 @@ public class AnimationData
         };
     }
 
-    public class JumpForwardAttacks
+    public class JumpTowardAttacks
     {
         public static FrameData LIGHT_PUNCH = new FrameData()
         {
             AnimationKey = "JumpingDirectionLightPunch",
             TotalFrames = 5f,
             FrameRate = 12f,
-            State = PlayerState.JumpForward,
+            State = PlayerState.JumpToward,
             Attack = AttackButtonState.LightPunch,
             Damage = 0,
             Stun = 0,
@@ -373,7 +373,7 @@ public class AnimationData
             AnimationKey = "JumpingDirectionMediumPunch",
             TotalFrames = 8f,
             FrameRate = 12f,
-            State = PlayerState.JumpForward,
+            State = PlayerState.JumpToward,
             Attack = AttackButtonState.MediumPunch,
             Damage = 0,
             Stun = 0,
@@ -385,7 +385,7 @@ public class AnimationData
             AnimationKey = "JumpingDirectionHeavyPunch",
             TotalFrames = 6f,
             FrameRate = 12f,
-            State = PlayerState.JumpForward,
+            State = PlayerState.JumpToward,
             Attack = AttackButtonState.HeavyPunch,
             Damage = 0,
             Stun = 0,
@@ -397,7 +397,7 @@ public class AnimationData
             AnimationKey = "JumpingDirectionLightKick",
             TotalFrames = 3f,
             FrameRate = 12f,
-            State = PlayerState.JumpForward,
+            State = PlayerState.JumpToward,
             Attack = AttackButtonState.LightKick,
             Damage = 0,
             Stun = 0,
@@ -409,7 +409,7 @@ public class AnimationData
             AnimationKey = "JumpingDirectionMediumKick",
             TotalFrames = 8f,
             FrameRate = 12f,
-            State = PlayerState.JumpForward,
+            State = PlayerState.JumpToward,
             Attack = AttackButtonState.MediumKick,
             Damage = 0,
             Stun = 0,
@@ -421,7 +421,7 @@ public class AnimationData
             AnimationKey = "JumpingDirectionHeavyKick",
             TotalFrames = 8f,
             FrameRate = 12f,
-            State = PlayerState.JumpForward,
+            State = PlayerState.JumpToward,
             Attack = AttackButtonState.HeavyKick,
             Damage = 0,
             Stun = 0,

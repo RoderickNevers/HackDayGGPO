@@ -42,6 +42,8 @@ public class JumpUpState : CharacterStateBlock
 
     public Player UpdatePlayer(Player player, long input)
     {
+        player.JumpType = PlayerState.JumpUp;
+
         if (player.IsJumping)
         {
             if (player.IsHit)

@@ -97,6 +97,7 @@ public class CharacterControllerStateMachine: IDisposable
         if (!player.IsGrounded && Mathf.Approximately(player.Position.y, 0.5f) || player.Position.y < 0)
         {
             player.IsAttacking = false;
+            player.JumpType = PlayerState.None;
             //player.State = PlayerState.Landing;
             //player = _LandingState.UpdatePlayer(player, input);
         }
@@ -139,7 +140,7 @@ public class CharacterControllerStateMachine: IDisposable
                 switch (player.State)
                 {
                     case PlayerState.JumpUp:
-                    case PlayerState.JumpForward:
+                    case PlayerState.JumpToward:
                     case PlayerState.JumpBack:
                     case PlayerState.JumpAttack:
                         player.State = PlayerState.JumpHit;
@@ -180,10 +181,6 @@ public class CharacterControllerStateMachine: IDisposable
                 case PlayerState.CrouchngAttack:
                     player = _AttackGroundState.UpdatePlayer(player, input);
                     break;
-                case PlayerState.StandHit:
-                    break;
-                case PlayerState.CrouchingHit:
-                    break;
                 case PlayerState.StandBlock:
                     break;
                 case PlayerState.CrouchBlock:
@@ -201,15 +198,11 @@ public class CharacterControllerStateMachine: IDisposable
                 case PlayerState.JumpUp:
                     player = _JumpUpState.UpdatePlayer(player, input);
                     break;
-                case PlayerState.JumpForward:
+                case PlayerState.JumpToward:
                     player = _JumpTowardsState.UpdatePlayer(player, input);
                     break;
                 case PlayerState.JumpBack:
                     player = _JumpAwayState.UpdatePlayer(player, input);
-                    break;
-                case PlayerState.JumpAttack:
-                    break;
-                case PlayerState.JumpHit:
                     break;
                 //case PlayerState.Falling:
                 //    player = _FallingState.UpdatePlayer(player, input);
@@ -234,12 +227,12 @@ public class CharacterControllerStateMachine: IDisposable
             float gravityModifier = player.Velocity.y == 0 ? PlayerConstants.FALLING_GRAVITY : PlayerConstants.RAISING_GRAVITY;
             player.Velocity.y += gravityModifier * Time.fixedDeltaTime;
 
-            switch (player.State)
+            switch (player.JumpType)
             {
                 case PlayerState.JumpUp:
                     player.Velocity.x = 0;
                     break;
-                case PlayerState.JumpForward:
+                case PlayerState.JumpToward:
                     player.Velocity.x = 0;
                     player.Velocity.x += PlayerConstants.JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
                     break;
@@ -273,7 +266,7 @@ public class CharacterControllerStateMachine: IDisposable
             else if ((input & InputConstants.INPUT_UP) != 0 && (input & InputConstants.INPUT_RIGHT) != 0)
             {
                 player.IsJumping = true;
-                player.State = PlayerState.JumpForward;
+                player.State = PlayerState.JumpToward;
             }
             else if ((input & InputConstants.INPUT_UP) != 0)
             {

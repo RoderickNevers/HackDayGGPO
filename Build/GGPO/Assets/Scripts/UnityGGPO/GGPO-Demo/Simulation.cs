@@ -49,7 +49,7 @@ public static class Simulation
             else if ((input & INPUT_UP) != 0 && (input & INPUT_RIGHT) != 0)
             {
                 player.IsJumping = true;
-                player.State = PlayerState.JumpForward;
+                player.State = PlayerState.JumpToward;
             }
             else if ((input & INPUT_UP) != 0)
             {
@@ -98,7 +98,7 @@ public static class Simulation
                 case PlayerState.JumpUp:
                     player.Velocity.x = 0;
                     break;
-                case PlayerState.JumpForward:
+                case PlayerState.JumpToward:
                     player.Velocity.x = 0;
                     player.Velocity.x += JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
                     break;
@@ -128,7 +128,7 @@ public static class Simulation
                 case PlayerState.JumpUp:
                     player.Velocity.x = 0;
                     break;
-                case PlayerState.JumpForward:
+                case PlayerState.JumpToward:
                     player.Velocity.x = 0;
                     player.Velocity.x += JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
                     break;

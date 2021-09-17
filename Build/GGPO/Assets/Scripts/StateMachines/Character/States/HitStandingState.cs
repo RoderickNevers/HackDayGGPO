@@ -37,12 +37,12 @@ public class HitStandingState : CharacterStateBlock
         {AnimationData.JumpUpAttacks.HEAVY_KICK.ID, AnimationData.Hit.HIGH_HEAVY},
 
         //Jumping forward attacks
-        {AnimationData.JumpForwardAttacks.LIGHT_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
-        {AnimationData.JumpForwardAttacks.MEDIUM_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
-        {AnimationData.JumpForwardAttacks.HEAVY_PUNCH.ID, AnimationData.Hit.HIGH_HEAVY},
-        {AnimationData.JumpForwardAttacks.LIGHT_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
-        {AnimationData.JumpForwardAttacks.MEDIUM_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
-        {AnimationData.JumpForwardAttacks.HEAVY_KICK.ID, AnimationData.Hit.HIGH_HEAVY},
+        {AnimationData.JumpTowardAttacks.LIGHT_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpTowardAttacks.MEDIUM_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpTowardAttacks.HEAVY_PUNCH.ID, AnimationData.Hit.HIGH_HEAVY},
+        {AnimationData.JumpTowardAttacks.LIGHT_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpTowardAttacks.MEDIUM_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpTowardAttacks.HEAVY_KICK.ID, AnimationData.Hit.HIGH_HEAVY},
 
         //Jumping backward attacks
         {AnimationData.JumpBackAttacks.LIGHT_PUNCH.ID, AnimationData.Hit.HIGH_LIGHT},
