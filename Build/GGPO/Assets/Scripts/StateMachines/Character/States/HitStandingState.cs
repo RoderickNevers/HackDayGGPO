@@ -9,6 +9,49 @@ using UnityEngine;
 public class HitStandingState : CharacterStateBlock
 {
     private const float SCREEN_FREEZE_TIME = 0.11f;
+
+    private readonly Dictionary<Guid, FrameData> _HitReactionLookup = new Dictionary<Guid, FrameData>()
+    {
+        // Standing attacks
+        {AnimationData.StandingAttacks.LIGHT_PUNCH.ID, AnimationData.Hit.HIGH_LIGHT},
+        {AnimationData.StandingAttacks.MEDIUM_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.StandingAttacks.HEAVY_PUNCH.ID, AnimationData.Hit.HIGH_HEAVY},
+        {AnimationData.StandingAttacks.LIGHT_KICK.ID, AnimationData.Hit.GUT_LIGHT},
+        {AnimationData.StandingAttacks.MEDIUM_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.StandingAttacks.HEAVY_KICK.ID, AnimationData.Hit.HIGH_HEAVY},
+
+        // Crouching attacks
+        {AnimationData.CrouchingAttacks.LIGHT_PUNCH.ID, AnimationData.Hit.GUT_LIGHT},
+        {AnimationData.CrouchingAttacks.MEDIUM_PUNCH.ID, AnimationData.Hit.GUT_HEAVY},
+        {AnimationData.CrouchingAttacks.HEAVY_PUNCH.ID, AnimationData.Hit.UPPER},
+        {AnimationData.CrouchingAttacks.LIGHT_KICK.ID, AnimationData.Hit.GUT_LIGHT},
+        {AnimationData.CrouchingAttacks.MEDIUM_KICK.ID, AnimationData.Hit.GUT_HEAVY},
+        {AnimationData.CrouchingAttacks.HEAVY_KICK.ID, AnimationData.Hit.SWEEP},
+
+        //Jumping up attacks
+        {AnimationData.JumpUpAttacks.LIGHT_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpUpAttacks.MEDIUM_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpUpAttacks.HEAVY_PUNCH.ID, AnimationData.Hit.HIGH_HEAVY},
+        {AnimationData.JumpUpAttacks.LIGHT_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpUpAttacks.MEDIUM_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpUpAttacks.HEAVY_KICK.ID, AnimationData.Hit.HIGH_HEAVY},
+
+        //Jumping forward attacks
+        {AnimationData.JumpForwardAttacks.LIGHT_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpForwardAttacks.MEDIUM_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpForwardAttacks.HEAVY_PUNCH.ID, AnimationData.Hit.HIGH_HEAVY},
+        {AnimationData.JumpForwardAttacks.LIGHT_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpForwardAttacks.MEDIUM_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpForwardAttacks.HEAVY_KICK.ID, AnimationData.Hit.HIGH_HEAVY},
+
+        //Jumping backward attacks
+        {AnimationData.JumpBackAttacks.LIGHT_PUNCH.ID, AnimationData.Hit.HIGH_LIGHT},
+        {AnimationData.JumpBackAttacks.MEDIUM_PUNCH.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpBackAttacks.HEAVY_PUNCH.ID, AnimationData.Hit.HIGH_HEAVY},
+        {AnimationData.JumpBackAttacks.LIGHT_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpBackAttacks.MEDIUM_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
+        {AnimationData.JumpBackAttacks.HEAVY_KICK.ID, AnimationData.Hit.HIGH_HEAVY}
+    };
     public HitStandingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
     {
         _StateMachine.Configure(CharacterState.HitStanding)
@@ -58,20 +101,12 @@ public class HitStandingState : CharacterStateBlock
         //characterController.HealthComponent.OnDizzy -= HandleDizzy;
     }
 
-    private Dictionary<Guid, FrameData> _HitReactionLookup = new Dictionary<Guid, FrameData>()
-    {
-        {AnimationData.StandingAttacks.LIGHT_PUNCH.ID, AnimationData.StandingHit.HIGH_LIGHT},
-        {AnimationData.StandingAttacks.MEDIUM_PUNCH.ID, AnimationData.StandingHit.HIGH_MEDIUM},
-        {AnimationData.StandingAttacks.HEAVY_PUNCH.ID, AnimationData.StandingHit.HIGH_HEAVY},
-        {AnimationData.StandingAttacks.LIGHT_KICK.ID, AnimationData.StandingHit.HIGH_GUT_LIGHT},
-        {AnimationData.StandingAttacks.MEDIUM_KICK.ID, AnimationData.StandingHit.HIGH_MEDIUM},
-        {AnimationData.StandingAttacks.HEAVY_KICK.ID, AnimationData.StandingHit.HIGH_HEAVY}
-    };
-
     public Player UpdatePlayer(Player player, long input)
     {
         if (player.CurrentlyHitByID == Guid.Empty)
+        {
             return player;
+        }
 
         Debug.Log($"Standing hit and it hurts!!! I got hit by {AnimationData.AttackLookup[player.CurrentlyHitByID].AnimationKey}");
 
@@ -98,6 +133,7 @@ public class HitStandingState : CharacterStateBlock
         //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_KICK);
         //        break;
         //}
+
         return player;
     }
 

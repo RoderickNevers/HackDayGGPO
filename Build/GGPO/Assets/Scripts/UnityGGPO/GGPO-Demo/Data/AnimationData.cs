@@ -209,7 +209,7 @@ public class AnimationData
         public static FrameData LIGHT_PUNCH = new FrameData()
         {
             AnimationKey = "CrouchingLightPunch",
-            TotalFrames = 4f,
+            TotalFrames = 3f,
             FrameRate = 12f,
             State = PlayerState.Crouching,
             Attack = AttackButtonState.LightPunch,
@@ -504,7 +504,7 @@ public class AnimationData
         };
     }
 
-    public class StandingHit
+    public class Hit
     {
         public static FrameData HIGH_LIGHT = new FrameData()
         {
@@ -554,7 +554,7 @@ public class AnimationData
             MeterGain = 0
         };
 
-        public static FrameData HIGH_GUT_LIGHT = new FrameData()
+        public static FrameData GUT_LIGHT = new FrameData()
         {
             AnimationKey = "Hit_Gut",
             TotalFrames = 5f,
@@ -566,7 +566,7 @@ public class AnimationData
             MeterGain = 0
         };
 
-        public static FrameData HIGH_GUT_HEAVY = new FrameData()
+        public static FrameData GUT_HEAVY = new FrameData()
         {
             AnimationKey = "Hit_GutHeavy",
             TotalFrames = 2f,
@@ -578,7 +578,7 @@ public class AnimationData
             MeterGain = 0
         };
 
-        public static FrameData HIGH_GUT_RECOVERY = new FrameData()
+        public static FrameData GUT_RECOVERY = new FrameData()
         {
             AnimationKey = "Hit_GutRecovery",
             TotalFrames = 7f,
@@ -590,7 +590,7 @@ public class AnimationData
             MeterGain = 0
         };
 
-        public static FrameData HIGH_CROUCHING_HEAVY = new FrameData()
+        public static FrameData CROUCHING_HEAVY = new FrameData()
         {
             AnimationKey = "Hit_CrouchingHeavy",
             TotalFrames = 3f,
@@ -602,7 +602,7 @@ public class AnimationData
             MeterGain = 0
         };
 
-        public static FrameData HIGH_CROUCHING_MEDIUM = new FrameData()
+        public static FrameData CROUCHING_MEDIUM = new FrameData()
         {
             AnimationKey = "Hit_CrouchingMedium",
             TotalFrames = 3f,
@@ -614,7 +614,7 @@ public class AnimationData
             MeterGain = 0
         };
 
-        public static FrameData HIGH_CROUCHING_LIGHT = new FrameData()
+        public static FrameData CROUCHING_LIGHT = new FrameData()
         {
             AnimationKey = "Hit_CrouchingLight",
             TotalFrames = 4f,
