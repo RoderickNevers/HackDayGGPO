@@ -19,14 +19,11 @@ public class FallingState : CharacterStateBlock
     protected override void OnEnterState()
     {
         base.OnEnterState();
-        //Debug.Log("Enter Falling");
-        //_Animator.SetTrigger(AnimatorConstants.PARAMENTER_FALLING);
     }
 
     protected override void OnExitState()
     {
         base.OnExitState();
-        //Debug.Log("Exit Falling");
     }
 
     protected override void AddListeners()
@@ -41,14 +38,7 @@ public class FallingState : CharacterStateBlock
 
     public Player UpdatePlayer(Player player, long input)
     {
+        Debug.Log("Shit, i am falling!");
         return player;
     }
-
-    //protected override void OnUpdate()
-    //{
-    //    base.OnUpdate();
-
-    //    if (characterController.IsGrounded)
-    //        stateMachine.Fire(CharacterStateTrigger.TriggerStanding);
-    //}
 }
