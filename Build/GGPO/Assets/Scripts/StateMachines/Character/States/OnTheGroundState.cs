@@ -7,27 +7,12 @@ public class OnTheGroundState : CharacterStateBlock
 {
     float onTheGroundTime = 0;
 
-    public OnTheGroundState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public OnTheGroundState()
     {
-        _StateMachine.Configure(CharacterState.OnTheGround)
-            .Permit(CharacterStateTrigger.TriggerGetUp, CharacterState.GettingUp)
-            .Permit(CharacterStateTrigger.TriggerKO, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
+
     }
 
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
-        //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.DEAD));
-    }
-
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-    }
-
-    public Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, long input)
     {
         return player;
     }

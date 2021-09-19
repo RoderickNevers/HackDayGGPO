@@ -5,15 +5,9 @@ using Stateless;
 
 public class FallingState : CharacterStateBlock
 {
-    public FallingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public FallingState()
     {
-        _StateMachine.Configure(CharacterState.Falling)
-            .Permit(CharacterStateTrigger.TriggerStanding, CharacterState.Standing)
-            .Permit(CharacterStateTrigger.TriggerAttackInAir, CharacterState.InAirAttack)
-            //.Permit(ChangeState.TriggerHitInAir, CharacterState.HitInAir)
-            //.Permit(ChangeState.TriggerKO, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
+
     }
 
     public Player UpdatePlayer(Player player, long input)

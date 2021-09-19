@@ -5,8 +5,6 @@ using SharedGame;
 
 public class CharacterControllerStateMachine: IDisposable
 {
-    private readonly StateMachine<CharacterState, CharacterStateTrigger> _Machine;
-
     public readonly IntroState _IntroState;
     public readonly StandingState _StandingState;
     public readonly AdvancingState _AdvancingState;
@@ -28,36 +26,28 @@ public class CharacterControllerStateMachine: IDisposable
     public readonly DizzyState _DizzyState;
     public readonly KOState _KOState;
 
-    public CharacterState CurrentTrigger => _Machine.State;
-
-    //-----------
-
     public CharacterControllerStateMachine()
     {
-        _Machine = new StateMachine<CharacterState, CharacterStateTrigger>(CharacterState.Intro);
-
-        CharacterStateBlockInitData stateBlockData = new CharacterStateBlockInitData(_Machine);
-
-        _IntroState = new IntroState(stateBlockData);
-        _StandingState = new StandingState(stateBlockData);
-        _AdvancingState = new AdvancingState(stateBlockData);
-        _RetreatingState = new RetreatingState(stateBlockData);
-        _CrouchingState = new CrouchingState(stateBlockData);
-        _AttackGroundState = new GroundedAttackState(stateBlockData);
-        _AttackInAirState = new InAirAttackState(stateBlockData);
-        _JumpUpState = new JumpUpState(stateBlockData);
-        _JumpTowardsState = new JumpTowardsState(stateBlockData);
-        _JumpAwayState = new JumpBackState(stateBlockData);
-        _FallingState = new FallingState(stateBlockData);
-        _LandingState = new LandingState(stateBlockData);
-        _HitStandingState = new HitStandingState(stateBlockData);
-        _HitCrouchingState = new HitCrouchingState(stateBlockData);
-        _HitInAirState = new HitInAirState(stateBlockData);
-        _SweepState = new SweepState(stateBlockData);
-        _OnTheGroundState = new OnTheGroundState(stateBlockData);
-        _GettingUpState = new GettingUpState(stateBlockData);
-        _DizzyState = new DizzyState(stateBlockData);
-        _KOState = new KOState(stateBlockData);
+        _IntroState = new IntroState();
+        _StandingState = new StandingState();
+        _AdvancingState = new AdvancingState();
+        _RetreatingState = new RetreatingState();
+        _CrouchingState = new CrouchingState();
+        _AttackGroundState = new GroundedAttackState();
+        _AttackInAirState = new InAirAttackState();
+        _JumpUpState = new JumpUpState();
+        _JumpTowardsState = new JumpTowardsState();
+        _JumpAwayState = new JumpBackState();
+        _FallingState = new FallingState();
+        _LandingState = new LandingState();
+        _HitStandingState = new HitStandingState();
+        _HitCrouchingState = new HitCrouchingState();
+        _HitInAirState = new HitInAirState();
+        _SweepState = new SweepState();
+        _OnTheGroundState = new OnTheGroundState();
+        _GettingUpState = new GettingUpState();
+        _DizzyState = new DizzyState();
+        _KOState = new KOState();
     }
 
     public void Dispose()
@@ -82,11 +72,6 @@ public class CharacterControllerStateMachine: IDisposable
         _GettingUpState?.Dispose();
         _DizzyState?.Dispose();
         _KOState?.Dispose();
-    }
-
-    public void Reset()
-    {
-        _Machine.Fire(CharacterStateTrigger.TriggerStanding);
     }
 
     public Player Run(Player player, long input)

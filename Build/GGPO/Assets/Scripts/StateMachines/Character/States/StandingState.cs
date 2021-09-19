@@ -5,65 +5,21 @@ using UnityEngine;
 
 public class StandingState : CharacterStateBlock
 {
-    public StandingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public StandingState()
     {
-        _StateMachine.Configure(CharacterState.Standing)
-            .PermitReentry(CharacterStateTrigger.TriggerStanding)
-            .Permit(CharacterStateTrigger.TriggerAdvancing, CharacterState.Advancing)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.Retreating)
-            .Permit(CharacterStateTrigger.TriggerCrouching, CharacterState.Crouching)
-            .Permit(CharacterStateTrigger.TriggerJumpUp, CharacterState.JumpUp)
-            .Permit(CharacterStateTrigger.TriggerJumpTowards, CharacterState.JumpToward)
-            .Permit(CharacterStateTrigger.TriggerJumpBack, CharacterState.JumpBack)
-            .Permit(CharacterStateTrigger.TriggerAttackGround, CharacterState.GroundedAttack)
-            .Permit(CharacterStateTrigger.TriggerHitStanding, CharacterState.HitStanding)
-            .Permit(CharacterStateTrigger.TriggerSweep, CharacterState.Sweep)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
     }
 
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
+    //characterController.UpdateLookDirection.Invoke();
 
-        Debug.Log("I have entered");
-        //characterController.UpdateLookDirection.Invoke();
+    //// Immediately move to the next state.
+    //if (TransitionStates())
+    //    return;
 
-        //// Immediately move to the next state.
-        //if (TransitionStates())
-        //    return;
+    //characterController.InputController.MovementCallback = HandleMovement;
+    //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.STANDING));
 
-        //characterController.InputController.MovementCallback = HandleMovement;
-        //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.STANDING));
-    }
 
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-
-        //characterController.InputController.MovementCallback = null;
-        //Debug.Log("EXIT STANDING");
-    }
-
-    //protected override void OnUpdate()
-    //{
-    //    base.OnUpdate();
-    //    characterController.MovementVector.x = 0;
-    //}
-
-    protected override void AddListeners()
-    {
-        base.AddListeners();
-        //characterController.InputController.OnInputCommand += HandleInputCommand;
-    }
-
-    protected override void RemoveListeners()
-    {
-        base.RemoveListeners();
-        //characterController.InputController.OnInputCommand -= HandleInputCommand;
-    }
-
-    public Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, long input)
     {
         if (player.IsAttacking)
         {

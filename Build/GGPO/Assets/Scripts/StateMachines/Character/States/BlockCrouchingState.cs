@@ -5,30 +5,13 @@ using Stateless;
 
 public class BlockCrouchingState : CharacterStateBlock
 {
-    public BlockCrouchingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public BlockCrouchingState()
     {
-        _StateMachine.Configure(CharacterState.BlockCrouching)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.Standing)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.HitStanding)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.Crouching)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.HitCrouching)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
+
     }
 
-    protected override void OnEnterState()
+    public override Player UpdatePlayer(Player player, long input)
     {
-        base.OnEnterState();
+        return base.UpdatePlayer(player, input);
     }
-
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-    }
-
-    //protected override void OnUpdate()
-    //{
-
-    //}
 }

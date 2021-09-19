@@ -52,56 +52,26 @@ public class HitStandingState : CharacterStateBlock
         {AnimationData.JumpBackAttacks.MEDIUM_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
         {AnimationData.JumpBackAttacks.HEAVY_KICK.ID, AnimationData.Hit.HIGH_HEAVY}
     };
-    public HitStandingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public HitStandingState()
     {
-        _StateMachine.Configure(CharacterState.HitStanding)
-            .PermitReentry(CharacterStateTrigger.TriggerHitStanding)
-            .Permit(CharacterStateTrigger.TriggerStanding, CharacterState.Standing)
-            .Permit(CharacterStateTrigger.TriggerDizzy, CharacterState.Dizzy)
-            .Permit(CharacterStateTrigger.TriggerKO, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
+
     }
 
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
-
-        //ScreenFreeze();
-        //ScreenShake(stateMachine.Move.AttackData.Type);
-        //characterController.HealthComponent.ApplyDamage(stateMachine.Move.AttackData);
-        //characterController.HealthComponent.OnResetDizzyLock?.Invoke(this, new EventArgs());
+    //ScreenFreeze();
+    //ScreenShake(stateMachine.Move.AttackData.Type);
+    //characterController.HealthComponent.ApplyDamage(stateMachine.Move.AttackData);
+    //characterController.HealthComponent.OnResetDizzyLock?.Invoke(this, new EventArgs());
         
-        //if (characterController.HealthComponent.IsAlive)
-        //{ 
-        //    PlayHitAnimation(stateMachine.Move.AttackData.Type);
-        //}
-        //else
-        //{
-        //    KO();
-        //}
-    }
+    //if (characterController.HealthComponent.IsAlive)
+    //{ 
+    //    PlayHitAnimation(stateMachine.Move.AttackData.Type);
+    //}
+    //else
+    //{
+    //    KO();
+    //}
 
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-    }
-
-    protected override void AddListeners()
-    {
-        base.AddListeners();
-
-        //characterController.HealthComponent.OnDizzy += HandleDizzy;
-    }
-
-    protected override void RemoveListeners()
-    {
-        base.RemoveListeners();
-
-        //characterController.HealthComponent.OnDizzy -= HandleDizzy;
-    }
-
-    public Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, long input)
     {
         if (player.CurrentlyHitByID == Guid.Empty)
         {

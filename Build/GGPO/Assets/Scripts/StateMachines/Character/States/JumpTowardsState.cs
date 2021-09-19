@@ -3,29 +3,20 @@ using UnityEngine;
 //using UnityEngine.InputSystem;
 public class JumpTowardsState : CharacterStateBlock
 {
-    public JumpTowardsState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public JumpTowardsState()
     {
-        _StateMachine.Configure(CharacterState.JumpToward)
-            .Permit(CharacterStateTrigger.TriggerFalling, CharacterState.Falling)
-            .Permit(CharacterStateTrigger.TriggerAttackInAir, CharacterState.InAirAttack)
-            //.Permit(ChangeState.TriggerHitInAir, CharacterState.HitInAir)
-            //.Permit(ChangeState.TriggerKO, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
+
     }
 
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
-        //Debug.Log("Enter Jump Towards");
-        //characterController.MovementVector = Vector2.zero;
-        //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.JUMP_FORWARDS));
-        //prevents the jump animation from being played when you re-enter the jump state from an air attack state
-        //if (_BaseCharacterController.IsGrounded)
-        //    _Animator.SetTrigger(AnimatorConstants.PARAMENTER_JUMP);
-    }
+    //Debug.Log("Enter Jump Towards");
+    //characterController.MovementVector = Vector2.zero;
+    //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.JUMP_FORWARDS));
+    //prevents the jump animation from being played when you re-enter the jump state from an air attack state
+    //if (_BaseCharacterController.IsGrounded)
+    //    _Animator.SetTrigger(AnimatorConstants.PARAMENTER_JUMP);
+ 
 
-    public Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, long input)
     {
         player.JumpType = PlayerState.JumpToward;
 

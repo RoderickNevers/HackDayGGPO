@@ -5,24 +5,9 @@ public class DizzyState : CharacterStateBlock
     private const float dizzyTime = 2;
     private float dizzyTimer = 0;
 
-    public DizzyState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public DizzyState()
     {
-        _StateMachine.Configure(CharacterState.Dizzy)
-            .PermitReentry(CharacterStateTrigger.TriggerDizzy)
-            .Permit(CharacterStateTrigger.TriggerHitStanding, CharacterState.HitStanding)
-            .Permit(CharacterStateTrigger.TriggerStanding, CharacterState.Standing)
-            .Permit(CharacterStateTrigger.TriggerSweep, CharacterState.Sweep)
-            .Permit(CharacterStateTrigger.TriggerKO, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
-    }
 
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
-        //Debug.Log("Dizzy");
-        //dizzyTimer = 0;
-        //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.DIZZY));
     }
 
     public Player UpdatePlayer(Player player, long input)

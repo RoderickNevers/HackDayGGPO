@@ -5,50 +5,9 @@ using UnityEngine;
 public class CrouchingState : CharacterStateBlock
 {
 
-    public CrouchingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public CrouchingState()
     {
-        _StateMachine.Configure(CharacterState.Crouching)
-            .Permit(CharacterStateTrigger.TriggerStanding, CharacterState.Standing)
-            .Permit(CharacterStateTrigger.TriggerAdvancing, CharacterState.Advancing)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.Retreating)
-            //.Permit(ChangeState.TriggerJumpUp, CharacterState.JumpUp)
-            //.Permit(ChangeState.TriggerRetreating, CharacterState.BlockCrouching)
-            //.Permit(ChangeState.TriggerRetreating, CharacterState.HitCrouching)
-            .Permit(CharacterStateTrigger.TriggerAttackGround, CharacterState.GroundedAttack)
-            //.Permit(ChangeState.TriggerRetreating, CharacterState.Throw)
-            //.Permit(ChangeState.TriggerRetreating, CharacterState.GetThrown)
-            //.Permit(ChangeState.TriggerRetreating, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
-    }
 
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
-
-        //characterController.InputController.MovementCallback = HandleMovement;
-        //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.CROUCHING));
-        //Debug.Log("Enter Crouching");
-    }
-
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-
-        //characterController.InputController.MovementCallback = null;
-        //Debug.Log("Exit Crouching");
-    }
-
-    protected override void AddListeners()
-    {
-        base.AddListeners();
-        //characterController.InputController.OnInputCommand += HandleInputCommand;
-    }
-
-    protected override void RemoveListeners()
-    {
-        base.RemoveListeners();
-        //characterController.InputController.OnInputCommand -= HandleInputCommand;
     }
 
     public Player UpdatePlayer(Player player, long input)

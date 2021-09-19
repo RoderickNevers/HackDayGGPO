@@ -16,22 +16,9 @@ public class HitCrouchingState : CharacterStateBlock
         {AnimationData.CrouchingAttacks.HEAVY_KICK.ID, AnimationData.Hit.SWEEP}
     };
 
-    public HitCrouchingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public HitCrouchingState()
     {
-        _StateMachine.Configure(CharacterState.HitCrouching)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.OnTheGround)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
-    }
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
-    }
 
-    protected override void OnExitState()
-    {
-        base.OnExitState();
     }
 
     public Player UpdatePlayer(Player player, long input)

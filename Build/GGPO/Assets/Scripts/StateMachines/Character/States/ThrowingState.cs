@@ -1,30 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Stateless;
+﻿
 
 public class ThrowingState : CharacterStateBlock
 {
-    public ThrowingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public ThrowingState()
     {
-        _StateMachine.Configure(CharacterState.Throw)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.Standing)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
+
     }
 
-    protected override void OnEnterState()
+    public Player UpdatePlayer(Player player, long input)
     {
-        base.OnEnterState();
+        return player;
     }
-
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-    }
-
-    //protected override void OnUpdate()
-    //{
-
-    //}
 }

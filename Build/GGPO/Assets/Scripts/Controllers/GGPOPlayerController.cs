@@ -45,7 +45,7 @@ public class GGPOPlayerController : MonoBehaviour
         transform.localScale = player.LookDirection == LookDirection.Left ? new Vector3(-1, 1, 1) : transform.localScale = new Vector3(1, 1, 1);
 
         // set the animator to the correct frame
-        m_Animator.Play(player.AnimationKey, BASE_LAYER, player.CurrentFrame);
+        m_Animator.Play(Animator.StringToHash(player.AnimationKey), BASE_LAYER, player.CurrentFrame);
 
         if (player.CurrentAttackID == Guid.Empty)
             return;

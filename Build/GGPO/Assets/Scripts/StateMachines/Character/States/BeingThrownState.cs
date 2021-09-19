@@ -5,27 +5,13 @@ using Stateless;
 
 public class BeingThrownState : CharacterStateBlock
 {
-    public BeingThrownState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public BeingThrownState()
     {
-        _StateMachine.Configure(CharacterState.GetThrown)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.OnTheGround)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
+
     }
 
-    protected override void OnEnterState()
+    public override Player UpdatePlayer(Player player, long input)
     {
-        base.OnEnterState();
+        return base.UpdatePlayer(player, input);
     }
-
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-    }
-
-    //protected override void OnUpdate()
-    //{
-
-    //}
 }

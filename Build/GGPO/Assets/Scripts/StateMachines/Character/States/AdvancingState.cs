@@ -3,68 +3,12 @@ using UnityEngine;
 
 public class AdvancingState : CharacterStateBlock
 {
-    private const float advanceSpeed = 3.5f;
-
-    public AdvancingState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public AdvancingState()
     {
-        _StateMachine.Configure(CharacterState.Advancing)
-            .Permit(CharacterStateTrigger.TriggerStanding, CharacterState.Standing)
-            .Permit(CharacterStateTrigger.TriggerRetreating, CharacterState.Retreating)
-            .Permit(CharacterStateTrigger.TriggerCrouching, CharacterState.Crouching)
-            .Permit(CharacterStateTrigger.TriggerAttackGround, CharacterState.GroundedAttack)
-            //.Permit(ChangeState.TriggerRetreating, CharacterState.Throw)
-            //.Permit(ChangeState.TriggerRetreating, CharacterState.GetThrown)
-            .Permit(CharacterStateTrigger.TriggerJumpTowards, CharacterState.JumpToward)
-            //.Permit(ChangeState.TriggerRetreating, CharacterState.HitStanding)
-            //.Permit(ChangeState.TriggerRetreating, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
+
     }
 
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
-
-        //characterController.InputController.MovementCallback = HandleMovement;
-        //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.WALK_FORWARDS));
-        //Debug.Log("ENTER ADVANCING");
-    }
-
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-
-        //characterController.InputController.MovementCallback = null;
-        //Debug.Log("EXIT ADVANCING");
-    }
-
-    //protected override void OnUpdate()
-    //{
-    //    base.OnUpdate();
-
-    //    // Update the X based on which side of the screen the opponent is on.
-    //    int directionMultiplier = characterController.CurrentSide == RingSide.LeftSide ? 1 : -1;
-    //    characterController.Movement(directionMultiplier, advanceSpeed);
-    //}
-
-    protected override void AddListeners()
-    {
-        base.AddListeners();
-        //characterController.InputController.OnInputCommand += HandleInputCommand;
-    }
-
-    protected override void RemoveListeners()
-    {
-        base.RemoveListeners();
-        //characterController.InputController.OnInputCommand -= HandleInputCommand;
-    }
-
-    internal void Update()
-    {
-        Debug.Log("advancing lol");
-    }
-
-    public Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, long input)
     {
         float velocity = 0;
 

@@ -3,24 +3,9 @@ using UnityEngine;
 
 public class KOState : CharacterStateBlock
 {
-    public KOState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public KOState()
     {
-        _StateMachine.Configure(CharacterState.KO)
-            .Permit(CharacterStateTrigger.TriggerStanding, CharacterState.Standing)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
-    }
 
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
-
-        //PlayAnimation();
-    }
-
-    protected override void OnExitState()
-    {
-        base.OnExitState();
     }
 
     public Player UpdatePlayer(Player player, long input)

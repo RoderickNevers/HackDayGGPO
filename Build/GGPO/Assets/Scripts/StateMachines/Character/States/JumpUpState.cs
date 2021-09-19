@@ -3,41 +3,9 @@ using UnityEngine;
 //using UnityEngine.InputSystem;
 public class JumpUpState : CharacterStateBlock
 {
-    public JumpUpState(CharacterStateBlockInitData stateBlockData) : base(stateBlockData)
+    public JumpUpState()
     {
-        _StateMachine.Configure(CharacterState.JumpUp)
-            .Permit(CharacterStateTrigger.TriggerFalling, CharacterState.Falling)
-            .Permit(CharacterStateTrigger.TriggerAttackInAir, CharacterState.InAirAttack)
-            //.Permit(ChangeState.TriggerHitInAir, CharacterState.HitInAir)
-            //.Permit(ChangeState.TriggerKO, CharacterState.KO)
-            .OnEntry(OnEnterState)
-            .OnExit(OnExitState);
-    }
 
-    protected override void OnEnterState()
-    {
-        base.OnEnterState();
-        //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.JUMP_UP));
-        //characterController.MovementVector = Vector2.zero;
-        //Debug.Log("Enter Jump Up");
-    }
-
-    protected override void OnExitState()
-    {
-        base.OnExitState();
-        //Debug.Log("Exit Jump Up");
-    }
-
-    protected override void AddListeners()
-    {
-        base.AddListeners();
-        //characterController.InputController.OnInputCommand += HandleInputCommand;
-    }
-
-    protected override void RemoveListeners()
-    {
-        base.RemoveListeners();
-        //characterController.InputController.OnInputCommand -= HandleInputCommand;
     }
 
     public Player UpdatePlayer(Player player, long input)
