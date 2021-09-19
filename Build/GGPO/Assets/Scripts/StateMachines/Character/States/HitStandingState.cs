@@ -100,22 +100,6 @@ public class HitStandingState : CharacterStateBlock
     //    stateMachine.Fire(CharacterStateTrigger.TriggerDizzy);
     //}
 
-    //private void PlayHitAnimation(AttackType incommingAttack)
-    //{
-    //    switch (incommingAttack)
-    //    {
-    //        case AttackType.Weak:
-    //            animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Hit.STANDING_LIGHT));
-    //            break;
-    //        case AttackType.Medium:
-    //            animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Hit.STANDING_MEDIUM));
-    //            break;
-    //        case AttackType.Heavy:
-    //            animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Hit.STANDING_HEAVY));
-    //            break;
-    //    }
-    //}
-
     //private void KO()
     //{
     //    stateMachine.Fire(CharacterStateTrigger.TriggerKO);
