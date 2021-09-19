@@ -3,13 +3,21 @@
 public class FrameData
 {
     public Guid ID = Guid.NewGuid();
+    public string Name;
     public string AnimationKey;
     public float TotalFrames;
     public float FrameRate;
     public PlayerState State;
     public AttackButtonState Attack;
     public int Damage;
-    public int Stun;
-    public int MeterGain;
-    public int Knockback;
+    public float HitStun;
+    public float DizzyStun;
+    public float HitPushBack;
+    public float BlockPushBack;
+    public float MeterGainOnWiff;
+    public float MeterGainOnHit;
+    public AttackType Type;
+    public AttackLevel Level;
+    public AttackCategory Category;
+    public AttackProperty Property;
 }

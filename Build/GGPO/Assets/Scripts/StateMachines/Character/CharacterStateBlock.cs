@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Stateless;
+using UnityEngine;
 
 public class CharacterStateBlock : AbstractStateBlock, IDisposable
 {
@@ -74,6 +75,21 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         PlayAnimationOneShot(ref player, frameData);
     }
 
+    /// <summary>
+    /// Pushes the character in a direction.
+    /// </summary>
+    /// <param name="player"></param>
+    protected void ApplyPush(ref Player player, int direction, float force)
+    {
+        player.Velocity.Set(direction, 0, 0);
+        player.Velocity = force * Time.fixedDeltaTime * player.Velocity;
+    }
+
+    /// <summary>
+    /// Checks if an attack button is being used.
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     protected AttackButtonState CheckAttacking(long input)
     {
         if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)

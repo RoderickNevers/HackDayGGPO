@@ -52,8 +52,8 @@ public class AnimationData
             State = PlayerState.Standing,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData WALK_FORWARD = new FrameData()
@@ -64,8 +64,8 @@ public class AnimationData
             State = PlayerState.Forward,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData WALK_BACKWARD = new FrameData()
@@ -76,8 +76,8 @@ public class AnimationData
             State = PlayerState.Back,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData CROUCH = new FrameData()
@@ -88,8 +88,8 @@ public class AnimationData
             State = PlayerState.Crouching,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData JUMP_UP = new FrameData()
@@ -100,8 +100,8 @@ public class AnimationData
             State = PlayerState.JumpUp,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData JUMP_FORWARD = new FrameData()
@@ -112,8 +112,8 @@ public class AnimationData
             State = PlayerState.JumpToward,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData JUMP_BACKWARD = new FrameData()
@@ -124,8 +124,8 @@ public class AnimationData
             State = PlayerState.JumpBack,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
     }
 
@@ -134,25 +134,43 @@ public class AnimationData
         public static FrameData LIGHT_PUNCH = new FrameData()
         {
             AnimationKey = "StandingLightPunch",
+            Name = "Standing Light Punch",
             TotalFrames = 5f,
             FrameRate = 12f,
             State = PlayerState.Standing,
             Attack = AttackButtonState.LightPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 30,
+            HitStun = 100,
+            DizzyStun = 05,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnHit = 5,
+            MeterGainOnWiff = 0,
+            Type = AttackType.Weak,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
         {
             AnimationKey = "StandingMediumPunch",
+            Name = "Standing Medium Punch",
             TotalFrames = 7f,
             FrameRate = 12f,
             State = PlayerState.Standing,
             Attack = AttackButtonState.MediumPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 60,
+            HitStun = 120,
+            DizzyStun = 100,
+            HitPushBack = 30,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
@@ -162,9 +180,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Standing,
             Attack = AttackButtonState.HeavyPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 200,
+            DizzyStun = 150,
+            HitPushBack = 30,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
@@ -174,9 +200,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Standing,
             Attack = AttackButtonState.LightKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 30,
+            HitStun = 100,
+            DizzyStun = 70,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 5,
+            Type = AttackType.Weak,
+            Level = AttackLevel.Low,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
@@ -186,9 +220,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Standing,
             Attack = AttackButtonState.MediumKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 60,
+            HitStun = 100,
+            DizzyStun = 100,
+            HitPushBack = 35,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
@@ -198,9 +240,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Standing,
             Attack = AttackButtonState.HeavyKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 200,
+            DizzyStun = 150,
+            HitPushBack = 40,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
     }
 
@@ -213,9 +263,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Crouching,
             Attack = AttackButtonState.LightPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 30,
+            HitStun = 100,
+            DizzyStun = 70,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 5,
+            Type = AttackType.Weak,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
@@ -225,9 +283,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Crouching,
             Attack = AttackButtonState.MediumPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 60,
+            HitStun = 100,
+            DizzyStun = 100,
+            HitPushBack = 35,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
@@ -237,9 +303,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Crouching,
             Attack = AttackButtonState.HeavyPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 100,
+            DizzyStun = 150,
+            HitPushBack = 40,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Launcher,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
@@ -249,9 +323,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Crouching,
             Attack = AttackButtonState.LightKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 20,
+            HitStun = 100,
+            DizzyStun = 70,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 5,
+            Type = AttackType.Weak,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
@@ -261,9 +343,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Crouching,
             Attack = AttackButtonState.MediumKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 50,
+            HitStun = 100,
+            DizzyStun = 100,
+            HitPushBack = 35,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.Low,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Ground
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
@@ -273,9 +363,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.Crouching,
             Attack = AttackButtonState.HeavyKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 100,
+            DizzyStun = 150,
+            HitPushBack = 40,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.Low,
+            Property = AttackProperty.Sweep,
+            Category = AttackCategory.Ground
         };
     }
 
@@ -288,9 +386,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpUp,
             Attack = AttackButtonState.LightPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 100,
+            DizzyStun = 70,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 5,
+            Type = AttackType.Weak,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
@@ -300,9 +406,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpUp,
             Attack = AttackButtonState.MediumPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 60,
+            HitStun = 100,
+            DizzyStun = 100,
+            HitPushBack = 35,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
@@ -312,9 +426,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpUp,
             Attack = AttackButtonState.HeavyPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 100,
+            DizzyStun = 150,
+            HitPushBack = 40,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
@@ -324,9 +446,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpUp,
             Attack = AttackButtonState.LightKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 30,
+            HitStun = 100,
+            DizzyStun = 70,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 5,
+            Type = AttackType.Weak,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
@@ -336,9 +466,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpUp,
             Attack = AttackButtonState.MediumKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 60,
+            HitStun = 100,
+            DizzyStun = 100,
+            HitPushBack = 35,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
@@ -348,9 +486,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpUp,
             Attack = AttackButtonState.HeavyKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 100,
+            DizzyStun = 150,
+            HitPushBack = 40,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
     }
 
@@ -363,9 +509,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpToward,
             Attack = AttackButtonState.LightPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 30,
+            HitStun = 100,
+            DizzyStun = 70,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 5,
+            Type = AttackType.Weak,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
@@ -375,9 +529,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpToward,
             Attack = AttackButtonState.MediumPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 60,
+            HitStun = 100,
+            DizzyStun = 100,
+            HitPushBack = 35,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
@@ -387,9 +549,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpToward,
             Attack = AttackButtonState.HeavyPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 100,
+            DizzyStun = 150,
+            HitPushBack = 40,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
@@ -399,9 +569,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpToward,
             Attack = AttackButtonState.LightKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 30,
+            HitStun = 100,
+            DizzyStun = 70,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 5,
+            Type = AttackType.Weak,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
@@ -411,9 +589,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpToward,
             Attack = AttackButtonState.MediumKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 60,
+            HitStun = 100,
+            DizzyStun = 100,
+            HitPushBack = 35,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
@@ -423,9 +609,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpToward,
             Attack = AttackButtonState.HeavyKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 100,
+            DizzyStun = 150,
+            HitPushBack = 40,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
     }
 
@@ -438,9 +632,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpBack,
             Attack = AttackButtonState.LightPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 30,
+            HitStun = 100,
+            DizzyStun = 70,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 5,
+            Type = AttackType.Weak,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData MEDIUM_PUNCH = new FrameData()
@@ -450,9 +652,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpBack,
             Attack = AttackButtonState.MediumPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 60,
+            HitStun = 100,
+            DizzyStun = 100,
+            HitPushBack = 35,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData HEAVY_PUNCH = new FrameData()
@@ -462,9 +672,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpBack,
             Attack = AttackButtonState.HeavyPunch,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 100,
+            DizzyStun = 150,
+            HitPushBack = 40,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData LIGHT_KICK = new FrameData()
@@ -474,9 +692,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpBack,
             Attack = AttackButtonState.LightKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 30,
+            HitStun = 100,
+            DizzyStun = 70,
+            HitPushBack = 25,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 5,
+            Type = AttackType.Weak,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData MEDIUM_KICK = new FrameData()
@@ -486,9 +712,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpBack,
             Attack = AttackButtonState.MediumKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 60,
+            HitStun = 100,
+            DizzyStun = 100,
+            HitPushBack = 35,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 3,
+            MeterGainOnHit = 10,
+            Type = AttackType.Medium,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
 
         public static FrameData HEAVY_KICK = new FrameData()
@@ -498,9 +732,17 @@ public class AnimationData
             FrameRate = 12f,
             State = PlayerState.JumpBack,
             Attack = AttackButtonState.HeavyKick,
-            Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            Damage = 90,
+            HitStun = 100,
+            DizzyStun = 150,
+            HitPushBack = 40,
+            BlockPushBack = 0,
+            MeterGainOnWiff = 5,
+            MeterGainOnHit = 15,
+            Type = AttackType.Heavy,
+            Level = AttackLevel.High,
+            Property = AttackProperty.Standard,
+            Category = AttackCategory.Air
         };
     }
 
@@ -514,8 +756,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData UPPER = new FrameData()
@@ -526,8 +768,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData HIGH_MEDIUM = new FrameData()
@@ -538,8 +780,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData HIGH_HEAVY = new FrameData()
@@ -550,8 +792,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData GUT_LIGHT = new FrameData()
@@ -562,8 +804,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData GUT_HEAVY = new FrameData()
@@ -574,8 +816,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData GUT_RECOVERY = new FrameData()
@@ -586,8 +828,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData CROUCHING_HEAVY = new FrameData()
@@ -598,8 +840,8 @@ public class AnimationData
             State = PlayerState.CrouchingHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData CROUCHING_MEDIUM = new FrameData()
@@ -610,8 +852,8 @@ public class AnimationData
             State = PlayerState.CrouchingHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData CROUCHING_LIGHT = new FrameData()
@@ -622,8 +864,8 @@ public class AnimationData
             State = PlayerState.CrouchingHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData TURN = new FrameData()
@@ -634,8 +876,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData SWEEP = new FrameData()
@@ -646,8 +888,8 @@ public class AnimationData
             State = PlayerState.Sweep,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData FALL_OVER = new FrameData()
@@ -658,8 +900,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
 
         public static FrameData BLOW_BACK = new FrameData()
@@ -670,8 +912,8 @@ public class AnimationData
             State = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
-            Stun = 0,
-            MeterGain = 0
+            HitStun = 0,
+            MeterGainOnWiff = 0
         };
     }
 }

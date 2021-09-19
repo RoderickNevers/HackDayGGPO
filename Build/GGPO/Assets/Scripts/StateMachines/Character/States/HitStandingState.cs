@@ -78,32 +78,12 @@ public class HitStandingState : CharacterStateBlock
             return player;
         }
 
-        Debug.Log($"Standing hit and it hurts!!! I got hit by {AnimationData.AttackLookup[player.CurrentlyHitByID].AnimationKey}");
-
+        FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
+        //Debug.Log($"Standing hit and it hurts!!! I got hit by {attack.AnimationKey}");
         PlayHitAnimation(ref player, _HitReactionLookup[player.CurrentlyHitByID]);
+        int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
 
-        //switch (player.CurrentButtonPressed)
-        //{
-        //    case AttackButtonState.LightPunch:
-        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_PUNCH);
-        //        break;
-        //    case AttackButtonState.MediumPunch:
-        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_PUNCH);
-        //        break;
-        //    case AttackButtonState.HeavyPunch:
-        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_PUNCH);
-        //        break;
-        //    case AttackButtonState.LightKick:
-        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_KICK);
-        //        break;
-        //    case AttackButtonState.MediumKick:
-        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_KICK);
-        //        break;
-        //    case AttackButtonState.HeavyKick:
-        //        PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_KICK);
-        //        break;
-        //}
-
+        ApplyPush(ref player, direction, attack.HitPushBack);
         return player;
     }
 
