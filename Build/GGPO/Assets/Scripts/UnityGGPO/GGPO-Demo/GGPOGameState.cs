@@ -158,32 +158,32 @@ public struct GGPOGameState : IGame
 
         // Attacks
 
-        if (control.GetButton(RewiredConsts.Action.LIGHTPUNCH))
+        if (control.GetButtonDown(RewiredConsts.Action.LIGHTPUNCH))
         {
             input |= InputConstants.INPUT_LIGHT_PUNCH;
         }
 
-        if (control.GetButton(RewiredConsts.Action.MEDIUMPUNCH))
+        if (control.GetButtonDown(RewiredConsts.Action.MEDIUMPUNCH))
         {
             input |= InputConstants.INPUT_MEDIUM_PUNCH;
         }
 
-        if (control.GetButton(RewiredConsts.Action.HEAVYPUNCH))
+        if (control.GetButtonDown(RewiredConsts.Action.HEAVYPUNCH))
         {
             input |= InputConstants.INPUT_HEAVY_PUNCH;
         }
 
-        if (control.GetButton(RewiredConsts.Action.LIGHTKICK))
+        if (control.GetButtonDown(RewiredConsts.Action.LIGHTKICK))
         {
             input |= InputConstants.INPUT_LIGHT_KICK;
         }
 
-        if (control.GetButton(RewiredConsts.Action.MEDIUMKICK))
+        if (control.GetButtonDown(RewiredConsts.Action.MEDIUMKICK))
         {
             input |= InputConstants.INPUT_MEDIUM_KICK;
         }
 
-        if (control.GetButton(RewiredConsts.Action.HEAVYKICK))
+        if (control.GetButtonDown(RewiredConsts.Action.HEAVYKICK))
         {
             input |= InputConstants.INPUT_HEAVY_KICK;
         }
