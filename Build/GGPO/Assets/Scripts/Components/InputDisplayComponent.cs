@@ -30,11 +30,11 @@ public class InputDisplayComponent : MonoBehaviour
             CurrentP1Input.text = $"{GameState.ReadInputs(0)}";
 
             Player player1 = GameState.GetPlayer(0);
-            string p1string = string.Format("Position: {0}, {1}, {2}", player1.Position.x, player1.Position.y, player1.Position.z);
+            string p1string = string.Format($"Health: {player1.Health}\nPosition: {player1.Position.x}, {player1.Position.y}, {player1.Position.z}");
             P1Text.text = p1string;
 
             Player player2 = GameState.GetPlayer(1);
-            string p2string = string.Format("Position: {0}, {1}, {2}", player2.Position.x, player2.Position.y, player2.Position.z);
+            string p2string = string.Format($"Health: {player2.Health}\nPosition: {player2.Position.x}, {player2.Position.y}, {player2.Position.z}");
             P2Text.text = p2string;
         }
     }

@@ -100,6 +100,9 @@ public struct GGPOGameState : IGame
     {
         Players[index].Position = startPosition;
         Players[index].ID = index == 0 ? PlayerID.Player1 : PlayerID.Player2;
+        Players[index].Health = 1000;
+        Players[index].Stun = 0;
+        Players[index].Power = 0;
     }
 
     public Player GetPlayer(int index)

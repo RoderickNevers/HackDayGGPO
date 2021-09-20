@@ -52,6 +52,7 @@ public class HitStandingState : CharacterStateBlock
         {AnimationData.JumpBackAttacks.MEDIUM_KICK.ID, AnimationData.Hit.HIGH_MEDIUM},
         {AnimationData.JumpBackAttacks.HEAVY_KICK.ID, AnimationData.Hit.HIGH_HEAVY}
     };
+
     public HitStandingState()
     {
 
@@ -73,27 +74,8 @@ public class HitStandingState : CharacterStateBlock
 
     public override Player UpdatePlayer(Player player, long input)
     {
-        if (player.CurrentlyHitByID == Guid.Empty)
-        {
-            return player;
-        }
-
-        FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
-        //Debug.Log($"Standing hit and it hurts!!! I got hit by {attack.AnimationKey}");
-        PlayHitAnimation(ref player, _HitReactionLookup[player.CurrentlyHitByID]);
-        int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
-
-        ApplyPush(ref player, direction, attack.HitPushBack);
-        return player;
+        return UpdateHitReaction(player, input, _HitReactionLookup);
     }
-
-    //protected override void HandleAnimationComplete()
-    //{
-    //    base.HandleAnimationComplete();
-
-    //    stateMachine.Fire(CharacterStateTrigger.TriggerStanding);
-    //    stateMachine.ResetAttackerData();
-    //}
 
     //protected virtual void HandleDizzy(object sender, EventArgs e)
     //{

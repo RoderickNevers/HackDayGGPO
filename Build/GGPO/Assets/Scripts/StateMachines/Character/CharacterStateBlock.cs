@@ -85,6 +85,41 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         player.Velocity = force * Time.fixedDeltaTime * player.Velocity;
     }
 
+    protected void ApplyDamage(ref Player player, int damage)
+    {
+        player.Health -= damage;
+    }
+
+    protected void GainHealth(ref Player player, int health)
+    {
+        player.Health += health;
+    }
+
+    protected void ApplyStun(ref Player player, int stun)
+    {
+        player.Stun += stun;
+    }
+
+    protected void ReduceStun(ref Player player, int stunReduction)
+    {
+        player.Stun -= stunReduction;
+    }
+
+    protected void ResetStun(ref Player player)
+    {
+        player.Stun = 0;
+    }
+
+    protected void GainPower(ref Player player, int power)
+    {
+        player.Power += power;
+    }
+
+    protected void UsePower(ref Player player, int power)
+    {
+        player.Power -= power;
+    }
+
     /// <summary>
     /// Checks if an attack button is being used.
     /// </summary>
@@ -127,6 +162,23 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     public override Player UpdatePlayer(Player player, long input)
     {
+        return player;
+    }
+
+    protected Player UpdateHitReaction(Player player, long input, Dictionary<Guid, FrameData> hitReactionLookup)
+    {
+        if (player.CurrentlyHitByID == Guid.Empty)
+        {
+            return player;
+        }
+
+        FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
+        int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
+
+        PlayHitAnimation(ref player, hitReactionLookup[player.CurrentlyHitByID]);
+        ApplyPush(ref player, direction, attack.HitPushBack);
+        ApplyDamage(ref player, attack.Damage);
+
         return player;
     }
 }

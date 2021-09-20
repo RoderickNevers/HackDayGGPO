@@ -8,7 +8,7 @@ public class HitCrouchingState : CharacterStateBlock
 {
     private readonly Dictionary<Guid, FrameData> _HitReactionLookup = new Dictionary<Guid, FrameData>()
     {
-                // Standing attacks
+        // Standing attacks
         {AnimationData.StandingAttacks.LIGHT_PUNCH.ID, AnimationData.Hit.CROUCHING_LIGHT},
         {AnimationData.StandingAttacks.MEDIUM_PUNCH.ID, AnimationData.Hit.CROUCHING_MEDIUM},
         {AnimationData.StandingAttacks.HEAVY_PUNCH.ID, AnimationData.Hit.CROUCHING_HEAVY},
@@ -55,15 +55,6 @@ public class HitCrouchingState : CharacterStateBlock
 
     public override Player UpdatePlayer(Player player, long input)
     {
-        if (player.CurrentlyHitByID == Guid.Empty)
-        {
-            return player;
-        }
-
-        Debug.Log("Crouching hit and this is cheap");
-
-        PlayHitAnimation(ref player, _HitReactionLookup[player.CurrentlyHitByID]);
-
-        return player;
+        return UpdateHitReaction(player, input, _HitReactionLookup);
     }
 }

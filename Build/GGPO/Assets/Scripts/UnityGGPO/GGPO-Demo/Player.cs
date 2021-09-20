@@ -14,6 +14,9 @@ public struct Player
     public bool IsJumping;
     public bool IsAttacking;
     public bool IsHit;
+    public int Health;
+    public int Stun;
+    public int Power;
     public PlayerState State;
     public PlayerState JumpType;
     public AttackButtonState CurrentButtonPressed;
@@ -35,6 +38,9 @@ public struct Player
         bw.Write(IsJumping);
         bw.Write(IsAttacking);
         bw.Write(IsHit);
+        bw.Write(Health);
+        bw.Write(Stun);
+        bw.Write(Power);
         bw.Write((int)State);
         bw.Write((int)JumpType);
         bw.Write((int)CurrentButtonPressed);
@@ -61,6 +67,9 @@ public struct Player
         IsJumping = br.ReadBoolean();
         IsAttacking = br.ReadBoolean();
         IsHit = br.ReadBoolean();
+        Health = br.ReadInt32();
+        Stun = br.ReadInt32();
+        Power = br.ReadInt32();
         State = (PlayerState)br.ReadInt32();
         JumpType = (PlayerState)br.ReadInt32();
         CurrentButtonPressed = (AttackButtonState)br.ReadInt32();
@@ -83,6 +92,9 @@ public struct Player
         hashCode = hashCode * -1521134295 + IsJumping.GetHashCode();
         hashCode = hashCode * -1521134295 + IsAttacking.GetHashCode();
         hashCode = hashCode * -1521134295 + IsHit.GetHashCode();
+        hashCode = hashCode * -1521134295 + Health.GetHashCode();
+        hashCode = hashCode * -1521134295 + Stun.GetHashCode();
+        hashCode = hashCode * -1521134295 + Power.GetHashCode();
         hashCode = hashCode * -1521134295 + State.GetHashCode();
         hashCode = hashCode * -1521134295 + JumpType.GetHashCode();
         hashCode = hashCode * -1521134295 + CurrentButtonPressed.GetHashCode();
