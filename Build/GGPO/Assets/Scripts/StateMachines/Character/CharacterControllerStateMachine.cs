@@ -202,8 +202,11 @@ public class CharacterControllerStateMachine: IDisposable
         if (player.Position.y >= PlayerConstants.JUMP_HEIGHT)
         {
             player.IsJumping = false;
-            player.State = PlayerState.Falling;
-            player = _FallingState.UpdatePlayer(player, input);
+            if (!player.IsHit)
+            {
+                player.State = PlayerState.Falling;
+                player = _FallingState.UpdatePlayer(player, input);
+            }
         }
 
         // Apply gravity

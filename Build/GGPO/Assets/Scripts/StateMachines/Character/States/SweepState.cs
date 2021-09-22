@@ -8,9 +8,9 @@ public class SweepState : CharacterStateBlock
 
     }
 
-        //characterController.HealthComponent.ApplyDamage(stateMachine.Move.AttackData);
-        //characterController.HealthComponent.OnResetDizzyLock?.Invoke(this, new EventArgs());
-        //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Hit.SWEEP));
+    //characterController.HealthComponent.ApplyDamage(stateMachine.Move.AttackData);
+    //characterController.HealthComponent.OnResetDizzyLock?.Invoke(this, new EventArgs());
+    //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Hit.SWEEP));
 
     public override Player UpdatePlayer(Player player, long input)
     {

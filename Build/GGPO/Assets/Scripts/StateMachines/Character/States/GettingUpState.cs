@@ -10,8 +10,18 @@ public class GettingUpState : CharacterStateBlock
 
     }
 
-    public Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, long input)
     {
         return player;
+    }
+
+    private void Regular()
+    {
+
+    }
+
+    private void QuickRecovery()
+    {
+
     }
 }

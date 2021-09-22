@@ -14,17 +14,35 @@ public class OnTheGroundState : CharacterStateBlock
 
     public override Player UpdatePlayer(Player player, long input)
     {
+        // How did the player fall -> Hard or Soft Knockdown
+        // Hard -> Nornal & Delayed
+        // Soft -> Quick, Normal & Delayed
+        onTheGroundTime += Time.deltaTime + 1f;
+        if (onTheGroundTime > 3f)
+        {
+            //Get Up
+        }
+
         return player;
     }
 
-    //protected override void OnUpdate()
-    //{
-    //    base.OnUpdate();
-    //    onTheGroundTime += Time.deltaTime + 1f;
+    private void Quick()
+    {
 
-    //    if (onTheGroundTime > 3f)
-    //    {
-    //        stateMachine.Fire(CharacterStateTrigger.TriggerGetUp);
-    //    }
-    //}
+    }
+
+    private void Normal()
+    {
+
+    }
+
+    private void Delayed()
+    {
+
+    }
+
+    private void ResetTimer()
+    {
+        onTheGroundTime = 0;
+    }
 }

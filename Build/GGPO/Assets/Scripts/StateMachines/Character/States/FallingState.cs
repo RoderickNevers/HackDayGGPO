@@ -10,14 +10,10 @@ public class FallingState : CharacterStateBlock
 
     }
 
-    public Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, long input)
     {
-        if (player.IsHit)
-        {
-            Debug.Log("IM HIT CAPTAIN & IM FALLING!!!!!!!!!!!!!!!");
-        }
         //Returning attack
-        else if (player.IsAttacking)
+        if (player.IsAttacking)
         {
             switch (player.JumpType)
             {

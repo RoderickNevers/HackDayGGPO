@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
-//using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
 public class StandingState : CharacterStateBlock
 {
     public StandingState()
     {
     }
-
-    //characterController.UpdateLookDirection.Invoke();
-
-    //// Immediately move to the next state.
-    //if (TransitionStates())
-    //    return;
-
-    //characterController.InputController.MovementCallback = HandleMovement;
-    //animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.STANDING));
-
 
     public override Player UpdatePlayer(Player player, long input)
     {

@@ -868,6 +868,19 @@ public class AnimationData
             MeterGainOnWiff = 0
         };
 
+        public static FrameData InAir = new FrameData()
+        {
+            AnimationKey = "Hit_InAir",
+            TotalFrames = 4f,
+            FrameRate = 12f,
+            State = PlayerState.JumpUp,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            HitStun = 0,
+            MeterGainOnWiff = 0
+        };
+
+
         public static FrameData TURN = new FrameData()
         {
             AnimationKey = "Hit_Turn",
