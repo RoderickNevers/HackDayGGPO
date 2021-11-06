@@ -136,6 +136,12 @@ public class CharacterControllerStateMachine: IDisposable
                         break;
                 }
             }
+
+            // Trigger falling
+            if (player.Position.y >= PlayerConstants.JUMP_HEIGHT)
+            {
+                TriggerFalling(ref player, input);
+            }
         }
         else
         {

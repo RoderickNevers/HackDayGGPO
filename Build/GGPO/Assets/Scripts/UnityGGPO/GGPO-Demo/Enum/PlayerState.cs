@@ -19,6 +19,7 @@
     StandBlock = 16,
     CrouchBlock = 17,
     Falling = 18,
-    Landing = 19,
-    Sweep = 20
+    FallingHit = 19,
+    Landing = 20,
+    Sweep = 21
 }
