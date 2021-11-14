@@ -95,8 +95,6 @@ public class CharacterControllerStateMachine: IDisposable
             player.Position.y = 0;
         }
 
-        CheckDirectionInput(ref player, input);
-
         // Getting hit
         if (player.IsHit)
         {
@@ -130,80 +128,84 @@ public class CharacterControllerStateMachine: IDisposable
                     case PlayerState.JumpToward:
                     case PlayerState.JumpBack:
                     case PlayerState.JumpAttack:
-                    case PlayerState.JumpHit:
                         player.State = PlayerState.JumpHit;
                         player = _HitInAirState.UpdatePlayer(player, input);
                         break;
                 }
             }
         }
-        else
-        {
-            // Grounded states
-            if (player.IsGrounded && !player.IsJumping && !player.IsHit)
-            {
-                switch (player.State)
-                {
-                    case PlayerState.Standing:
-                        player = _StandingState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.Forward:
-                        player = _AdvancingState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.Back:
-                        player = _RetreatingState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.Crouching:
-                        player = _CrouchingState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.DownForward:
-                        player = _CrouchingState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.DownBack:
-                        player = _CrouchingState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.StandingAttack:
-                        player = _AttackGroundState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.CrouchngAttack:
-                        player = _AttackGroundState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.StandBlock:
-                        break;
-                    case PlayerState.CrouchBlock:
-                        break;
-                    default:
-                        player = _StandingState.UpdatePlayer(player, input);
-                        break;
-                }
-            }
-            // Air states
-            else if (player.IsJumping)
-            {
-                switch (player.State)
-                {
-                    case PlayerState.JumpUp:
-                        player = _JumpUpState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.JumpToward:
-                        player = _JumpTowardsState.UpdatePlayer(player, input);
-                        break;
-                    case PlayerState.JumpBack:
-                        player = _JumpAwayState.UpdatePlayer(player, input);
-                        break;
-                        //case PlayerState.Falling:
-                        //    player = _FallingState.UpdatePlayer(player, input);
-                        //    break;
-                        //case PlayerState.Landing:
-                        //    player = _LandingState.UpdatePlayer(player, input);
-                        //    break;
-                }
-            }
 
-            // Trigger falling
-            if (player.Position.y >= PlayerConstants.JUMP_HEIGHT)
+        CheckDirectionInput(ref player, input);
+
+        // Grounded states
+        if (player.IsGrounded && !player.IsJumping && !player.IsHit)
+        {
+            switch (player.State)
             {
-                TriggerFalling(ref player, input);
+                case PlayerState.Standing:
+                    player = _StandingState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.Forward:
+                    player = _AdvancingState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.Back:
+                    player = _RetreatingState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.Crouching:
+                    player = _CrouchingState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.DownForward:
+                    player = _CrouchingState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.DownBack:
+                    player = _CrouchingState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.StandingAttack:
+                    player = _AttackGroundState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.CrouchngAttack:
+                    player = _AttackGroundState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.StandBlock:
+                    break;
+                case PlayerState.CrouchBlock:
+                    break;
+                default:
+                    player = _StandingState.UpdatePlayer(player, input);
+                    break;
+            }
+        }
+        // Air states
+        else if (player.IsJumping)
+        {
+            switch(player.State)
+            {
+                case PlayerState.JumpUp:
+                    player = _JumpUpState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.JumpToward:
+                    player = _JumpTowardsState.UpdatePlayer(player, input);
+                    break;
+                case PlayerState.JumpBack:
+                    player = _JumpAwayState.UpdatePlayer(player, input);
+                    break;
+                //case PlayerState.Falling:
+                //    player = _FallingState.UpdatePlayer(player, input);
+                //    break;
+                //case PlayerState.Landing:
+                //    player = _LandingState.UpdatePlayer(player, input);
+                //    break;
+            }
+        }
+
+        // Trigger falling
+        if (player.Position.y >= PlayerConstants.JUMP_HEIGHT)
+        {
+            player.IsJumping = false;
+            if (!player.IsHit)
+            {
+                player.State = PlayerState.Falling;
+                player = _FallingState.UpdatePlayer(player, input);
             }
         }
 
@@ -233,16 +235,6 @@ public class CharacterControllerStateMachine: IDisposable
         player.Position += player.Velocity;
 
         return player;
-    }
-
-    private void TriggerFalling(ref Player player, long input)
-    {
-        player.IsJumping = false;
-        if (!player.IsHit)
-        {
-            player.State = PlayerState.Falling;
-            player = _FallingState.UpdatePlayer(player, input);
-        }
     }
 
     private bool GroundCheck(Player player)
