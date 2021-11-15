@@ -115,7 +115,7 @@ public class FallingState : CharacterStateBlock
                             PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_KICK);
                             break;
                         case AttackButtonState.None:
-                            FrameData data = player.LookDirection == LookDirection.Right ? AnimationData.Movememt.JUMP_FORWARD : AnimationData.Movememt.JUMP_BACKWARD;
+                            FrameData data = AnimationData.Movememt.DESCENDING_CONTROLLED_UP;
                             PlayAnimationOneShot(ref player, data);
                             break;
                     }
@@ -142,7 +142,7 @@ public class FallingState : CharacterStateBlock
                             PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.HEAVY_KICK);
                             break;
                         case AttackButtonState.None:
-                            FrameData data = player.LookDirection == LookDirection.Right ? AnimationData.Movememt.JUMP_FORWARD : AnimationData.Movememt.JUMP_BACKWARD;
+                            FrameData data = player.LookDirection == LookDirection.Right ? AnimationData.Movememt.DESCENDING_CONTROLLED_FORWARD : AnimationData.Movememt.DESCENDING_CONTROLLED_BACKWARD;
                             PlayAnimationOneShot(ref player, data);
                             break;
                     }
@@ -169,7 +169,7 @@ public class FallingState : CharacterStateBlock
                             PlayAttackAnimation(ref player, AnimationData.JumpBackAttacks.HEAVY_KICK);
                             break;
                         case AttackButtonState.None:
-                            FrameData data = player.LookDirection == LookDirection.Right ? AnimationData.Movememt.JUMP_FORWARD : AnimationData.Movememt.JUMP_BACKWARD;
+                            FrameData data = player.LookDirection == LookDirection.Right ? AnimationData.Movememt.DESCENDING_CONTROLLED_FORWARD : AnimationData.Movememt.DESCENDING_CONTROLLED_BACKWARD;
                             PlayAnimationOneShot(ref player, data);
                             break;
                     }

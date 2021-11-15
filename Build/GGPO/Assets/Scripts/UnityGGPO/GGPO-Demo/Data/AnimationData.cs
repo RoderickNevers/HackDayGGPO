@@ -127,6 +127,57 @@ public class AnimationData
             HitStun = 0,
             MeterGainOnWiff = 0
         };
+
+        public static FrameData DESCENDING_CONTROLLED_UP = new FrameData()
+        {
+            AnimationKey = "Falling",
+            TotalFrames = 4f,
+            FrameRate = 12f,
+            State = PlayerState.JumpUp,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            HitStun = 0,
+            MeterGainOnWiff = 0
+        };
+
+        public static FrameData DESCENDING_CONTROLLED_FORWARD = new FrameData()
+        {
+            AnimationKey = "Falling",
+            TotalFrames = 4f,
+            FrameRate = 12f,
+            State = PlayerState.JumpToward,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            HitStun = 0,
+            MeterGainOnWiff = 0
+        };
+
+        public static FrameData DESCENDING_CONTROLLED_BACKWARD = new FrameData()
+        {
+            AnimationKey = "Falling",
+            TotalFrames = 4f,
+            FrameRate = 12f,
+            State = PlayerState.JumpBack,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            HitStun = 0,
+            MeterGainOnWiff = 0
+        };
+
+        public static FrameData FALLING_CRASH_UP = new FrameData()
+        {
+
+        };
+
+        public static FrameData FALLING_CRASH_FORWARD = new FrameData()
+        {
+
+        };
+
+        public static FrameData FALLING_CRASH_BACKWARD = new FrameData()
+        {
+
+        };
     }
 
     public class StandingAttacks

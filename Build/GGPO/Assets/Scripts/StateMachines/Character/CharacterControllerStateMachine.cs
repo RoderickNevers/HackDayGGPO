@@ -199,7 +199,7 @@ public class CharacterControllerStateMachine: IDisposable
         }
 
         // Trigger falling
-        if (player.Position.y >= PlayerConstants.JUMP_HEIGHT)
+        if (player.Position.y >= PlayerConstants.JUMP_HEIGHT || player.Velocity.y < 0)
         {
             player.IsJumping = false;
             if (!player.IsHit)
