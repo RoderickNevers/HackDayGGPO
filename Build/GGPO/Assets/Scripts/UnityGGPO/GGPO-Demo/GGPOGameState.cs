@@ -5,6 +5,7 @@ using Unity.Collections;
 using UnityEngine;
 using Rewired;
 using SharedGame;
+using System.Linq;
 
 [Serializable]
 public struct GGPOGameState : IGame
@@ -12,6 +13,7 @@ public struct GGPOGameState : IGame
     public Player[] Players;
     private CharacterControllerStateMachine _StateSimulator;
     private List<Rewired.Player> _Controls;
+    private List<Vector3> _StartPositions;
 
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
@@ -90,19 +92,32 @@ public struct GGPOGameState : IGame
             ReInput.players.GetPlayer(1)
         };
 
+        _StartPositions = new List<Vector3>();
+
         for (int i = 0; i < Players.Length; i++)
         {
             Players[i] = new Player();
         }
     }
 
+
+
     public void InitPlayer(int index, Vector3 startPosition)
     {
+        if (_StartPositions.Count == 0 || _StartPositions.Count == 1)
+        {
+            _StartPositions.Add(startPosition);
+        }
+
         Players[index].Position = startPosition;
         Players[index].ID = index == 0 ? PlayerID.Player1 : PlayerID.Player2;
-        Players[index].Health = 1000;
+        Players[index].Health = 1;
         Players[index].Stun = 0;
         Players[index].Power = 0;
+        Players[index].State = PlayerState.Standing;
+        Players[index].IsHit = false;
+        Players[index].IsJumping = false;
+        Players[index].IsAttacking = false;
     }
 
     public Player GetPlayer(int index)
@@ -131,6 +146,15 @@ public struct GGPOGameState : IGame
         for (int i = 0; i < Players.Length; i++)
         {
             Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
+        }
+
+        if (Players.Any(x => x.State == PlayerState.KO))
+        {
+            // Restart the players
+            for (int i = 0; i < Players.Length; i++)
+            {
+                InitPlayer(i, _StartPositions[i]);
+            }
         }
     }
 

@@ -95,6 +95,13 @@ public class CharacterControllerStateMachine: IDisposable
             player.Position.y = 0;
         }
 
+        if (player.State == PlayerState.KO)
+        {
+            player = _KOState.UpdatePlayer(player, input);
+            // when the animation is completem, tell the game to end
+            return player;
+        }
+
         // Getting hit
         if (player.IsHit)
         {
@@ -108,6 +115,12 @@ public class CharacterControllerStateMachine: IDisposable
                     case PlayerState.StandHit:
                         player.State = PlayerState.StandHit;
                         player = _HitStandingState.UpdatePlayer(player, input);
+
+                        if (player.Health <= 0)
+                        {
+                            player.State = PlayerState.KO;
+                            return player;
+                        }
                         break;
 
                     //case PlayerState.Crouching:

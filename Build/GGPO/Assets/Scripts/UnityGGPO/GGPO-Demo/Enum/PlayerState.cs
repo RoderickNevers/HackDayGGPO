@@ -20,5 +20,6 @@
     CrouchBlock = 17,
     Falling = 18,
     Landing = 19,
-    Sweep = 20
+    Sweep = 20,
+    KO = 21
 }

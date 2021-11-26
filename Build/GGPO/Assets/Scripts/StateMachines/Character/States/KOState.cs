@@ -1,37 +1,23 @@
-﻿using Stateless.Graph;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 
 public class KOState : CharacterStateBlock
 {
+    private readonly Dictionary<Guid, FrameData> _HitReactionLookup = new Dictionary<Guid, FrameData>()
+    {
+        // Standing attacks
+        {AnimationData.StandingAttacks.SLASH.ID, AnimationData.Hit.DEAD_4},
+        {AnimationData.StandingAttacks.HEAVY_SLASH.ID, AnimationData.Hit.DEAD_4},
+        {AnimationData.StandingAttacks.GUARD_BREAK.ID, AnimationData.Hit.HIT_3},
+    };
+
     public KOState()
     {
 
     }
 
-    public Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, long input)
     {
-        return player;
+        return UpdateHitReaction(player, input, _HitReactionLookup);
     }
-
-    //private void PlayAnimation()
-    //{
-    //    switch (stateMachine.Move.AttackData.Type)
-    //    {
-    //        case AttackType.Weak:
-    //            animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.HEART_ATTACK));
-    //            break;
-    //        case AttackType.Medium:
-    //        case AttackType.Heavy:
-    //            animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Hit.SPIN));
-    //            characterController.ApplyImpact(80);
-    //            break;
-    //    }
-    //}
-
-    //protected override void HandleAnimationComplete()
-    //{
-    //    base.HandleAnimationComplete();
-    //    animator.Play(Animator.StringToHash(ProjectConstants.FighterAnimations.Basic.DEAD));
-    //    stateMachine.ResetAttackerData();
-    //}
 }

@@ -158,6 +158,11 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
 
         FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
+        if (attack.ID == AnimationData.StandingAttacks.GUARD_BREAK.ID)
+        {
+            player.State = PlayerState.KO;
+        }
+
         int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
 
         PlayHitAnimation(ref player, hitReactionLookup[player.CurrentlyHitByID]);

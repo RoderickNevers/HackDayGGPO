@@ -13,8 +13,8 @@ public class HitStandingState : CharacterStateBlock
     private readonly Dictionary<Guid, FrameData> _HitReactionLookup = new Dictionary<Guid, FrameData>()
     {
         // Standing attacks
-        {AnimationData.StandingAttacks.SLASH.ID, AnimationData.Hit.HIT_1},
-        {AnimationData.StandingAttacks.HEAVY_SLASH.ID, AnimationData.Hit.HIT_2},
+        {AnimationData.StandingAttacks.SLASH.ID, AnimationData.Hit.DEAD_4},
+        {AnimationData.StandingAttacks.HEAVY_SLASH.ID, AnimationData.Hit.DEAD_4},
         {AnimationData.StandingAttacks.GUARD_BREAK.ID, AnimationData.Hit.HIT_3},
     };
 
