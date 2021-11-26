@@ -27,59 +27,59 @@ public class JumpTowardsState : CharacterStateBlock
                 Debug.Log("IM HIT CAPTAIN!!!!!!!!!!!!!!!");
             }
             //Returning attack
-            else if (player.IsAttacking)
-            {
-                switch (player.CurrentButtonPressed)
-                {
-                    case AttackButtonState.LightPunch:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.LIGHT_PUNCH);
-                        break;
-                    case AttackButtonState.MediumPunch:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.MEDIUM_PUNCH);
-                        break;
-                    case AttackButtonState.HeavyPunch:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.HEAVY_PUNCH);
-                        break;
-                    case AttackButtonState.LightKick:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.LIGHT_KICK);
-                        break;
-                    case AttackButtonState.MediumKick:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.MEDIUM_KICK);
-                        break;
-                    case AttackButtonState.HeavyKick:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.HEAVY_KICK);
-                        break;
-                }
-            }
-            //New attack or nothing
-            else
-            {
-                switch (CheckAttacking(input))
-                {
-                    case AttackButtonState.LightPunch:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.LIGHT_PUNCH);
-                        break;
-                    case AttackButtonState.MediumPunch:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.MEDIUM_PUNCH);
-                        break;
-                    case AttackButtonState.HeavyPunch:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.HEAVY_PUNCH);
-                        break;
-                    case AttackButtonState.LightKick:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.LIGHT_KICK);
-                        break;
-                    case AttackButtonState.MediumKick:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.MEDIUM_KICK);
-                        break;
-                    case AttackButtonState.HeavyKick:
-                        PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.HEAVY_KICK);
-                        break;
-                    case AttackButtonState.None:
-                        FrameData data = player.LookDirection == LookDirection.Right ? AnimationData.Movememt.JUMP_FORWARD : AnimationData.Movememt.JUMP_BACKWARD;
-                        PlayAnimationOneShot(ref player, data);
-                        break;
-                }
-            }
+            //else if (player.IsAttacking)
+            //{
+            //    switch (player.CurrentButtonPressed)
+            //    {
+            //        case AttackButtonState.LightPunch:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.LIGHT_PUNCH);
+            //            break;
+            //        case AttackButtonState.MediumPunch:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.MEDIUM_PUNCH);
+            //            break;
+            //        case AttackButtonState.HeavyPunch:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.HEAVY_PUNCH);
+            //            break;
+            //        case AttackButtonState.LightKick:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.LIGHT_KICK);
+            //            break;
+            //        case AttackButtonState.MediumKick:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.MEDIUM_KICK);
+            //            break;
+            //        case AttackButtonState.HeavyKick:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.HEAVY_KICK);
+            //            break;
+            //    }
+            //}
+            ////New attack or nothing
+            //else
+            //{
+            //    switch (CheckAttacking(input))
+            //    {
+            //        case AttackButtonState.LightPunch:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.LIGHT_PUNCH);
+            //            break;
+            //        case AttackButtonState.MediumPunch:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.MEDIUM_PUNCH);
+            //            break;
+            //        case AttackButtonState.HeavyPunch:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.HEAVY_PUNCH);
+            //            break;
+            //        case AttackButtonState.LightKick:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.LIGHT_KICK);
+            //            break;
+            //        case AttackButtonState.MediumKick:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.MEDIUM_KICK);
+            //            break;
+            //        case AttackButtonState.HeavyKick:
+            //            PlayAttackAnimation(ref player, AnimationData.JumpTowardAttacks.HEAVY_KICK);
+            //            break;
+            //        case AttackButtonState.None:
+            //            FrameData data = player.LookDirection == LookDirection.Right ? AnimationData.Movememt.JUMP_FORWARD : AnimationData.Movememt.JUMP_BACKWARD;
+            //            PlayAnimationOneShot(ref player, data);
+            //            break;
+            //    }
+            //}
 
             player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
             player.Velocity.y += Mathf.Sqrt(PlayerConstants.JUMP_FORCE_VERT * Time.fixedDeltaTime);

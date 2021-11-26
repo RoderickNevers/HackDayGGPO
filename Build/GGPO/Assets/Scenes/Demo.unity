@@ -2156,7 +2156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _GGPOComponent: {fileID: 872434713}
-  playerPrefab: {fileID: 8836281713434355255, guid: 4ddf2122e7305c74ebb7ecd17847f37a, type: 3}
+  playerPrefab: {fileID: 6468695675800617881, guid: 2d1d904b93850bc48959d724e0987099, type: 3}
   _P1Spawn: {fileID: 1176557784}
   _P2Spawn: {fileID: 775113006}
 --- !u!114 &872434713

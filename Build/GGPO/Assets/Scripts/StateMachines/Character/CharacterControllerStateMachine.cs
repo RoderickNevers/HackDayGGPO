@@ -110,29 +110,29 @@ public class CharacterControllerStateMachine: IDisposable
                         player = _HitStandingState.UpdatePlayer(player, input);
                         break;
 
-                    case PlayerState.Crouching:
-                    case PlayerState.DownForward:
-                    case PlayerState.DownBack:
-                    case PlayerState.CrouchingHit:
-                        player.State = PlayerState.CrouchingHit;
-                        player = _HitCrouchingState.UpdatePlayer(player, input);
-                        break;
+                    //case PlayerState.Crouching:
+                    //case PlayerState.DownForward:
+                    //case PlayerState.DownBack:
+                    //case PlayerState.CrouchingHit:
+                    //    player.State = PlayerState.CrouchingHit;
+                    //    player = _HitCrouchingState.UpdatePlayer(player, input);
+                    //    break;
                 }
             }
             // Air states
-            else if (player.IsJumping)
-            {
-                switch (player.State)
-                {
-                    case PlayerState.JumpUp:
-                    case PlayerState.JumpToward:
-                    case PlayerState.JumpBack:
-                    case PlayerState.JumpAttack:
-                        player.State = PlayerState.JumpHit;
-                        player = _HitInAirState.UpdatePlayer(player, input);
-                        break;
-                }
-            }
+            //else if (player.IsJumping)
+            //{
+            //    switch (player.State)
+            //    {
+            //        case PlayerState.JumpUp:
+            //        case PlayerState.JumpToward:
+            //        case PlayerState.JumpBack:
+            //        case PlayerState.JumpAttack:
+            //            player.State = PlayerState.JumpHit;
+            //            player = _HitInAirState.UpdatePlayer(player, input);
+            //            break;
+            //    }
+            //}
         }
 
         CheckDirectionInput(ref player, input);
@@ -151,21 +151,21 @@ public class CharacterControllerStateMachine: IDisposable
                 case PlayerState.Back:
                     player = _RetreatingState.UpdatePlayer(player, input);
                     break;
-                case PlayerState.Crouching:
-                    player = _CrouchingState.UpdatePlayer(player, input);
-                    break;
-                case PlayerState.DownForward:
-                    player = _CrouchingState.UpdatePlayer(player, input);
-                    break;
-                case PlayerState.DownBack:
-                    player = _CrouchingState.UpdatePlayer(player, input);
-                    break;
+                //case PlayerState.Crouching:
+                //    player = _CrouchingState.UpdatePlayer(player, input);
+                //    break;
+                //case PlayerState.DownForward:
+                //    player = _CrouchingState.UpdatePlayer(player, input);
+                //    break;
+                //case PlayerState.DownBack:
+                //    player = _CrouchingState.UpdatePlayer(player, input);
+                //    break;
                 case PlayerState.StandingAttack:
                     player = _AttackGroundState.UpdatePlayer(player, input);
                     break;
-                case PlayerState.CrouchngAttack:
-                    player = _AttackGroundState.UpdatePlayer(player, input);
-                    break;
+                //case PlayerState.CrouchngAttack:
+                //    player = _AttackGroundState.UpdatePlayer(player, input);
+                //    break;
                 case PlayerState.StandBlock:
                     break;
                 case PlayerState.CrouchBlock:
@@ -176,38 +176,38 @@ public class CharacterControllerStateMachine: IDisposable
             }
         }
         // Air states
-        else if (player.IsJumping)
-        {
-            switch(player.State)
-            {
-                case PlayerState.JumpUp:
-                    player = _JumpUpState.UpdatePlayer(player, input);
-                    break;
-                case PlayerState.JumpToward:
-                    player = _JumpTowardsState.UpdatePlayer(player, input);
-                    break;
-                case PlayerState.JumpBack:
-                    player = _JumpAwayState.UpdatePlayer(player, input);
-                    break;
-                //case PlayerState.Falling:
-                //    player = _FallingState.UpdatePlayer(player, input);
-                //    break;
-                //case PlayerState.Landing:
-                //    player = _LandingState.UpdatePlayer(player, input);
-                //    break;
-            }
-        }
+        //else if (player.IsJumping)
+        //{
+        //    switch(player.State)
+        //    {
+        //        case PlayerState.JumpUp:
+        //            player = _JumpUpState.UpdatePlayer(player, input);
+        //            break;
+        //        case PlayerState.JumpToward:
+        //            player = _JumpTowardsState.UpdatePlayer(player, input);
+        //            break;
+        //        case PlayerState.JumpBack:
+        //            player = _JumpAwayState.UpdatePlayer(player, input);
+        //            break;
+        //        //case PlayerState.Falling:
+        //        //    player = _FallingState.UpdatePlayer(player, input);
+        //        //    break;
+        //        //case PlayerState.Landing:
+        //        //    player = _LandingState.UpdatePlayer(player, input);
+        //        //    break;
+        //    }
+        //}
 
         // Trigger falling
-        if (player.Position.y >= PlayerConstants.JUMP_HEIGHT || player.Velocity.y < 0)
-        {
-            player.IsJumping = false;
-            if (!player.IsHit)
-            {
-                player.State = PlayerState.Falling;
-                player = _FallingState.UpdatePlayer(player, input);
-            }
-        }
+        //if (player.Position.y >= PlayerConstants.JUMP_HEIGHT || player.Velocity.y < 0)
+        //{
+        //    player.IsJumping = false;
+        //    if (!player.IsHit)
+        //    {
+        //        player.State = PlayerState.Falling;
+        //        player = _FallingState.UpdatePlayer(player, input);
+        //    }
+        //}
 
         // Apply gravity
         if (!player.IsGrounded && player.Position.y >= 0)
@@ -215,20 +215,20 @@ public class CharacterControllerStateMachine: IDisposable
             float gravityModifier = player.Velocity.y == 0 ? PlayerConstants.FALLING_GRAVITY : PlayerConstants.RAISING_GRAVITY;
             player.Velocity.y += gravityModifier * Time.fixedDeltaTime;
 
-            switch (player.JumpType)
-            {
-                case PlayerState.JumpUp:
-                    player.Velocity.x = 0;
-                    break;
-                case PlayerState.JumpToward:
-                    player.Velocity.x = 0;
-                    player.Velocity.x += PlayerConstants.JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
-                    break;
-                case PlayerState.JumpBack:
-                    player.Velocity.x = 0;
-                    player.Velocity.x += -PlayerConstants.JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
-                    break;
-            }
+            //switch (player.JumpType)
+            //{
+            //    case PlayerState.JumpUp:
+            //        player.Velocity.x = 0;
+            //        break;
+            //    case PlayerState.JumpToward:
+            //        player.Velocity.x = 0;
+            //        player.Velocity.x += PlayerConstants.JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
+            //        break;
+            //    case PlayerState.JumpBack:
+            //        player.Velocity.x = 0;
+            //        player.Velocity.x += -PlayerConstants.JUMP_FORCE_HORIZ * Time.fixedDeltaTime;
+            //        break;
+            //}
         }
 
         // Move Player
@@ -246,35 +246,35 @@ public class CharacterControllerStateMachine: IDisposable
     {
         if (player.IsGrounded && !player.IsJumping && !player.IsAttacking)
         {
-            if ((input & InputConstants.INPUT_UP) != 0 && (input & InputConstants.INPUT_LEFT) != 0)
-            {
-                player.IsJumping = true;
-                player.State = PlayerState.JumpBack;
-            }
-            else if ((input & InputConstants.INPUT_UP) != 0 && (input & InputConstants.INPUT_RIGHT) != 0)
-            {
-                player.IsJumping = true;
-                player.State = PlayerState.JumpToward;
-            }
-            else if ((input & InputConstants.INPUT_UP) != 0)
-            {
-                player.IsJumping = true;
-                player.State = PlayerState.JumpUp;
-            }
-            else if ((input & InputConstants.INPUT_DOWN) != 0 && (input & InputConstants.INPUT_LEFT) != 0)
-            {
-                player.State = PlayerState.DownBack;
-            }
-            else if ((input & InputConstants.INPUT_DOWN) != 0 && (input & InputConstants.INPUT_RIGHT) != 0)
-            {
-                player.State = PlayerState.DownForward;
-            }
-            else if ((input & InputConstants.INPUT_DOWN) != 0)
-            {
-                player.State = PlayerState.Crouching;
-            }
+            //if ((input & InputConstants.INPUT_UP) != 0 && (input & InputConstants.INPUT_LEFT) != 0)
+            //{
+            //    player.IsJumping = true;
+            //    player.State = PlayerState.JumpBack;
+            //}
+            //else if ((input & InputConstants.INPUT_UP) != 0 && (input & InputConstants.INPUT_RIGHT) != 0)
+            //{
+            //    player.IsJumping = true;
+            //    player.State = PlayerState.JumpToward;
+            //}
+            //else if ((input & InputConstants.INPUT_UP) != 0)
+            //{
+            //    player.IsJumping = true;
+            //    player.State = PlayerState.JumpUp;
+            //}
+            //else if ((input & InputConstants.INPUT_DOWN) != 0 && (input & InputConstants.INPUT_LEFT) != 0)
+            //{
+            //    player.State = PlayerState.DownBack;
+            //}
+            //else if ((input & InputConstants.INPUT_DOWN) != 0 && (input & InputConstants.INPUT_RIGHT) != 0)
+            //{
+            //    player.State = PlayerState.DownForward;
+            //}
+            //else if ((input & InputConstants.INPUT_DOWN) != 0)
+            //{
+            //    player.State = PlayerState.Crouching;
+            //}
             //Looking left
-            else if ((input & InputConstants.INPUT_LEFT) != 0 && player.LookDirection == LookDirection.Left)
+            if ((input & InputConstants.INPUT_LEFT) != 0 && player.LookDirection == LookDirection.Left)
             {
                 player.State = PlayerState.Forward;
             }

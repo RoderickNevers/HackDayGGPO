@@ -21,23 +21,14 @@ public class AdvancingState : CharacterStateBlock
         {
             switch (player.CurrentButtonPressed)
             {
-                case AttackButtonState.LightPunch:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_PUNCH);
+                case AttackButtonState.Slash:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.SLASH);
                     break;
-                case AttackButtonState.MediumPunch:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_PUNCH);
+                case AttackButtonState.HeavySlash:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_SLASH);
                     break;
-                case AttackButtonState.HeavyPunch:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_PUNCH);
-                    break;
-                case AttackButtonState.LightKick:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_KICK);
-                    break;
-                case AttackButtonState.MediumKick:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_KICK);
-                    break;
-                case AttackButtonState.HeavyKick:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_KICK);
+                case AttackButtonState.GuardBreak:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.GUARD_BREAK);
                     break;
             }
         }
@@ -46,23 +37,14 @@ public class AdvancingState : CharacterStateBlock
         {
             switch (CheckAttacking(input))
             {
-                case AttackButtonState.LightPunch:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_PUNCH);
+                case AttackButtonState.Slash:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.SLASH);
                     break;
-                case AttackButtonState.MediumPunch:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_PUNCH);
+                case AttackButtonState.HeavySlash:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_SLASH);
                     break;
-                case AttackButtonState.HeavyPunch:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_PUNCH);
-                    break;
-                case AttackButtonState.LightKick:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.LIGHT_KICK);
-                    break;
-                case AttackButtonState.MediumKick:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.MEDIUM_KICK);
-                    break;
-                case AttackButtonState.HeavyKick:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_KICK);
+                case AttackButtonState.GuardBreak:
+                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.GUARD_BREAK);
                     break;
                 case AttackButtonState.None:
                     PlayAnimationLoop(ref player, AnimationData.Movememt.WALK_FORWARD);

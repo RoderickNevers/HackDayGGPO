@@ -139,15 +139,15 @@ public struct GGPOGameState : IGame
         long input = 0;
         Rewired.Player control = _Controls[id];
 
-        if (control.GetButton(RewiredConsts.Action.UP))
-        {
-            input |= InputConstants.INPUT_UP;
-        }
+        //if (control.GetButton(RewiredConsts.Action.UP))
+        //{
+        //    input |= InputConstants.INPUT_UP;
+        //}
 
-        if (control.GetButton(RewiredConsts.Action.DOWN))
-        {
-            input |= InputConstants.INPUT_DOWN;
-        }
+        //if (control.GetButton(RewiredConsts.Action.DOWN))
+        //{
+        //    input |= InputConstants.INPUT_DOWN;
+        //}
 
         if (control.GetButton(RewiredConsts.Action.LEFT))
         {
@@ -161,34 +161,19 @@ public struct GGPOGameState : IGame
 
         // Attacks
 
-        if (control.GetButtonDown(RewiredConsts.Action.LIGHTPUNCH))
+        if (control.GetButtonDown(RewiredConsts.Action.SLASH))
         {
-            input |= InputConstants.INPUT_LIGHT_PUNCH;
+            input |= InputConstants.INPUT_SLASH;
         }
 
-        if (control.GetButtonDown(RewiredConsts.Action.MEDIUMPUNCH))
+        if (control.GetButtonDown(RewiredConsts.Action.HEAVYSLASH))
         {
-            input |= InputConstants.INPUT_MEDIUM_PUNCH;
+            input |= InputConstants.INPUT_HEAVY_SLASH;
         }
 
-        if (control.GetButtonDown(RewiredConsts.Action.HEAVYPUNCH))
+        if (control.GetButtonDown(RewiredConsts.Action.GUARDBREAK))
         {
-            input |= InputConstants.INPUT_HEAVY_PUNCH;
-        }
-
-        if (control.GetButtonDown(RewiredConsts.Action.LIGHTKICK))
-        {
-            input |= InputConstants.INPUT_LIGHT_KICK;
-        }
-
-        if (control.GetButtonDown(RewiredConsts.Action.MEDIUMKICK))
-        {
-            input |= InputConstants.INPUT_MEDIUM_KICK;
-        }
-
-        if (control.GetButtonDown(RewiredConsts.Action.HEAVYKICK))
-        {
-            input |= InputConstants.INPUT_HEAVY_KICK;
+            input |= InputConstants.INPUT_GUARD_BREAK;
         }
 
         return input;

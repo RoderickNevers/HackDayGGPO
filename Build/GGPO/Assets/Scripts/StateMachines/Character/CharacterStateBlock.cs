@@ -127,34 +127,19 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
     /// <returns></returns>
     protected AttackButtonState CheckAttacking(long input)
     {
-        if ((input & InputConstants.INPUT_LIGHT_PUNCH) != 0)
+        if ((input & InputConstants.INPUT_SLASH) != 0)
         {
-            return AttackButtonState.LightPunch;
+            return AttackButtonState.Slash;
         }
 
-        if ((input & InputConstants.INPUT_MEDIUM_PUNCH) != 0)
+        if ((input & InputConstants.INPUT_HEAVY_SLASH) != 0)
         {
-            return AttackButtonState.MediumPunch;
+            return AttackButtonState.HeavySlash;
         }
 
-        if ((input & InputConstants.INPUT_HEAVY_PUNCH) != 0)
+        if ((input & InputConstants.INPUT_GUARD_BREAK) != 0)
         {
-            return AttackButtonState.HeavyPunch;
-        }
-
-        if ((input & InputConstants.INPUT_LIGHT_KICK) != 0)
-        {
-            return AttackButtonState.LightKick;
-        }
-
-        if ((input & InputConstants.INPUT_MEDIUM_KICK) != 0)
-        {
-            return AttackButtonState.MediumKick;
-        }
-
-        if ((input & InputConstants.INPUT_HEAVY_KICK) != 0)
-        {
-            return AttackButtonState.HeavyKick;
+            return AttackButtonState.GuardBreak;
         }
 
         return AttackButtonState.None;
