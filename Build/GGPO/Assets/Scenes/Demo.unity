@@ -919,95 +919,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151966911}
   m_CullTransparentMesh: 1
---- !u!1 &155527097
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 155527102}
-  - component: {fileID: 155527101}
-  - component: {fileID: 155527100}
-  - component: {fileID: 155527098}
-  m_Layer: 0
-  m_Name: LocalSessionControl
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &155527098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155527097}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ca7a146278e9184fb14de834012a326, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RecordBtn: {fileID: 1511192085}
-  m_LoadBtn: {fileID: 845924450}
-  m_PlayPauseBtn: {fileID: 1086919749}
-  m_RewindPauseBtn: {fileID: 1341772696}
-  m_StepForwardBtn: {fileID: 1799935760}
-  m_StepBackwardsBtn: {fileID: 626307334}
-  m_Slider: {fileID: 81001868}
-  m_MinSliderText: {fileID: 595734186}
-  m_MaxSliderText: {fileID: 160845924}
---- !u!114 &155527100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155527097}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecab2178c42ba1940bfcf0bedc344554, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_GameManager: {fileID: 872434713}
-  m_SpeedModifier: {fileID: 991398600}
-  m_ResetSpeedModifierBtn: {fileID: 85768965}
---- !u!114 &155527101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155527097}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eb25fce63dc36341af7897ba7c17dc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_GameManager: {fileID: 872434713}
-  m_LobbyComponent: {fileID: 872434711}
-  m_GameSpeedManager: {fileID: 155527100}
-  m_ReplayManager: {fileID: 155527098}
-  m_StartOnlySessionBtn: {fileID: 1682240402}
-  m_StartStopSessionBtn: {fileID: 1812112401}
-  m_MainMenuPanel: {fileID: 604742629}
-  m_DebugPanel: {fileID: 908509833}
---- !u!4 &155527102
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 155527097}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 375.76416, y: 555.55206, z: 727.03235}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &160845923
 GameObject:
   m_ObjectHideFlags: 0
@@ -3053,7 +2964,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &800029974 stripped
 RectTransform:
@@ -3275,6 +3186,8 @@ GameObject:
   - component: {fileID: 872434711}
   - component: {fileID: 872434720}
   - component: {fileID: 872434721}
+  - component: {fileID: 872434715}
+  - component: {fileID: 872434714}
   m_Layer: 5
   m_Name: MasterControl
   m_TagString: Untagged
@@ -3322,6 +3235,12 @@ MonoBehaviour:
   playerPrefab: {fileID: 6468695675800617881, guid: 2d1d904b93850bc48959d724e0987099, type: 3}
   _P1Spawn: {fileID: 1176557784}
   _P2Spawn: {fileID: 775113006}
+  m_LobbyComponent: {fileID: 872434711}
+  m_GameSpeedManager: {fileID: 872434715}
+  m_ReplayManager: {fileID: 872434714}
+  m_StartStopSessionBtn: {fileID: 1812112401}
+  m_MainMenuPanel: {fileID: 604742629}
+  m_DebugPanel: {fileID: 908509833}
 --- !u!114 &872434713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3334,6 +3253,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c04ff2a401b9fc24188f9976a4b1ea14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &872434714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872434710}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca7a146278e9184fb14de834012a326, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RecordBtn: {fileID: 1511192085}
+  m_LoadBtn: {fileID: 845924450}
+  m_PlayPauseBtn: {fileID: 1086919749}
+  m_RewindPauseBtn: {fileID: 1341772696}
+  m_StepForwardBtn: {fileID: 1799935760}
+  m_StepBackwardsBtn: {fileID: 626307334}
+  m_Slider: {fileID: 81001868}
+  m_MinSliderText: {fileID: 595734186}
+  m_MaxSliderText: {fileID: 160845924}
+--- !u!114 &872434715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872434710}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecab2178c42ba1940bfcf0bedc344554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GameManager: {fileID: 872434713}
+  m_SpeedModifier: {fileID: 991398600}
+  m_ResetSpeedModifierBtn: {fileID: 85768965}
 --- !u!114 &872434716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4914,7 +4869,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1199685107
 GameObject:
@@ -6336,7 +6291,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1511192081
 GameObject:
