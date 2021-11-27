@@ -9,6 +9,8 @@ using TMPro;
 
 public class LobbyComponent : MonoBehaviour
 {
+    private readonly int MaxLobbyMembers = 4;
+
     [Header("Main Menu Content")]
     [SerializeField] private GameObject m_MainMenuPanel;
     [SerializeField] private Button m_CreateBtn;
@@ -29,10 +31,7 @@ public class LobbyComponent : MonoBehaviour
 
     private SteamManager m_SteamManager;
     private Lobby? m_CurrentLobby;
-    private int m_MaxLobbyMembers = 4;
-
-    private LobbyQuery m_LobbyList { get; }
-
+    private LobbyQuery m_LobbyList;
 
     private void Start()
     {
@@ -255,7 +254,7 @@ public class LobbyComponent : MonoBehaviour
 
     public async Task<Lobby?> CreateLobbyAsync()
     {
-        return await SteamMatchmaking.CreateLobbyAsync(m_MaxLobbyMembers);
+        return await SteamMatchmaking.CreateLobbyAsync(MaxLobbyMembers);
     }
 
     public void ShowLobby()

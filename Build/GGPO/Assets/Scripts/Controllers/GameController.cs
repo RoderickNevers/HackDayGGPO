@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    const int RATE_LOCK = 60;
+
     [SerializeField] private GGPOComponent _GGPOComponent;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Transform _P1Spawn;
@@ -16,6 +18,18 @@ public class GameController : MonoBehaviour
         _GGPOComponent.OnRunningChanged += OnRunningChanged;
         _GGPOComponent.OnStateChanged += OnStateChanged;
         _GGPOComponent.OnCheckCollision += OnCheckCollision;
+    }
+
+    private void Start()
+    {
+        LockFramerate();
+    }
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     public void OnDestroy()
@@ -106,5 +120,11 @@ public class GameController : MonoBehaviour
             Player player = gameState.GetPlayer(i);
             PlayerControllers[i].OnStateChanged(ref player);
         }
+    }
+
+    private void LockFramerate()
+    {
+        Time.captureFramerate = RATE_LOCK;
+        Application.targetFrameRate = RATE_LOCK;
     }
 }
