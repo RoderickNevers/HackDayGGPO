@@ -11,16 +11,21 @@ using System.Linq;
 public struct GGPOGameState : IGame
 {
     public Player[] Players;
-    private CharacterControllerStateMachine _StateSimulator;
-    private List<Rewired.Player> _Controls;
-    private List<Vector3> _StartPositions;
+    private readonly CharacterControllerStateMachine _StateSimulator;
+    private readonly List<Rewired.Player> _Controls;
+    private readonly List<Vector3> _StartPositions;
 
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
 
     [SerializeField]
     private int frameNumber;
-    public int Framenumber { get { return frameNumber; } private set { frameNumber = value; } }
+
+    public int Framenumber 
+    {
+        get => frameNumber;
+        private set => frameNumber = value;
+    }
 
     public int Checksum => GetHashCode();
 

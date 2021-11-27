@@ -3144,16 +3144,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _GGPOComponent: {fileID: 872434713}
-  playerPrefab: {fileID: 6468695675800617881, guid: 2d1d904b93850bc48959d724e0987099, type: 3}
+  _PlayerPrefab: {fileID: 6468695675800617881, guid: 2d1d904b93850bc48959d724e0987099, type: 3}
   _P1Spawn: {fileID: 1176557784}
   _P2Spawn: {fileID: 775113006}
-  m_LobbyComponent: {fileID: 872434711}
-  m_GameSpeedManager: {fileID: 872434715}
-  m_ReplayManager: {fileID: 872434714}
-  m_StartStopSessionBtn: {fileID: 1812112401}
-  m_MainMenuPanel: {fileID: 604742629}
-  m_DebugPanel: {fileID: 908509833}
-  Players: []
+  _LobbyComponent: {fileID: 872434711}
+  _GameSpeedManager: {fileID: 872434715}
+  _ReplayManager: {fileID: 872434714}
+  _StartStopSessionBtn: {fileID: 1812112401}
+  _MainMenuPanel: {fileID: 604742629}
+  _DebugPanel: {fileID: 908509833}
 --- !u!114 &872434713
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,28 +6,28 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    const int RATE_LOCK = 60;
+    const int FRAME_RATE_LOCK = 60;
 
-    [Header("GGPO")]
+    [Header("GGPO Manager")]
     [SerializeField] private GGPOGameManager _GGPOComponent;
 
     [Header("Gameplay Objects")]
-    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject _PlayerPrefab;
     [SerializeField] private Transform _P1Spawn;
     [SerializeField] private Transform _P2Spawn;
 
     [Header("Components")]
-    [SerializeField] private LobbyComponent m_LobbyComponent;
-    [SerializeField] private GameSpeedManager m_GameSpeedManager;
-    [SerializeField] private ReplayManager m_ReplayManager;
+    [SerializeField] private LobbyComponent _LobbyComponent;
+    [SerializeField] private GameSpeedManager _GameSpeedManager;
+    [SerializeField] private ReplayManager _ReplayManager;
 
     [Header("UI")]
-    [SerializeField] private Button m_StartStopSessionBtn;
-    [SerializeField] private GameObject m_MainMenuPanel;
-    [SerializeField] private GameObject m_DebugPanel;
+    [SerializeField] private Button _StartStopSessionBtn;
+    [SerializeField] private GameObject _MainMenuPanel;
+    [SerializeField] private GameObject _DebugPanel;
 
-    private GGPOPlayerController[] PlayerControllers = Array.Empty<GGPOPlayerController>();
-    public List<GGPOPlayerController> Players = new List<GGPOPlayerController>();
+    private readonly List<GGPOPlayerController> _Players = new List<GGPOPlayerController>();
+    private GGPOPlayerController[] _PlayerControllers = Array.Empty<GGPOPlayerController>();
 
     private static GameController _instance;
     public static GameController Instance
@@ -42,30 +42,11 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public LookDirection CheckLookDirection(Player player)
-    {
-        if (player.ID == PlayerID.Player1)
-        {
-            return Players[(int)PlayerID.Player1].transform.position.x < Players[(int)PlayerID.Player2].transform.position.x ? LookDirection.Right : LookDirection.Left;
-        }
-        else
-        {
-            return Players[(int)PlayerID.Player2].transform.position.x < Players[(int)PlayerID.Player1].transform.position.x ? LookDirection.Right : LookDirection.Left;
-        }
-    }
-
-
-
     public void Awake()
     {
-        _GGPOComponent.OnRunningChanged += HandleRunningChanged;
-        _GGPOComponent.OnStateChanged += HandleStateChanged;
-        _GGPOComponent.OnCheckCollision += HandleCheckCollision;
-
-        //------
-
         AddListeners();
-        SetButtonsActive(true);
+
+        SetLocalSessionActiveState(true);
         SetEnableLocalSessionFeatures(false);
     }
 
@@ -73,6 +54,25 @@ public class GameController : MonoBehaviour
     {
         LockFramerate();
     }
+
+    public void OnDestroy()
+    {
+        RemoveListeners();
+    }
+
+    private void OnEnable()
+    {
+        SetLocalSessionActiveState(enabled);
+    }
+
+    private void OnDisable()
+    {
+        if (!enabled)
+        {
+            SetLocalSessionActiveState(enabled);
+        }
+    }
+
     private void Update()
     {
         if (Input.GetKey(KeyCode.Escape))
@@ -81,30 +81,37 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void OnDestroy()
+    private void AddListeners()
+    {
+        _GGPOComponent.OnRunningChanged += HandleRunningChanged;
+        _GGPOComponent.OnStateChanged += HandleStateChanged;
+        _GGPOComponent.OnCheckCollision += HandleCheckCollision;
+
+        _StartStopSessionBtn.onClick.AddListener(StartStopSession);
+    }
+
+    private void RemoveListeners()
     {
         _GGPOComponent.OnRunningChanged -= HandleRunningChanged;
         _GGPOComponent.OnStateChanged -= HandleStateChanged;
         _GGPOComponent.OnCheckCollision -= HandleCheckCollision;
 
-        //-----
-
-        RemoveListeners();
+        _StartStopSessionBtn.onClick.RemoveListener(StartStopSession);
     }
 
     private void HandleRunningChanged(bool running)
     {
         if (running)
         {
-            OnConnectionStart();
+            HandleConnectionStart();
         }
         else
         {
-            OnConnectionEnd();
+            HandleConnectionEnd();
         }
     }
 
-    public void OnConnectionStart()
+    public void HandleConnectionStart()
     {
         GGPOGameState gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
         ResetView(gameState);
@@ -117,37 +124,14 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void OnConnectionEnd()
+    public void HandleConnectionEnd()
     {
-        for (int i = 0; i < PlayerControllers.Length; ++i)
+        for (int i = 0; i < _PlayerControllers.Length; ++i)
         {
-            Destroy(PlayerControllers[i].gameObject);
+            Destroy(_PlayerControllers[i].gameObject);
         }
 
-        PlayerControllers = Array.Empty<GGPOPlayerController>();
-    }
-
-    private void InstantiateNewPlayer(int playerIndex)
-    {
-        // add player at correct spawn position
-        Transform start = playerIndex == 0 ? _P1Spawn : _P2Spawn;
-
-        GameObject player = Instantiate(playerPrefab, start.position, start.rotation);
-        GGPOPlayerController playerController = player.GetComponent<GGPOPlayerController>();
-        PlayerControllers[playerIndex] = playerController;
-        playerController.ID = playerIndex == 0 ? PlayerID.Player1 : PlayerID.Player2;
-        Players.Add(playerController);
-    }
-
-    private void ResetView(GGPOGameState gs)
-    {
-        Player[] players = gs.Players;
-        PlayerControllers = new GGPOPlayerController[players.Length];
-
-        for (int i = 0; i < players.Length; ++i)
-        {
-            InstantiateNewPlayer(i);
-        }
+        _PlayerControllers = Array.Empty<GGPOPlayerController>();
     }
 
     //Checks the players controller for attack collisions
@@ -155,9 +139,9 @@ public class GameController : MonoBehaviour
     {
         var gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
 
-        for (int i = 0; i < PlayerControllers.Length; ++i)
+        for (int i = 0; i < _PlayerControllers.Length; ++i)
         {
-            HitData result = PlayerControllers[i].OnCheckCollision();
+            HitData result = _PlayerControllers[i].OnCheckCollision();
             gameState.GetPlayerRef(i).IsHit = result.IsHit;
             gameState.GetPlayerRef(i).CurrentlyHitByID = result.AttackData?.ID ?? Guid.Empty;
         }
@@ -168,78 +152,75 @@ public class GameController : MonoBehaviour
     {
         var gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
 
-        for (int i = 0; i < PlayerControllers.Length; ++i)
+        for (int i = 0; i < _PlayerControllers.Length; ++i)
         {
             Player player = gameState.GetPlayer(i);
-            PlayerControllers[i].OnStateChanged(ref player);
+            _PlayerControllers[i].OnStateChanged(ref player);
+        }
+    }
+
+    private void InstantiateNewPlayer(int playerIndex)
+    {
+        // add player at correct spawn position
+        Transform start = playerIndex == 0 ? _P1Spawn : _P2Spawn;
+
+        GameObject player = Instantiate(_PlayerPrefab, start.position, start.rotation);
+        GGPOPlayerController playerController = player.GetComponent<GGPOPlayerController>();
+        _PlayerControllers[playerIndex] = playerController;
+        playerController.ID = playerIndex == 0 ? PlayerID.Player1 : PlayerID.Player2;
+        _Players.Add(playerController);
+    }
+
+    private void ResetView(GGPOGameState gs)
+    {
+        Player[] players = gs.Players;
+        _PlayerControllers = new GGPOPlayerController[players.Length];
+
+        for (int i = 0; i < players.Length; ++i)
+        {
+            InstantiateNewPlayer(i);
         }
     }
 
     private void LockFramerate()
     {
-        Time.captureFramerate = RATE_LOCK;
-        Application.targetFrameRate = RATE_LOCK;
+        Time.captureFramerate = FRAME_RATE_LOCK;
+        Application.targetFrameRate = FRAME_RATE_LOCK;
     }
 
-    //---
-
-    private void OnDisable()
+    private void SetLocalSessionActiveState(bool isEnabled)
     {
-        if (!enabled)
-        {
-            SetButtonsActive(enabled);
-        }
-    }
-    private void OnEnable()
-    {
-        SetButtonsActive(enabled);
-    }
-
-    private void AddListeners()
-    {
-        //m_StartOnlySessionBtn.onClick.AddListener(OnStartStopSession);
-        m_StartStopSessionBtn.onClick.AddListener(OnStartStopSession);
-    }
-
-    private void RemoveListeners()
-    {
-        //m_StartOnlySessionBtn.onClick.RemoveListener(OnStartStopSession);
-        m_StartStopSessionBtn.onClick.RemoveListener(OnStartStopSession);
-    }
-
-    private void SetButtonsActive(bool enabled)
-    {
-        m_StartStopSessionBtn.gameObject.SetActive(enabled);
+        _StartStopSessionBtn.gameObject.SetActive(isEnabled);
     }
 
     public void ShowMainMenu()
     {
-        m_MainMenuPanel.SetActive(true);
-        m_DebugPanel.SetActive(false);
+        _MainMenuPanel.SetActive(true);
+        _DebugPanel.SetActive(false);
     }
 
     public void ShowGame()
     {
-        m_MainMenuPanel.SetActive(false);
-        m_DebugPanel.SetActive(true);
+        _MainMenuPanel.SetActive(false);
+        _DebugPanel.SetActive(true);
     }
 
-    private void SetEnableLocalSessionFeatures(bool enabled)
+    private void SetEnableLocalSessionFeatures(bool isEnabled)
     {
-        m_GameSpeedManager.enabled = enabled;
-        m_ReplayManager.enabled = enabled;
+        _GameSpeedManager.enabled = isEnabled;
+        _ReplayManager.enabled = isEnabled;
     }
 
-    private void OnStartStopSession()
+    private void StartStopSession()
     {
-        var btnText = m_StartStopSessionBtn.GetComponentInChildren<Text>();
+        var btnText = _StartStopSessionBtn.GetComponentInChildren<Text>();
 
         if (!_GGPOComponent.IsRunning)
         {
             _GGPOComponent.StartLocalGame();
 
             // Disable Steam Lobby component
-            m_LobbyComponent.enabled = false;
+            _LobbyComponent.enabled = false;
 
             SetEnableLocalSessionFeatures(true);
 
@@ -252,13 +233,25 @@ public class GameController : MonoBehaviour
             _GGPOComponent.Shutdown();
 
             // Reenable Steam Lobby component
-            m_LobbyComponent.enabled = true;
+            _LobbyComponent.enabled = true;
 
             SetEnableLocalSessionFeatures(false);
 
             ShowMainMenu();
 
             btnText.text = "Start Local Session";
+        }
+    }
+
+    public LookDirection CheckLookDirection(Player player)
+    {
+        if (player.ID == PlayerID.Player1)
+        {
+            return _Players[(int)PlayerID.Player1].transform.position.x < _Players[(int)PlayerID.Player2].transform.position.x ? LookDirection.Right : LookDirection.Left;
+        }
+        else
+        {
+            return _Players[(int)PlayerID.Player2].transform.position.x < _Players[(int)PlayerID.Player1].transform.position.x ? LookDirection.Right : LookDirection.Left;
         }
     }
 }

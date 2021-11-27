@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Stateless;
-using SharedGame;
 
 public class CharacterControllerStateMachine: IDisposable
 {
