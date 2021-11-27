@@ -8,8 +8,6 @@ public class GameSpeedManager : MonoBehaviour
     [SerializeField] private GGPOComponent m_GameManager;
     [SerializeField] private InputField m_SpeedModifier;
     [SerializeField] private Button m_ResetSpeedModifierBtn;
-    [SerializeField] private Button m_PlayPauseBtn;
-    [SerializeField] private Button m_StepBtn;
 
     private void Start()
     {
@@ -25,16 +23,12 @@ public class GameSpeedManager : MonoBehaviour
     {
         m_SpeedModifier.onValueChanged.AddListener(OnGameSpeedChanged);
         m_ResetSpeedModifierBtn.onClick.AddListener(OnGameSpeedResetPressed);
-        m_PlayPauseBtn.onClick.AddListener(OnPlayPausePressed);
-        m_StepBtn.onClick.AddListener(OnStepPressed);
     }
 
     private void RemoveListeners()
     {
         m_SpeedModifier.onValueChanged.RemoveListener(OnGameSpeedChanged);
         m_ResetSpeedModifierBtn.onClick.RemoveListener(OnGameSpeedResetPressed);
-        m_PlayPauseBtn.onClick.RemoveListener(OnPlayPausePressed);
-        m_StepBtn.onClick.RemoveListener(OnStepPressed);
     }
 
     private void OnGameSpeedChanged(string newValue)
@@ -50,25 +44,5 @@ public class GameSpeedManager : MonoBehaviour
     {
         m_SpeedModifier.text = "1.0";
         m_GameManager.ResetFrameLengthToDefault();
-    }
-
-    private void OnPlayPausePressed()
-    {
-        m_GameManager.manualFrameIncrement = !m_GameManager.manualFrameIncrement;
-
-        var text = m_PlayPauseBtn.GetComponentInChildren<Text>();
-        if (m_GameManager.manualFrameIncrement)
-        {
-            text.text = "Play";
-        }
-        else
-        {
-            text.text = "Pause";
-        }
-    }
-
-    private void OnStepPressed()
-    {
-        m_GameManager.IncrementFrame();
     }
 }

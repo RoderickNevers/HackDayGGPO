@@ -17,7 +17,11 @@ public struct GGPOGameState : IGame
 
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
-    public int Framenumber { get; private set; }
+
+    [SerializeField]
+    private int frameNumber;
+    public int Framenumber { get { return frameNumber; } private set { frameNumber = value; } }
+
     public int Checksum => GetHashCode();
 
     public void Serialize(BinaryWriter writer)
@@ -79,7 +83,7 @@ public struct GGPOGameState : IGame
 
     public GGPOGameState(int num_players)
     {
-        Framenumber = 0;
+        frameNumber = 0;
         UnserializedInputsP1 = 0;
         UnserializedInputsP2 = 0;
 
@@ -100,7 +104,22 @@ public struct GGPOGameState : IGame
         }
     }
 
+    public GGPOGameState Clone()
+    {
+        // COPY OVER ALL 
+        GGPOGameState newState = new GGPOGameState(Players.Length);
+        newState.Framenumber = Framenumber;
+        newState.UnserializedInputsP1 = UnserializedInputsP1;
+        newState.UnserializedInputsP2 = UnserializedInputsP2;
 
+        for (int i = 0; i < newState.Players.Length; ++i)
+        {
+            newState.Players[i].Position = Players[i].Position;
+            newState.Players[i].Velocity = Players[i].Velocity;
+        }
+
+        return newState;
+    }
 
     public void InitPlayer(int index, Vector3 startPosition)
     {

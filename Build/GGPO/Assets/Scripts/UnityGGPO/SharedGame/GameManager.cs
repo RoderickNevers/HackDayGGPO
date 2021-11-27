@@ -55,6 +55,18 @@ namespace SharedGame {
             shouldIncrementFrame = true;
         }
 
+        private ReplayManager m_ReplayManager = null;
+        public void StartPlayback(GGPOGameState initialGameState, ReplayManager replayManager)
+        {
+            m_ReplayManager = replayManager;
+            Runner.SetGame(initialGameState);
+        }
+
+        public void StopPlayback()
+        {
+            m_ReplayManager = null;
+        }
+
         public Stopwatch updateWatch = new Stopwatch();
 
         public bool IsRunning { get; private set; }
@@ -103,13 +115,21 @@ namespace SharedGame {
                     if (shouldIncrementFrame)
                     {
                         shouldIncrementFrame = false;
-                        OnPreRunFrame();
 
-                        OnCheckCollision?.Invoke();
-                        // update the sim
-                        Runner.RunFrame();
-                        // update the game objects
-                        OnStateChanged?.Invoke();
+                        // Normal frame increment
+                        if (m_ReplayManager == null)
+                        {
+                            OnPreRunFrame();
+                            OnCheckCollision?.Invoke();
+                            Runner.RunFrame();
+                            OnStateChanged?.Invoke();
+                        }
+                        else
+                        {
+                            // playback
+                            Runner.SetGame(m_ReplayManager.GetNextGameState());
+                            OnStateChanged?.Invoke();
+                        }
                     }
                 }
                 else
@@ -130,10 +150,19 @@ namespace SharedGame {
 
                         //updateWatch.Start();
 
-                        OnPreRunFrame();
-                        OnCheckCollision?.Invoke();
-                        Runner.RunFrame();
-                        OnStateChanged?.Invoke();
+                        if (m_ReplayManager == null)
+                        {
+                            OnPreRunFrame();
+                            OnCheckCollision?.Invoke();
+                            Runner.RunFrame();
+                            OnStateChanged?.Invoke();
+                        }
+                        else
+                        {
+                            // playback
+                            Runner.SetGame(m_ReplayManager.GetNextGameState());
+                            OnStateChanged?.Invoke();
+                        }
 
                         now = Time.time;
                         var extraMs = Mathf.Max(0, (int)((next - now) * 1000f) - 1);
