@@ -5,6 +5,7 @@ using Steamworks;
 using Steamworks.Data;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class LobbyComponent : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class LobbyComponent : MonoBehaviour
 
     [Header("Gameplay Debug Panel")]
     [SerializeField] private GameObject m_DebugPanel;
+    [SerializeField] private TextMeshProUGUI m_SteamDebug;
 
     private SteamManager m_SteamManager;
     private Lobby? m_CurrentLobby;
@@ -38,6 +40,7 @@ public class LobbyComponent : MonoBehaviour
         {
             if (SteamManager.Initialized)
             {
+                m_SteamDebug.text = "Steam API init -- SUCCESS!";
                 Debug.Log("Steam API init -- SUCCESS!");
                 m_SteamManager = GetComponent<SteamManager>();
                 AddListeners();
@@ -45,12 +48,14 @@ public class LobbyComponent : MonoBehaviour
             }
             else
             {
+                m_SteamDebug.text = "Steam isn't running. Going to debug mode";
                 Debug.Log($"Steam isn't running. Going to debug mode");
                 ShowGame();
             }
         }
         catch (Exception e)
         {
+            m_SteamDebug.text = $"It's ALLLLLLLLLLLLL burning {e.Message}";
             Debug.LogError($"It's ALLLLLLLLLLLLL burning {e.Message}");
         }
     }
