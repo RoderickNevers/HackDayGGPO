@@ -54,7 +54,7 @@ public class SteamManager : MonoBehaviour
     private FacepunchConnectionManager connectionManager;
     private FacepunchSocketManager socketManager;
 
-    private GGPOComponent m_GameManager;
+    private GGPOGameManager m_GameManager;
 
     //protected SteamAPIWarningMessageHook_t m_SteamAPIWarningMessageHook;
 
@@ -158,7 +158,7 @@ public class SteamManager : MonoBehaviour
         // Init P2P relay
         SteamNetworkingUtils.InitRelayNetworkAccess();
 
-        m_GameManager = (GGPOComponent)SharedGame.GameManager.Instance;
+        m_GameManager = (GGPOGameManager)SharedGame.GameManager.Instance;
     }
 
     // This should only ever get called on first load and after an Assembly reload, You should never Disable the Steamworks Manager yourself.

@@ -1,5 +1,6 @@
 using SharedGame;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,25 +8,53 @@ public class GameController : MonoBehaviour
 {
     const int RATE_LOCK = 60;
 
-    [SerializeField] private GGPOComponent _GGPOComponent;
+    [Header("GGPO")]
+    [SerializeField] private GGPOGameManager _GGPOComponent;
+
+    [Header("Gameplay Objects")]
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Transform _P1Spawn;
     [SerializeField] private Transform _P2Spawn;
 
     [Header("Components")]
-    //[SerializeField] private GGPOComponent m_GameManager;
     [SerializeField] private LobbyComponent m_LobbyComponent;
     [SerializeField] private GameSpeedManager m_GameSpeedManager;
     [SerializeField] private ReplayManager m_ReplayManager;
 
     [Header("UI")]
-    //[SerializeField] private Button m_StartOnlySessionBtn;
     [SerializeField] private Button m_StartStopSessionBtn;
-
     [SerializeField] private GameObject m_MainMenuPanel;
     [SerializeField] private GameObject m_DebugPanel;
 
     private GGPOPlayerController[] PlayerControllers = Array.Empty<GGPOPlayerController>();
+    public List<GGPOPlayerController> Players = new List<GGPOPlayerController>();
+
+    private static GameController _instance;
+    public static GameController Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<GameController>();
+            }
+            return _instance;
+        }
+    }
+
+    public LookDirection CheckLookDirection(Player player)
+    {
+        if (player.ID == PlayerID.Player1)
+        {
+            return Players[(int)PlayerID.Player1].transform.position.x < Players[(int)PlayerID.Player2].transform.position.x ? LookDirection.Right : LookDirection.Left;
+        }
+        else
+        {
+            return Players[(int)PlayerID.Player2].transform.position.x < Players[(int)PlayerID.Player1].transform.position.x ? LookDirection.Right : LookDirection.Left;
+        }
+    }
+
+
 
     public void Awake()
     {
@@ -107,7 +136,7 @@ public class GameController : MonoBehaviour
         GGPOPlayerController playerController = player.GetComponent<GGPOPlayerController>();
         PlayerControllers[playerIndex] = playerController;
         playerController.ID = playerIndex == 0 ? PlayerID.Player1 : PlayerID.Player2;
-        MatchComponent.Instance.Players.Add(playerController);
+        Players.Add(playerController);
     }
 
     private void ResetView(GGPOGameState gs)

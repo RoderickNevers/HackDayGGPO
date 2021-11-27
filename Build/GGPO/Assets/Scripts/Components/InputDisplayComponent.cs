@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class InputDisplayComponent : MonoBehaviour
 {
-
-    [SerializeField] private GGPOComponent GameManager;
+    [SerializeField] private GGPOGameManager GameManager;
     [SerializeField] private Text CurrentP1Input;
     [SerializeField] private Text P1Text;
     [SerializeField] private Text P2Text;

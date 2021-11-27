@@ -3094,11 +3094,10 @@ GameObject:
   - component: {fileID: 872434718}
   - component: {fileID: 872434717}
   - component: {fileID: 872434716}
+  - component: {fileID: 872434720}
   - component: {fileID: 872434713}
   - component: {fileID: 872434712}
   - component: {fileID: 872434711}
-  - component: {fileID: 872434720}
-  - component: {fileID: 872434721}
   - component: {fileID: 872434715}
   - component: {fileID: 872434714}
   m_Layer: 5
@@ -3154,6 +3153,7 @@ MonoBehaviour:
   m_StartStopSessionBtn: {fileID: 1812112401}
   m_MainMenuPanel: {fileID: 604742629}
   m_DebugPanel: {fileID: 908509833}
+  Players: []
 --- !u!114 &872434713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3163,7 +3163,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 872434710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c04ff2a401b9fc24188f9976a4b1ea14, type: 3}
+  m_Script: {fileID: 11500000, guid: 4fb7be2f3b884174fa13a9073b288d56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &872434714
@@ -3295,19 +3295,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &872434721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 872434710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b7aec61349f0ab499634871a4aeeba5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Players: []
 --- !u!1 &878111613
 GameObject:
   m_ObjectHideFlags: 0

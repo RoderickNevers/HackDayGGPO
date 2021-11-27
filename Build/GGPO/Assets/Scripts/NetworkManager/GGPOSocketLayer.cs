@@ -19,7 +19,7 @@ public class GGPOSocketLayer
 
     private const int PACKET_BUFFER_SIZE = 200;
 
-    private GGPOComponent gameManager;
+    private GGPOGameManager gameManager;
     private bool isHost;
     
     private Thread ggpoForwardThread;
@@ -33,7 +33,7 @@ public class GGPOSocketLayer
 
     private FacepunchConnectionInterface facepunchConnection;
 
-    public void InitializeGGPOSocketLayer(GGPOComponent gameManager)
+    public void InitializeGGPOSocketLayer(GGPOGameManager gameManager)
     {
         this.gameManager = gameManager;
     }

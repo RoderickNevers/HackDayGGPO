@@ -2,7 +2,7 @@ using SharedGame;
 using System.Collections.Generic;
 using UnityGGPO;
 
-public class GGPOComponent : GameManager
+public class GGPOGameManager : GameManager
 {
     public override void Shutdown()
     {
