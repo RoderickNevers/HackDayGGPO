@@ -11,10 +11,9 @@ public class LobbyComponent : MonoBehaviour
 {
     private readonly int MaxLobbyMembers = 4;
 
+    // MAIN MENU STUFF TO BE RELOCATED TO THE GAME CONTROLLER
     [Header("Main Menu Content")]
     [SerializeField] private GameObject m_MainMenuPanel;
-    [SerializeField] private Button m_CreateBtn;
-    [SerializeField] private Button m_ListLobbiesBtn;
 
     [Header("Lobby Content")]
     [SerializeField] private GameObject m_LobbyPanel;
@@ -80,9 +79,7 @@ public class LobbyComponent : MonoBehaviour
         // Match starting
         SteamMatchmaking.OnLobbyGameCreated += OnLobbyGameCreated;
 
-        m_CreateBtn.onClick.AddListener(CreateLobby);
         m_LeaveBtn.onClick.AddListener(LeaveLobby);
-        m_ListLobbiesBtn.onClick.AddListener(ListCloseLobbies);
         m_StartLocalSessionBtn.onClick.AddListener(ShowGame);
         m_StartSessionBtn.onClick.AddListener(StartSession);
         m_EndSessionBtn.onClick.AddListener(EndSession);
@@ -101,9 +98,7 @@ public class LobbyComponent : MonoBehaviour
 
         SteamMatchmaking.OnLobbyGameCreated -= OnLobbyGameCreated;
 
-        m_CreateBtn.onClick.RemoveAllListeners();
         m_LeaveBtn.onClick.RemoveAllListeners();
-        m_ListLobbiesBtn.onClick.RemoveAllListeners();
         m_StartLocalSessionBtn.onClick.RemoveAllListeners();
         m_StartSessionBtn.onClick.RemoveAllListeners();
         m_EndSessionBtn.onClick.RemoveAllListeners();
@@ -237,7 +232,7 @@ public class LobbyComponent : MonoBehaviour
         Debug.Log($"{friend.Name} sent message {message}  to\nlobby:{lobby.Id}");
     }
 
-    private async void CreateLobby()
+    public async void CreateLobby()
     {
         Debug.Log("Trying to create lobby ...");
         try
@@ -336,7 +331,7 @@ public class LobbyComponent : MonoBehaviour
         }
     }
 
-    private async void ListCloseLobbies()
+    public async void ListCloseLobbies()
     {
         Debug.Log("Trying to get list of available lobbies ...");
         Lobby[] lobbies = await m_LobbyList.FilterDistanceClose().RequestAsync();

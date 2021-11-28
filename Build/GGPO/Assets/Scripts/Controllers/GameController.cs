@@ -21,7 +21,12 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameSpeedManager _GameSpeedManager;
     [SerializeField] private ReplayManager _ReplayManager;
 
-    [Header("UI")]
+    [Header("Main Menu")]
+    [SerializeField] private Button _CreateBtn;
+    [SerializeField] private Button _ListLobbiesBtn;
+    [SerializeField] private Button _LocalGameBtn;
+
+    [Header("Debug UI")]
     [SerializeField] private Button _StartStopSessionBtn;
     [SerializeField] private GameObject _MainMenuPanel;
     [SerializeField] private GameObject _DebugPanel;
@@ -44,6 +49,8 @@ public class GameController : MonoBehaviour
 
     public void Awake()
     {
+        _DebugPanel.SetActive(false);
+
         AddListeners();
 
         SetLocalSessionActiveState(true);
@@ -75,9 +82,14 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            _DebugPanel.SetActive(!_DebugPanel.activeSelf);
         }
     }
 
@@ -87,6 +99,9 @@ public class GameController : MonoBehaviour
         _GGPOComponent.OnStateChanged += HandleStateChanged;
         _GGPOComponent.OnCheckCollision += HandleCheckCollision;
 
+        _CreateBtn.onClick.AddListener(_LobbyComponent.CreateLobby);
+        _ListLobbiesBtn.onClick.AddListener(_LobbyComponent.ListCloseLobbies);
+        _LocalGameBtn.onClick.AddListener(StartStopSession);
         _StartStopSessionBtn.onClick.AddListener(StartStopSession);
     }
 
@@ -96,6 +111,9 @@ public class GameController : MonoBehaviour
         _GGPOComponent.OnStateChanged -= HandleStateChanged;
         _GGPOComponent.OnCheckCollision -= HandleCheckCollision;
 
+        _CreateBtn.onClick.RemoveListener(_LobbyComponent.CreateLobby);
+        _ListLobbiesBtn.onClick.RemoveListener(_LobbyComponent.ListCloseLobbies);
+        _StartStopSessionBtn.onClick.RemoveListener(StartStopSession);
         _StartStopSessionBtn.onClick.RemoveListener(StartStopSession);
     }
 
@@ -202,7 +220,7 @@ public class GameController : MonoBehaviour
     public void ShowGame()
     {
         _MainMenuPanel.SetActive(false);
-        _DebugPanel.SetActive(true);
+        //_DebugPanel.SetActive(true);
     }
 
     private void SetEnableLocalSessionFeatures(bool isEnabled)
