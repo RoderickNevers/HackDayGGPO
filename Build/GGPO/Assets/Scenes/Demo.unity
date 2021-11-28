@@ -3513,7 +3513,6 @@ MonoBehaviour:
   m_PlayerLobbyObjectContainer: {fileID: 1217519336}
   m_PlayerLobbyComponent: {fileID: 2706647618320858009, guid: 39f6460d12a6a7a41b759e7c50ebb90a, type: 3}
   m_LeaveBtn: {fileID: 515220024}
-  m_StartLocalSessionBtn: {fileID: 1812112401}
   m_StartSessionBtn: {fileID: 586743387}
   m_EndSessionBtn: {fileID: 1175026653}
   m_DebugPanel: {fileID: 908509833}
@@ -7439,7 +7438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

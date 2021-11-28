@@ -20,7 +20,6 @@ public class LobbyComponent : MonoBehaviour
     [SerializeField] private Transform m_PlayerLobbyObjectContainer;
     [SerializeField] private PlayerLobbyComponent m_PlayerLobbyComponent;
     [SerializeField] private Button m_LeaveBtn;
-    [SerializeField] private Button m_StartLocalSessionBtn;
     [SerializeField] private Button m_StartSessionBtn;
     [SerializeField] private Button m_EndSessionBtn;
 
@@ -80,7 +79,6 @@ public class LobbyComponent : MonoBehaviour
         SteamMatchmaking.OnLobbyGameCreated += OnLobbyGameCreated;
 
         m_LeaveBtn.onClick.AddListener(LeaveLobby);
-        m_StartLocalSessionBtn.onClick.AddListener(ShowGame);
         m_StartSessionBtn.onClick.AddListener(StartSession);
         m_EndSessionBtn.onClick.AddListener(EndSession);
     }
@@ -99,7 +97,6 @@ public class LobbyComponent : MonoBehaviour
         SteamMatchmaking.OnLobbyGameCreated -= OnLobbyGameCreated;
 
         m_LeaveBtn.onClick.RemoveAllListeners();
-        m_StartLocalSessionBtn.onClick.RemoveAllListeners();
         m_StartSessionBtn.onClick.RemoveAllListeners();
         m_EndSessionBtn.onClick.RemoveAllListeners();
     }

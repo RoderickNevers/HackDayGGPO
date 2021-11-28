@@ -179,13 +179,12 @@ namespace SharedGame {
             return string.Format("f:{0} c:{1}", info.framenumber, info.checksum); // %04d  %08x
         }
 
-        public void StartGame(IGameRunner runner)
+        public virtual void StartGame(IGameRunner runner, bool isDebugMode = false)
         {
             Runner = runner;
-            GameController.Instance.ShowHud();
         }
 
-        public abstract void StartLocalGame();
+        public abstract void StartLocalGame(bool isDebugMode);
 
         public abstract void StartGGPOGame(IPerfUpdate perfPanel, IList<Connections> connections, int playerIndex);
 

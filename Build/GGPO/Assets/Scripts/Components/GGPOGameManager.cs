@@ -13,10 +13,19 @@ public class GGPOGameManager : GameManager
         GGPORunner.OnFrameDelay += OnFrameDelay;
     }
 
-    public override void StartLocalGame()
+    public override void StartLocalGame(bool isDebugMode)
     {
         var game = new LocalRunner(new GGPOGameState(2));
-        StartGame(game);
+        StartGame(game, isDebugMode);
+    }
+
+    public override void StartGame(IGameRunner runner, bool isDebugMode = false)
+    {
+        base.StartGame(runner);
+        if (!isDebugMode)
+        {
+            GameController.Instance.ShowHud();
+        }
     }
 
     public void StopGGPOGame()

@@ -257,8 +257,7 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        ShowHud();
-        StartLocalGame();
+        StartLocalGame(isDebugMode: false);
     }
 
     private void StartTrainingMode()
@@ -269,7 +268,7 @@ public class GameController : MonoBehaviour
         }
 
         CurrentGameType = GameType.Training;
-        StartLocalGame();
+        StartLocalGame(isDebugMode: true);
 
         _DebugPanel.SetActive(true);
         _HUDComponent.gameObject.SetActive(false);
@@ -282,8 +281,7 @@ public class GameController : MonoBehaviour
         if (!_GGPOComponent.IsRunning)
         {
             CurrentGameType = GameType.Training;
-            StartLocalGame();
-
+            StartLocalGame(isDebugMode: true);
             btnText.text = "Stop Local Session";
         }
         else
@@ -293,11 +291,11 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void StartLocalGame()
+    private void StartLocalGame(bool isDebugMode)
     {
         SetEnableLocalSessionFeatures(true);
         _LobbyComponent.enabled = false;
-        _GGPOComponent.StartLocalGame();
+        _GGPOComponent.StartLocalGame(isDebugMode);
         _MainMenuPanel.SetActive(false);
     }
 
