@@ -179,8 +179,10 @@ namespace SharedGame {
             return string.Format("f:{0} c:{1}", info.framenumber, info.checksum); // %04d  %08x
         }
 
-        public void StartGame(IGameRunner runner) {
+        public void StartGame(IGameRunner runner)
+        {
             Runner = runner;
+            GameController.Instance.ShowHud();
         }
 
         public abstract void StartLocalGame();

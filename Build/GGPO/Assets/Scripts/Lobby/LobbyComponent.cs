@@ -186,7 +186,7 @@ public class LobbyComponent : MonoBehaviour
             m_SteamManager.StartSteamworksConnection(false, steamId);
         }
 
-        // Hide the lobby UI
+        GameController.Instance.CurrentGameType = GameController.GameType.Versus;
         ShowGame();
     }
 
@@ -270,7 +270,7 @@ public class LobbyComponent : MonoBehaviour
     {
         m_MainMenuPanel.SetActive(false);
         m_LobbyPanel.SetActive(false);
-        m_DebugPanel.SetActive(true);
+        m_DebugPanel.SetActive(false);
     }
 
     private void LeaveLobby()
@@ -294,8 +294,6 @@ public class LobbyComponent : MonoBehaviour
 
             // Alert all in lobby
             m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
-
-            GameController.Instance.CurrentGameType = GameController.GameType.Versus;
         }
     }
 

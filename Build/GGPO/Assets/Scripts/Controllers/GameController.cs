@@ -239,6 +239,17 @@ public class GameController : MonoBehaviour
         _ReplayManager.enabled = isEnabled;
     }
 
+    public void ShowHud()
+    {
+        _DebugPanel.SetActive(false);
+        _HUDComponent.HideScreen().OnComplete(() =>
+        {
+            _HUDComponent.gameObject.SetActive(true);
+            CurrentGameType = GameType.Versus;
+
+        });
+    }
+
     private void StartVersusMode()
     {
         if (_GGPOComponent.IsRunning)
@@ -246,14 +257,8 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        _HUDComponent.HideScreen().OnComplete(()=>
-        {
-            _HUDComponent.gameObject.SetActive(true);
-            CurrentGameType = GameType.Versus;
-            StartLocalGame();
-        });
-
-        _DebugPanel.SetActive(false);
+        ShowHud();
+        StartLocalGame();
     }
 
     private void StartTrainingMode()
