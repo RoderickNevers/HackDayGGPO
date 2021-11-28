@@ -1,6 +1,8 @@
-using SharedGame;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +22,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private LobbyComponent _LobbyComponent;
     [SerializeField] private GameSpeedManager _GameSpeedManager;
     [SerializeField] private ReplayManager _ReplayManager;
+    [SerializeField] private HUDComponent _HUDComponent;
 
     [Header("Main Menu")]
     [SerializeField] private Button _CreateBtn;
@@ -31,6 +34,23 @@ public class GameController : MonoBehaviour
     [SerializeField] private Button _StartStopSessionBtn;
     [SerializeField] private GameObject _MainMenuPanel;
     [SerializeField] private GameObject _DebugPanel;
+
+    public enum MatchState
+    {
+        PreBattle,
+        Battle,
+        PostBattle
+    }
+
+    public enum GameType
+    {
+        None,
+        Versus,
+        Training
+    }
+
+    [HideInInspector] public GameType CurrentGameType = GameType.None;
+    [HideInInspector] public MatchState GameState;
 
     private readonly List<GGPOPlayerController> _Players = new List<GGPOPlayerController>();
     private GGPOPlayerController[] _PlayerControllers = Array.Empty<GGPOPlayerController>();
@@ -53,7 +73,6 @@ public class GameController : MonoBehaviour
         _DebugPanel.SetActive(false);
 
         AddListeners();
-
         SetLocalSessionActiveState(true);
         SetEnableLocalSessionFeatures(false);
     }
@@ -214,7 +233,6 @@ public class GameController : MonoBehaviour
         _StartStopSessionBtn.gameObject.SetActive(isEnabled);
     }
 
-
     private void SetEnableLocalSessionFeatures(bool isEnabled)
     {
         _GameSpeedManager.enabled = isEnabled;
@@ -228,7 +246,12 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        StartLocalGame();
+        _HUDComponent.HideScreen().OnComplete(()=>
+        {
+            _HUDComponent.gameObject.SetActive(true);
+            CurrentGameType = GameType.Versus;
+            StartLocalGame();
+        });
 
         _DebugPanel.SetActive(false);
     }
@@ -240,9 +263,11 @@ public class GameController : MonoBehaviour
             return;
         }
 
+        CurrentGameType = GameType.Training;
         StartLocalGame();
 
         _DebugPanel.SetActive(true);
+        _HUDComponent.gameObject.SetActive(false);
     }
 
     private void ToggleSession()
@@ -251,6 +276,7 @@ public class GameController : MonoBehaviour
 
         if (!_GGPOComponent.IsRunning)
         {
+            CurrentGameType = GameType.Training;
             StartLocalGame();
 
             btnText.text = "Stop Local Session";
@@ -277,6 +303,7 @@ public class GameController : MonoBehaviour
         _GGPOComponent.Shutdown();
         _MainMenuPanel.SetActive(true);
         _DebugPanel.SetActive(false);
+        _HUDComponent.gameObject.SetActive(false);
     }
 
     public LookDirection CheckLookDirection(Player player)
@@ -289,5 +316,48 @@ public class GameController : MonoBehaviour
         {
             return _Players[(int)PlayerID.Player2].transform.position.x < _Players[(int)PlayerID.Player1].transform.position.x ? LookDirection.Right : LookDirection.Left;
         }
+    }
+
+    public MatchState UpdateGameProgress(Player[] players)
+    {
+        switch (GameState)
+        {
+            case MatchState.PreBattle:
+                Sequence preSequence = DOTween.Sequence();
+                preSequence.Append(_HUDComponent.ShowScreen());
+                preSequence.Append(_HUDComponent.Announce("Fight"));
+                preSequence.Play().OnComplete(() => { GameState = MatchState.Battle; });
+                break;
+
+            case MatchState.Battle:
+                // let the players fight
+                // look for a winner
+                // change the game to post battle
+                if (!players.Any(x => x.State == PlayerState.KO))
+                {
+                    break;
+                }
+
+                var play = players.Where(x => x.State == PlayerState.KO).Single();
+                play.Loses += 1;
+
+                GameState = MatchState.PostBattle;
+
+                break;
+
+            case MatchState.PostBattle:
+                // lock the players
+                // allow the win and lose aniations to play
+                // fade the screen out
+                // change the game to pre battle
+
+                Sequence postSequence = DOTween.Sequence();
+                postSequence.Append(_HUDComponent.Announce("KO"));
+                postSequence.Append(_HUDComponent.HideScreen());
+                postSequence.Play().OnComplete(() => { GameState = MatchState.PreBattle; });
+                break;
+        }
+
+        return GameState;
     }
 }

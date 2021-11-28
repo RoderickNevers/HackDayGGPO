@@ -26,6 +26,7 @@ public struct Player
     public string AnimationKey;
     public float CurrentFrame;
     public float AnimationIndex;
+    public int Loses;
 
     public void Serialize(BinaryWriter bw)
     {
@@ -54,6 +55,7 @@ public struct Player
         bw.Write(AnimationKey);
         bw.Write(CurrentFrame);
         bw.Write(AnimationIndex);
+        bw.Write(Loses);
     }
 
     public void Deserialize(BinaryReader br)
@@ -79,31 +81,34 @@ public struct Player
         AnimationKey = br.ReadString();
         CurrentFrame = br.ReadSingle();
         AnimationIndex = br.ReadSingle();
+        Loses = br.ReadInt32();
     }
 
     public override int GetHashCode()
     {
         int hashCode = 1858597544;
+        int number = -1521134295;
 
-        hashCode = hashCode * -1521134295 + ID.GetHashCode();
-        hashCode = hashCode * -1521134295 + Position.GetHashCode();
-        hashCode = hashCode * -1521134295 + Velocity.GetHashCode();
-        hashCode = hashCode * -1521134295 + IsGrounded.GetHashCode();
-        hashCode = hashCode * -1521134295 + IsJumping.GetHashCode();
-        hashCode = hashCode * -1521134295 + IsAttacking.GetHashCode();
-        hashCode = hashCode * -1521134295 + IsHit.GetHashCode();
-        hashCode = hashCode * -1521134295 + Health.GetHashCode();
-        hashCode = hashCode * -1521134295 + Stun.GetHashCode();
-        hashCode = hashCode * -1521134295 + Power.GetHashCode();
-        hashCode = hashCode * -1521134295 + State.GetHashCode();
-        hashCode = hashCode * -1521134295 + JumpType.GetHashCode();
-        hashCode = hashCode * -1521134295 + CurrentButtonPressed.GetHashCode();
-        hashCode = hashCode * -1521134295 + CurrentAttackID.GetHashCode();
-        hashCode = hashCode * -1521134295 + CurrentlyHitByID.GetHashCode();
-        hashCode = hashCode * -1521134295 + LookDirection.GetHashCode();
-        hashCode = hashCode * -1521134295 + AnimationKey.GetHashCode();
-        hashCode = hashCode * -1521134295 + CurrentFrame.GetHashCode();
-        hashCode = hashCode * -1521134295 + AnimationIndex.GetHashCode();
+        hashCode = hashCode * number + ID.GetHashCode();
+        hashCode = hashCode * number + Position.GetHashCode();
+        hashCode = hashCode * number + Velocity.GetHashCode();
+        hashCode = hashCode * number + IsGrounded.GetHashCode();
+        hashCode = hashCode * number + IsJumping.GetHashCode();
+        hashCode = hashCode * number + IsAttacking.GetHashCode();
+        hashCode = hashCode * number + IsHit.GetHashCode();
+        hashCode = hashCode * number + Health.GetHashCode();
+        hashCode = hashCode * number + Stun.GetHashCode();
+        hashCode = hashCode * number + Power.GetHashCode();
+        hashCode = hashCode * number + State.GetHashCode();
+        hashCode = hashCode * number + JumpType.GetHashCode();
+        hashCode = hashCode * number + CurrentButtonPressed.GetHashCode();
+        hashCode = hashCode * number + CurrentAttackID.GetHashCode();
+        hashCode = hashCode * number + CurrentlyHitByID.GetHashCode();
+        hashCode = hashCode * number + LookDirection.GetHashCode();
+        hashCode = hashCode * number + AnimationKey.GetHashCode();
+        hashCode = hashCode * number + CurrentFrame.GetHashCode();
+        hashCode = hashCode * number + AnimationIndex.GetHashCode();
+        hashCode = hashCode * number + Loses.GetHashCode();
 
         return hashCode;
     }

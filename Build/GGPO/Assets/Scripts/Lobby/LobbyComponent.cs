@@ -42,13 +42,11 @@ public class LobbyComponent : MonoBehaviour
                 Debug.Log("Steam API init -- SUCCESS!");
                 m_SteamManager = GetComponent<SteamManager>();
                 AddListeners();
-                ShowMainMenu();
             }
             else
             {
                 m_SteamDebug.text = "Steam isn't running. Going to debug mode";
                 Debug.Log($"Steam isn't running. Going to debug mode");
-                ShowGame();
             }
         }
         catch (Exception e)
@@ -56,6 +54,8 @@ public class LobbyComponent : MonoBehaviour
             m_SteamDebug.text = $"It's ALLLLLLLLLLLLL burning {e.Message}";
             Debug.LogError($"It's ALLLLLLLLLLLLL burning {e.Message}");
         }
+
+        ShowMainMenu();
     }
 
     private void OnDestroy()

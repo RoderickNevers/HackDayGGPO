@@ -167,18 +167,35 @@ public struct GGPOGameState : IGame
         UnserializedInputsP1 = inputs[0];
         UnserializedInputsP2 = inputs[1];
 
-        for (int i = 0; i < Players.Length; i++)
+        switch (GameController.Instance.CurrentGameType)
         {
-            Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
-        }
-
-        if (Players.Any(x => x.State == PlayerState.KO))
-        {
-            // Restart the players
-            for (int i = 0; i < Players.Length; i++)
-            {
-                InitPlayer(i, _StartPositions[i]);
-            }
+            // Gameplay
+            case GameController.GameType.Versus:
+                switch (GameController.Instance.UpdateGameProgress(Players))
+                {
+                    case GameController.MatchState.PreBattle:
+                        for (int i = 0; i < Players.Length; i++)
+                        {
+                            InitPlayer(i, _StartPositions[i]);
+                        }
+                        break;
+                    case GameController.MatchState.Battle:
+                        for (int i = 0; i < Players.Length; i++)
+                        {
+                            Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
+                        }
+                        break;
+                    case GameController.MatchState.PostBattle:
+                        break;
+                }
+                break;
+            // Debug mode
+            case GameController.GameType.Training:
+                for (int i = 0; i < Players.Length; i++)
+                {
+                    Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
+                }
+                break;
         }
     }
 
