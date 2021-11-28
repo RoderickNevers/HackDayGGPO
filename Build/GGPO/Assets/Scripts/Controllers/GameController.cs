@@ -24,7 +24,8 @@ public class GameController : MonoBehaviour
     [Header("Main Menu")]
     [SerializeField] private Button _CreateBtn;
     [SerializeField] private Button _ListLobbiesBtn;
-    [SerializeField] private Button _LocalGameBtn;
+    [SerializeField] private Button _VersusModeBtn;
+    [SerializeField] private Button _TrainingModeBtn;
 
     [Header("Debug UI")]
     [SerializeField] private Button _StartStopSessionBtn;
@@ -101,8 +102,9 @@ public class GameController : MonoBehaviour
 
         _CreateBtn.onClick.AddListener(_LobbyComponent.CreateLobby);
         _ListLobbiesBtn.onClick.AddListener(_LobbyComponent.ListCloseLobbies);
-        _LocalGameBtn.onClick.AddListener(StartStopSession);
-        _StartStopSessionBtn.onClick.AddListener(StartStopSession);
+        _VersusModeBtn.onClick.AddListener(StartVersusMode);
+        _TrainingModeBtn.onClick.AddListener(StartTrainingMode);
+        _StartStopSessionBtn.onClick.AddListener(ToggleSession);
     }
 
     private void RemoveListeners()
@@ -113,8 +115,9 @@ public class GameController : MonoBehaviour
 
         _CreateBtn.onClick.RemoveListener(_LobbyComponent.CreateLobby);
         _ListLobbiesBtn.onClick.RemoveListener(_LobbyComponent.ListCloseLobbies);
-        _StartStopSessionBtn.onClick.RemoveListener(StartStopSession);
-        _StartStopSessionBtn.onClick.RemoveListener(StartStopSession);
+        _VersusModeBtn.onClick.RemoveListener(StartVersusMode);
+        _TrainingModeBtn.onClick.RemoveListener(StartTrainingMode);
+        _StartStopSessionBtn.onClick.RemoveListener(ToggleSession);
     }
 
     private void HandleRunningChanged(bool running)
@@ -211,17 +214,6 @@ public class GameController : MonoBehaviour
         _StartStopSessionBtn.gameObject.SetActive(isEnabled);
     }
 
-    public void ShowMainMenu()
-    {
-        _MainMenuPanel.SetActive(true);
-        _DebugPanel.SetActive(false);
-    }
-
-    public void ShowGame()
-    {
-        _MainMenuPanel.SetActive(false);
-        //_DebugPanel.SetActive(true);
-    }
 
     private void SetEnableLocalSessionFeatures(bool isEnabled)
     {
@@ -229,36 +221,62 @@ public class GameController : MonoBehaviour
         _ReplayManager.enabled = isEnabled;
     }
 
-    private void StartStopSession()
+    private void StartVersusMode()
+    {
+        if (_GGPOComponent.IsRunning)
+        {
+            return;
+        }
+
+        StartLocalGame();
+
+        _DebugPanel.SetActive(false);
+    }
+
+    private void StartTrainingMode()
+    {
+        if (_GGPOComponent.IsRunning)
+        {
+            return;
+        }
+
+        StartLocalGame();
+
+        _DebugPanel.SetActive(true);
+    }
+
+    private void ToggleSession()
     {
         var btnText = _StartStopSessionBtn.GetComponentInChildren<Text>();
 
         if (!_GGPOComponent.IsRunning)
         {
-            _GGPOComponent.StartLocalGame();
-
-            // Disable Steam Lobby component
-            _LobbyComponent.enabled = false;
-
-            SetEnableLocalSessionFeatures(true);
-
-            ShowGame();
+            StartLocalGame();
 
             btnText.text = "Stop Local Session";
         }
         else
         {
-            _GGPOComponent.Shutdown();
-
-            // Reenable Steam Lobby component
-            _LobbyComponent.enabled = true;
-
-            SetEnableLocalSessionFeatures(false);
-
-            ShowMainMenu();
-
+            StopLocalGame();
             btnText.text = "Start Local Session";
         }
+    }
+
+    private void StartLocalGame()
+    {
+        SetEnableLocalSessionFeatures(true);
+        _LobbyComponent.enabled = false;
+        _GGPOComponent.StartLocalGame();
+        _MainMenuPanel.SetActive(false);
+    }
+
+    private void StopLocalGame()
+    {
+        SetEnableLocalSessionFeatures(false);
+        _LobbyComponent.enabled = true;
+        _GGPOComponent.Shutdown();
+        _MainMenuPanel.SetActive(true);
+        _DebugPanel.SetActive(false);
     }
 
     public LookDirection CheckLookDirection(Player player)
