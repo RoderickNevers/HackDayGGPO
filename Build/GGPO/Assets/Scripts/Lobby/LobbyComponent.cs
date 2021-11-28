@@ -294,6 +294,8 @@ public class LobbyComponent : MonoBehaviour
 
             // Alert all in lobby
             m_CurrentLobby?.SetGameServer(SteamClient.SteamId);
+
+            GameController.Instance.CurrentGameType = GameController.GameType.Versus;
         }
     }
 
