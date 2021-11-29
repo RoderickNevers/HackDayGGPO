@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _DebugPanel;
 
     [HideInInspector] public GameType CurrentGameType = GameType.None;
-    [HideInInspector] public MatchState GameState;
+    [HideInInspector] public MatchState GameState = MatchState.PreBattle;
 
     private readonly List<GGPOPlayerController> _Players = new List<GGPOPlayerController>();
     private GGPOPlayerController[] _PlayerControllers = Array.Empty<GGPOPlayerController>();

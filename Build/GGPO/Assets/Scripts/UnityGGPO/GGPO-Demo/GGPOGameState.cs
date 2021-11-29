@@ -159,6 +159,8 @@ public struct GGPOGameState : IGame
         Debug.Log(filename);
     }
 
+    //bool flag;
+
     public void UpdateSimulation(long[] inputs, int disconnect_flags)
     {
         Framenumber++;
@@ -167,38 +169,11 @@ public struct GGPOGameState : IGame
         UnserializedInputsP1 = inputs[0];
         UnserializedInputsP2 = inputs[1];
 
-        switch (GameController.Instance.CurrentGameType)
+        GameController.Instance.GameState = GameController.Instance.UpdateGameProgress(Players);
+
+        for (int i = 0; i < Players.Length; i++)
         {
-            // Gameplay
-            case GameType.Versus:
-                switch (GameController.Instance.UpdateGameProgress(Players))
-                {
-                    case MatchState.PreBattle:
-                        for (int i = 0; i < Players.Length; i++)
-                        {
-                            InitPlayer(i, _StartPositions[i]);
-                            Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
-                        }
-                        break;
-
-                    case MatchState.Battle:
-                        for (int i = 0; i < Players.Length; i++)
-                        {
-                            Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
-                        }
-                        break;
-
-                    case MatchState.PostBattle:
-                        break;
-                }
-                break;
-            // Debug mode
-            case GameType.Training:
-                for (int i = 0; i < Players.Length; i++)
-                {
-                    Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
-                }
-                break;
+            Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
         }
     }
 
@@ -217,31 +192,35 @@ public struct GGPOGameState : IGame
         //    input |= InputConstants.INPUT_DOWN;
         //}
 
-        if (control.GetButton(RewiredConsts.Action.LEFT))
+        if (GameController.Instance.CurrentGameType == GameType.Training
+            || GameController.Instance.CurrentGameType == GameType.Versus && GameController.Instance.GameState == MatchState.Battle)
         {
-            input |= InputConstants.INPUT_LEFT;
-        }
+            if (control.GetButton(RewiredConsts.Action.LEFT))
+            {
+                input |= InputConstants.INPUT_LEFT;
+            }
 
-        if (control.GetButton(RewiredConsts.Action.RIGHT))
-        {
-            input |= InputConstants.INPUT_RIGHT;
-        }
+            if (control.GetButton(RewiredConsts.Action.RIGHT))
+            {
+                input |= InputConstants.INPUT_RIGHT;
+            }
 
-        // Attacks
+            // Attacks
 
-        if (control.GetButtonDown(RewiredConsts.Action.SLASH))
-        {
-            input |= InputConstants.INPUT_SLASH;
-        }
+            if (control.GetButtonDown(RewiredConsts.Action.SLASH))
+            {
+                input |= InputConstants.INPUT_SLASH;
+            }
 
-        if (control.GetButtonDown(RewiredConsts.Action.HEAVYSLASH))
-        {
-            input |= InputConstants.INPUT_HEAVY_SLASH;
-        }
+            if (control.GetButtonDown(RewiredConsts.Action.HEAVYSLASH))
+            {
+                input |= InputConstants.INPUT_HEAVY_SLASH;
+            }
 
-        if (control.GetButtonDown(RewiredConsts.Action.GUARDBREAK))
-        {
-            input |= InputConstants.INPUT_GUARD_BREAK;
+            if (control.GetButtonDown(RewiredConsts.Action.GUARDBREAK))
+            {
+                input |= InputConstants.INPUT_GUARD_BREAK;
+            }
         }
 
         return input;
