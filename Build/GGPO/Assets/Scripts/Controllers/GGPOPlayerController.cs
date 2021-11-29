@@ -40,10 +40,14 @@ public class GGPOPlayerController : MonoBehaviour
     // Won't be called on rollbacks (I think)
     public void OnStateChanged(ref Player player)
     {
-        // move player
-        transform.position = player.Position;
-        transform.localScale = player.LookDirection == LookDirection.Left ? new Vector3(-1, 1, 1) : transform.localScale = new Vector3(1, 1, 1);
+        if (GameController.Instance.CurrentGameType == GameType.Training || GameController.Instance.GameState == MatchState.Battle)
+        {
+            // move player
+            transform.position = player.Position;
+        }
 
+        transform.localScale = player.LookDirection == LookDirection.Left ? new Vector3(-1, 1, 1) : transform.localScale = new Vector3(1, 1, 1);
+        
         // set the animator to the correct frame
         m_Animator.Play(Animator.StringToHash(player.AnimationKey), BASE_LAYER, player.CurrentFrame);
 

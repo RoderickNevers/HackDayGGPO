@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameSpeedManager _GameSpeedManager;
     [SerializeField] private ReplayManager _ReplayManager;
     [SerializeField] private HUDComponent _HUDComponent;
+    [SerializeField] private FadeOverlayComponent _FadeOverlayComponent;
 
     [Header("Main Menu")]
     [SerializeField] private Button _CreateBtn;
@@ -34,20 +35,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private Button _StartStopSessionBtn;
     [SerializeField] private GameObject _MainMenuPanel;
     [SerializeField] private GameObject _DebugPanel;
-
-    public enum MatchState
-    {
-        PreBattle,
-        Battle,
-        PostBattle
-    }
-
-    public enum GameType
-    {
-        None,
-        Versus,
-        Training
-    }
 
     [HideInInspector] public GameType CurrentGameType = GameType.None;
     [HideInInspector] public MatchState GameState;
@@ -70,7 +57,9 @@ public class GameController : MonoBehaviour
 
     public void Awake()
     {
+        LockFramerate();
         _DebugPanel.SetActive(false);
+        _HUDComponent.gameObject.SetActive(false);
 
         AddListeners();
         SetLocalSessionActiveState(true);
@@ -79,7 +68,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        LockFramerate();
+        _FadeOverlayComponent.ShowScreen(1f);
     }
 
     public void OnDestroy()
@@ -242,7 +231,7 @@ public class GameController : MonoBehaviour
     public void ShowHud()
     {
         _DebugPanel.SetActive(false);
-        _HUDComponent.HideScreen().OnComplete(() =>
+        _FadeOverlayComponent.HideScreen().OnComplete(() =>
         {
             _HUDComponent.gameObject.SetActive(true);
             CurrentGameType = GameType.Versus;
@@ -327,15 +316,12 @@ public class GameController : MonoBehaviour
         {
             case MatchState.PreBattle:
                 Sequence preSequence = DOTween.Sequence();
-                preSequence.Append(_HUDComponent.ShowScreen());
+                preSequence.Append(_FadeOverlayComponent.ShowScreen());
                 preSequence.Append(_HUDComponent.Announce("Fight"));
                 preSequence.Play().OnComplete(() => { GameState = MatchState.Battle; });
                 break;
 
             case MatchState.Battle:
-                // let the players fight
-                // look for a winner
-                // change the game to post battle
                 if (!players.Any(x => x.State == PlayerState.KO))
                 {
                     break;
@@ -349,14 +335,9 @@ public class GameController : MonoBehaviour
                 break;
 
             case MatchState.PostBattle:
-                // lock the players
-                // allow the win and lose aniations to play
-                // fade the screen out
-                // change the game to pre battle
-
                 Sequence postSequence = DOTween.Sequence();
                 postSequence.Append(_HUDComponent.Announce("KO"));
-                postSequence.Append(_HUDComponent.HideScreen());
+                postSequence.Append(_FadeOverlayComponent.HideScreen());
                 postSequence.Play().OnComplete(() => { GameState = MatchState.PreBattle; });
                 break;
         }

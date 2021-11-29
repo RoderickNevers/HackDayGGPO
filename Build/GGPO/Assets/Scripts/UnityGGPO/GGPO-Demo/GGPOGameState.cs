@@ -170,27 +170,30 @@ public struct GGPOGameState : IGame
         switch (GameController.Instance.CurrentGameType)
         {
             // Gameplay
-            case GameController.GameType.Versus:
+            case GameType.Versus:
                 switch (GameController.Instance.UpdateGameProgress(Players))
                 {
-                    case GameController.MatchState.PreBattle:
+                    case MatchState.PreBattle:
                         for (int i = 0; i < Players.Length; i++)
                         {
                             InitPlayer(i, _StartPositions[i]);
+                            Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
                         }
                         break;
-                    case GameController.MatchState.Battle:
+
+                    case MatchState.Battle:
                         for (int i = 0; i < Players.Length; i++)
                         {
                             Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
                         }
                         break;
-                    case GameController.MatchState.PostBattle:
+
+                    case MatchState.PostBattle:
                         break;
                 }
                 break;
             // Debug mode
-            case GameController.GameType.Training:
+            case GameType.Training:
                 for (int i = 0; i < Players.Length; i++)
                 {
                     Players[i] = _StateSimulator.Run(Players[i], inputs[i]);

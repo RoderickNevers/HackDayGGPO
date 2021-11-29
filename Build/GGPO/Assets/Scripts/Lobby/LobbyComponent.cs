@@ -183,7 +183,7 @@ public class LobbyComponent : MonoBehaviour
             m_SteamManager.StartSteamworksConnection(false, steamId);
         }
 
-        GameController.Instance.CurrentGameType = GameController.GameType.Versus;
+        GameController.Instance.CurrentGameType = GameType.Versus;
         ShowGame();
     }
 
