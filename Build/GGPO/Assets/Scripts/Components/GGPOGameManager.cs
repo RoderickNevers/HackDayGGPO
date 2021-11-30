@@ -26,6 +26,10 @@ public class GGPOGameManager : GameManager
         {
             GameController.Instance.ShowHud();
         }
+        else
+        {
+            GameController.Instance.ShowDebug();
+        }
     }
 
     public void StopGGPOGame()

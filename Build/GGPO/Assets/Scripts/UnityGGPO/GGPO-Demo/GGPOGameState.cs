@@ -112,9 +112,9 @@ public struct GGPOGameState : IGame
         GameController.Instance.OnGameStateChanged += HandleGameStateChanged;
     }
 
-    private void HandleGameStateChanged(object sender, MatchState e)
+    private void HandleGameStateChanged(object sender, MatchState state)
     {
-        switch (e)
+        switch (state)
         {
             case MatchState.PreBattle:
                 ResetPlayers();

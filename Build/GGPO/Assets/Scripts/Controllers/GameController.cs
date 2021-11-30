@@ -89,7 +89,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        _FadeOverlayComponent.ShowScreen(1f);
+        _FadeOverlayComponent.ShowScreen(0.2f);
     }
 
     public void OnDestroy()
@@ -252,11 +252,14 @@ public class GameController : MonoBehaviour
     public void ShowHud()
     {
         _DebugPanel.SetActive(false);
-        _FadeOverlayComponent.HideScreen().OnComplete(() =>
-        {
-            _HUDComponent.gameObject.SetActive(true);
-            CurrentGameType = GameType.Versus;
-        });
+        _HUDComponent.gameObject.SetActive(true);
+    }
+
+    public void ShowDebug()
+    {
+        _DebugPanel.SetActive(true);
+        _HUDComponent.gameObject.SetActive(false);
+        _FadeOverlayComponent.ShowScreen(2f);
     }
 
     private void StartVersusMode()
@@ -266,7 +269,11 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        StartLocalGame(isDebugMode: false);
+        _FadeOverlayComponent.HideScreen(2f).OnComplete(() =>
+        {
+            CurrentGameType = GameType.Versus;
+            StartLocalGame(isDebugMode: false);
+        });
     }
 
     private void StartTrainingMode()
@@ -276,11 +283,11 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        CurrentGameType = GameType.Training;
-        StartLocalGame(isDebugMode: true);
-
-        _DebugPanel.SetActive(true);
-        _HUDComponent.gameObject.SetActive(false);
+        _FadeOverlayComponent.HideScreen(2f).OnComplete(() =>
+        {
+            CurrentGameType = GameType.Training;
+            StartLocalGame(isDebugMode: true);
+        });
     }
 
     private void ToggleSession()
