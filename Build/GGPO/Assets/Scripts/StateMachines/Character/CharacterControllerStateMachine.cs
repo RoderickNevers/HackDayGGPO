@@ -247,16 +247,16 @@ public class CharacterControllerStateMachine: IDisposable
         player.Position += player.Velocity;
 
         // pre battle pose
-        if (GameController.Instance.CurrentGameType == GameType.Versus && GameController.Instance.GameState == MatchState.PreBattle)
-        {
-            player = _StandingState.UpdatePlayer(player, input);
-        }
+        //if (GameController.Instance.CurrentGameType == GameType.Versus && GameController.Instance.GameState == MatchState.PreBattle)
+        //{
+        //    player = _StandingState.UpdatePlayer(player, input);
+        //}
 
         // post battle pose
-        if (GameController.Instance.GameState == MatchState.PostBattle)
-        {
-            //player = _StandingState.UpdatePlayer(player, input);
-        }
+        //if (GameController.Instance.GameState == MatchState.PostBattle)
+        //{
+        //    player = _StandingState.UpdatePlayer(player, input);
+        //}
 
         return player;
     }
