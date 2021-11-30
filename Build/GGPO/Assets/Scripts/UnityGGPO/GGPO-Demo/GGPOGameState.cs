@@ -107,6 +107,23 @@ public struct GGPOGameState : IGame
         {
             Players[i] = new Player();
         }
+
+        // todo: need to unsubscribe too
+        GameController.Instance.OnGameStateChanged += HandleGameStateChanged;
+    }
+
+    private void HandleGameStateChanged(object sender, MatchState e)
+    {
+        switch (e)
+        {
+            case MatchState.PreBattle:
+                ResetPlayers();
+                break;
+            case MatchState.Battle:
+                break;
+            case MatchState.PostBattle:
+                break;
+        }
     }
 
     public GGPOGameState Clone()
@@ -244,5 +261,13 @@ public struct GGPOGameState : IGame
         }
 
         return hashCode;
+    }
+
+    private void ResetPlayers()
+    {
+        for (int i = 0; i < Players.Length; i++)
+        {
+            InitPlayer(i, _StartPositions[i]);
+        }
     }
 }

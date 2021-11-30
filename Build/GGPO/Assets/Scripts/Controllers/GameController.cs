@@ -6,6 +6,15 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class MatchStateEventArgs
+{
+    public MatchState state;
+    public MatchStateEventArgs(MatchState matchState)
+    {
+        state = matchState;
+    }
+}
+
 public class GameController : MonoBehaviour
 {
     const int FRAME_RATE_LOCK = 60;
@@ -36,9 +45,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _MainMenuPanel;
     [SerializeField] private GameObject _DebugPanel;
 
-    [HideInInspector] public GameType CurrentGameType = GameType.None;
-    [HideInInspector] public MatchState GameState = MatchState.PreBattle;
+    public EventHandler<MatchState> OnGameStateChanged;
 
+    private MatchState _GameState = MatchState.PreBattle;
     private readonly List<GGPOPlayerController> _Players = new List<GGPOPlayerController>();
     private GGPOPlayerController[] _PlayerControllers = Array.Empty<GGPOPlayerController>();
 
@@ -52,6 +61,18 @@ public class GameController : MonoBehaviour
                 _instance = FindObjectOfType<GameController>();
             }
             return _instance;
+        }
+    }
+
+    public GameType CurrentGameType { get; set; } = GameType.None;
+
+    public MatchState GameState
+    {
+        get => _GameState;
+        set
+        {
+            _GameState = value;
+            OnGameStateChanged?.Invoke(this, _GameState);
         }
     }
 
@@ -235,7 +256,6 @@ public class GameController : MonoBehaviour
         {
             _HUDComponent.gameObject.SetActive(true);
             CurrentGameType = GameType.Versus;
-
         });
     }
 
@@ -312,13 +332,13 @@ public class GameController : MonoBehaviour
 
     public MatchState UpdateGameProgress(Player[] players)
     {
-        switch (GameState)
+        switch (_GameState)
         {
             case MatchState.PreBattle:
                 Sequence preSequence = DOTween.Sequence();
                 preSequence.Append(_FadeOverlayComponent.ShowScreen());
                 preSequence.Append(_HUDComponent.Announce("Fight"));
-                preSequence.Play().OnComplete(() => { GameState = MatchState.Battle; });
+                preSequence.Play().OnComplete(() => { _GameState = MatchState.Battle; });
                 break;
 
             case MatchState.Battle:
@@ -330,7 +350,7 @@ public class GameController : MonoBehaviour
                 var play = players.Where(x => x.State == PlayerState.KO).Single();
                 play.Loses += 1;
 
-                GameState = MatchState.PostBattle;
+                _GameState = MatchState.PostBattle;
 
                 break;
 
@@ -338,10 +358,10 @@ public class GameController : MonoBehaviour
                 Sequence postSequence = DOTween.Sequence();
                 postSequence.Append(_HUDComponent.Announce("KO"));
                 postSequence.Append(_FadeOverlayComponent.HideScreen());
-                postSequence.Play().OnComplete(() => { GameState = MatchState.PreBattle; });
+                postSequence.Play().OnComplete(() => { _GameState = MatchState.PreBattle; });
                 break;
         }
 
-        return GameState;
+        return _GameState;
     }
 }
