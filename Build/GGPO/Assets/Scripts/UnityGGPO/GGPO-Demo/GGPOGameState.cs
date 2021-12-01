@@ -186,7 +186,10 @@ public struct GGPOGameState : IGame
         UnserializedInputsP1 = inputs[0];
         UnserializedInputsP2 = inputs[1];
 
-        GameController.Instance.GameState = GameController.Instance.UpdateGameProgress(Players);
+        if (GameController.Instance.CurrentGameType == GameType.Versus)
+        {
+            GameController.Instance.GameState = GameController.Instance.UpdateGameProgress(Players);
+        }
 
         for (int i = 0; i < Players.Length; i++)
         {
@@ -209,8 +212,7 @@ public struct GGPOGameState : IGame
         //    input |= InputConstants.INPUT_DOWN;
         //}
 
-        if (GameController.Instance.CurrentGameType == GameType.Training
-            || GameController.Instance.CurrentGameType == GameType.Versus && GameController.Instance.GameState == MatchState.Battle)
+        if (GameController.Instance.GameState == MatchState.Battle)
         {
             if (control.GetButton(RewiredConsts.Action.LEFT))
             {

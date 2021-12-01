@@ -17,13 +17,14 @@ public class HUDComponent : MonoBehaviour
 
     public Sequence Announce(string announcement)
     {
+        float time = 0.5f;
         _Announcer.text = announcement;
-        _Announcer.transform.localScale = Vector2.zero;
 
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(_Announcer.transform.DOScale(Vector2.one, 0.2f));
-        sequence.Append(_Announcer.transform.DOPunchScale(new Vector2(2,2), 0.2f));
-        sequence.Append(_Announcer.transform.DOScale(Vector2.zero, 0.2f));
+        sequence.Append(_Announcer.transform.DOScale(Vector2.zero, 0));
+        sequence.Append(_Announcer.transform.DOScale(Vector2.one, time)).SetDelay(1f);
+        sequence.Append(_Announcer.transform.DOScale(Vector2.zero, time));
+
         return sequence;
     }
 }

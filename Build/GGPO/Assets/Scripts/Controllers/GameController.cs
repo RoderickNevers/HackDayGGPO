@@ -17,8 +17,6 @@ public class MatchStateEventArgs
 
 public class GameController : MonoBehaviour
 {
-    const int FRAME_RATE_LOCK = 60;
-
     [Header("GGPO Manager")]
     [SerializeField] private GGPOGameManager _GGPOComponent;
 
@@ -45,12 +43,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _MainMenuPanel;
     [SerializeField] private GameObject _DebugPanel;
 
-    public EventHandler<MatchState> OnGameStateChanged;
-
-    private MatchState _GameState = MatchState.PreBattle;
-    private readonly List<GGPOPlayerController> _Players = new List<GGPOPlayerController>();
-    private GGPOPlayerController[] _PlayerControllers = Array.Empty<GGPOPlayerController>();
-
     private static GameController _instance;
     public static GameController Instance
     {
@@ -63,6 +55,15 @@ public class GameController : MonoBehaviour
             return _instance;
         }
     }
+
+    const int FRAME_RATE_LOCK = 60;
+
+    public EventHandler<MatchState> OnGameStateChanged;
+
+    private MatchState _GameState = MatchState.PreBattle;
+    private readonly List<GGPOPlayerController> _Players = new List<GGPOPlayerController>();
+    private GGPOPlayerController[] _PlayerControllers = Array.Empty<GGPOPlayerController>();
+    private bool isPlaying = false;
 
     public GameType CurrentGameType { get; set; } = GameType.None;
 
@@ -259,7 +260,7 @@ public class GameController : MonoBehaviour
     {
         _DebugPanel.SetActive(true);
         _HUDComponent.gameObject.SetActive(false);
-        _FadeOverlayComponent.ShowScreen(2f);
+        _FadeOverlayComponent.ShowScreen(0.5f);
     }
 
     private void StartVersusMode()
@@ -269,7 +270,7 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        _FadeOverlayComponent.HideScreen(2f).OnComplete(() =>
+        _FadeOverlayComponent.HideScreen(1f).OnComplete(() =>
         {
             CurrentGameType = GameType.Versus;
             StartLocalGame(isDebugMode: false);
@@ -283,9 +284,10 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        _FadeOverlayComponent.HideScreen(2f).OnComplete(() =>
+        _FadeOverlayComponent.HideScreen(1f).OnComplete(() =>
         {
             CurrentGameType = GameType.Training;
+            GameState = MatchState.Battle;
             StartLocalGame(isDebugMode: true);
         });
     }
@@ -342,10 +344,24 @@ public class GameController : MonoBehaviour
         switch (_GameState)
         {
             case MatchState.PreBattle:
+                if (isPlaying)
+                {
+                    return _GameState;
+                }
+
+                isPlaying = true;
+
                 Sequence preSequence = DOTween.Sequence();
                 preSequence.Append(_FadeOverlayComponent.ShowScreen());
                 preSequence.Append(_HUDComponent.Announce("Fight"));
-                preSequence.Play().OnComplete(() => { _GameState = MatchState.Battle; });
+                preSequence.OnComplete(() => 
+                {
+                    preSequence.Kill();
+                    isPlaying = false;
+                    _GameState = MatchState.Battle;
+                });
+
+                preSequence.Play();
                 break;
 
             case MatchState.Battle:
@@ -362,10 +378,24 @@ public class GameController : MonoBehaviour
                 break;
 
             case MatchState.PostBattle:
+                if (isPlaying)
+                {
+                    return _GameState;
+                }
+
+                isPlaying = true;
+
                 Sequence postSequence = DOTween.Sequence();
                 postSequence.Append(_HUDComponent.Announce("KO"));
                 postSequence.Append(_FadeOverlayComponent.HideScreen());
-                postSequence.Play().OnComplete(() => { _GameState = MatchState.PreBattle; });
+                postSequence.OnComplete(() =>
+                {
+                    postSequence.Kill();
+                    isPlaying = false;
+                    _GameState = MatchState.PreBattle;
+                });
+
+                postSequence.Play();
                 break;
         }
 

@@ -183,8 +183,7 @@ public class LobbyComponent : MonoBehaviour
             m_SteamManager.StartSteamworksConnection(false, steamId);
         }
 
-        GameController.Instance.CurrentGameType = GameType.Versus;
-        ShowGame();
+        StartVersusMode();
     }
 
     /// <summary>
@@ -263,8 +262,9 @@ public class LobbyComponent : MonoBehaviour
         m_DebugPanel.SetActive(false);
     }
 
-    public void ShowGame()
+    public void StartVersusMode()
     {
+        GameController.Instance.CurrentGameType = GameType.Versus;
         m_MainMenuPanel.SetActive(false);
         m_LobbyPanel.SetActive(false);
         m_DebugPanel.SetActive(false);
