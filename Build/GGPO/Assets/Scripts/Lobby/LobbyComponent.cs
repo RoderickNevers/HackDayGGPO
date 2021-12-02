@@ -5,13 +5,15 @@ using Steamworks;
 using Steamworks.Data;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class LobbyComponent : MonoBehaviour
 {
+    private readonly int MaxLobbyMembers = 4;
+
+    // MAIN MENU STUFF TO BE RELOCATED TO THE GAME CONTROLLER
     [Header("Main Menu Content")]
     [SerializeField] private GameObject m_MainMenuPanel;
-    [SerializeField] private Button m_CreateBtn;
-    [SerializeField] private Button m_ListLobbiesBtn;
 
     [Header("Lobby Content")]
     [SerializeField] private GameObject m_LobbyPanel;
@@ -23,13 +25,11 @@ public class LobbyComponent : MonoBehaviour
 
     [Header("Gameplay Debug Panel")]
     [SerializeField] private GameObject m_DebugPanel;
+    [SerializeField] private TextMeshProUGUI m_SteamDebug;
 
     private SteamManager m_SteamManager;
     private Lobby? m_CurrentLobby;
-    private int m_MaxLobbyMembers = 4;
-
-    private LobbyQuery m_LobbyList { get; }
-
+    private LobbyQuery m_LobbyList;
 
     private void Start()
     {
@@ -37,21 +37,24 @@ public class LobbyComponent : MonoBehaviour
         {
             if (SteamManager.Initialized)
             {
+                m_SteamDebug.text = "Steam API init -- SUCCESS!";
                 Debug.Log("Steam API init -- SUCCESS!");
                 m_SteamManager = GetComponent<SteamManager>();
                 AddListeners();
-                ShowMainMenu();
             }
             else
             {
+                m_SteamDebug.text = "Steam isn't running. Going to debug mode";
                 Debug.Log($"Steam isn't running. Going to debug mode");
-                ShowGame();
             }
         }
         catch (Exception e)
         {
+            m_SteamDebug.text = $"It's ALLLLLLLLLLLLL burning {e.Message}";
             Debug.LogError($"It's ALLLLLLLLLLLLL burning {e.Message}");
         }
+
+        ShowMainMenu();
     }
 
     private void OnDestroy()
@@ -75,9 +78,7 @@ public class LobbyComponent : MonoBehaviour
         // Match starting
         SteamMatchmaking.OnLobbyGameCreated += OnLobbyGameCreated;
 
-        m_CreateBtn.onClick.AddListener(CreateLobby);
         m_LeaveBtn.onClick.AddListener(LeaveLobby);
-        m_ListLobbiesBtn.onClick.AddListener(ListCloseLobbies);
         m_StartSessionBtn.onClick.AddListener(StartSession);
         m_EndSessionBtn.onClick.AddListener(EndSession);
     }
@@ -95,9 +96,7 @@ public class LobbyComponent : MonoBehaviour
 
         SteamMatchmaking.OnLobbyGameCreated -= OnLobbyGameCreated;
 
-        m_CreateBtn.onClick.RemoveAllListeners();
         m_LeaveBtn.onClick.RemoveAllListeners();
-        m_ListLobbiesBtn.onClick.RemoveAllListeners();
         m_StartSessionBtn.onClick.RemoveAllListeners();
         m_EndSessionBtn.onClick.RemoveAllListeners();
     }
@@ -184,8 +183,7 @@ public class LobbyComponent : MonoBehaviour
             m_SteamManager.StartSteamworksConnection(false, steamId);
         }
 
-        // Hide the lobby UI
-        ShowGame();
+        StartVersusMode();
     }
 
     /// <summary>
@@ -230,7 +228,7 @@ public class LobbyComponent : MonoBehaviour
         Debug.Log($"{friend.Name} sent message {message}  to\nlobby:{lobby.Id}");
     }
 
-    private async void CreateLobby()
+    public async void CreateLobby()
     {
         Debug.Log("Trying to create lobby ...");
         try
@@ -247,11 +245,12 @@ public class LobbyComponent : MonoBehaviour
 
     public async Task<Lobby?> CreateLobbyAsync()
     {
-        return await SteamMatchmaking.CreateLobbyAsync(m_MaxLobbyMembers);
+        return await SteamMatchmaking.CreateLobbyAsync(MaxLobbyMembers);
     }
 
     public void ShowLobby()
     {
+        GameController.Instance.CurrentGameType = GameType.None;
         m_MainMenuPanel.SetActive(false);
         m_LobbyPanel.SetActive(true);
         m_DebugPanel.SetActive(false);
@@ -259,16 +258,16 @@ public class LobbyComponent : MonoBehaviour
 
     public void ShowMainMenu()
     {
+        GameController.Instance.CurrentGameType = GameType.None;
         m_MainMenuPanel.SetActive(true);
         m_LobbyPanel.SetActive(false);
         m_DebugPanel.SetActive(false);
     }
 
-    public void ShowGame()
+    public void StartVersusMode()
     {
-        m_MainMenuPanel.SetActive(false);
+        GGPOGameManager.Instance.OnLauncheGame?.Invoke(this, GameType.Versus);
         m_LobbyPanel.SetActive(false);
-        m_DebugPanel.SetActive(true);
     }
 
     private void LeaveLobby()
@@ -329,7 +328,7 @@ public class LobbyComponent : MonoBehaviour
         }
     }
 
-    private async void ListCloseLobbies()
+    public async void ListCloseLobbies()
     {
         Debug.Log("Trying to get list of available lobbies ...");
         Lobby[] lobbies = await m_LobbyList.FilterDistanceClose().RequestAsync();

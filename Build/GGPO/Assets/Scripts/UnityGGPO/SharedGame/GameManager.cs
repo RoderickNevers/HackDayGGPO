@@ -29,6 +29,10 @@ namespace SharedGame {
 
         public event Action OnStateChanged;
 
+        public event Action OnCheckCollision;
+
+        public EventHandler<GameType> OnLauncheGame;
+
         // Game speed
         public const float FRAME_LENGTH_SEC = 1f / 60f;
         public float currentFrameLength { get; protected set; } = FRAME_LENGTH_SEC;
@@ -118,6 +122,7 @@ namespace SharedGame {
                         if (m_ReplayManager == null)
                         {
                             OnPreRunFrame();
+                            OnCheckCollision?.Invoke();
                             Runner.RunFrame();
                             OnStateChanged?.Invoke();
                         }
@@ -150,6 +155,7 @@ namespace SharedGame {
                         if (m_ReplayManager == null)
                         {
                             OnPreRunFrame();
+                            OnCheckCollision?.Invoke();
                             Runner.RunFrame();
                             OnStateChanged?.Invoke();
                         }
@@ -175,11 +181,12 @@ namespace SharedGame {
             return string.Format("f:{0} c:{1}", info.framenumber, info.checksum); // %04d  %08x
         }
 
-        public void StartGame(IGameRunner runner) {
+        public virtual void StartGame(IGameRunner runner, bool isDebugMode = false)
+        {
             Runner = runner;
         }
 
-        public abstract void StartLocalGame();
+        public abstract void StartLocalGame(bool isDebugMode);
 
         public abstract void StartGGPOGame(IPerfUpdate perfPanel, IList<Connections> connections, int playerIndex);
 

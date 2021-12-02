@@ -8,7 +8,7 @@ using UnityEditor;
 
 public class ReplayManager : MonoBehaviour
 {
-    private GGPOComponent _GGPOComponent;
+    private GGPOGameManager _GGPOComponent;
 
     private bool m_IsRecording;
     private int m_CurrentFrameNum;
@@ -50,7 +50,7 @@ public class ReplayManager : MonoBehaviour
 
     private void Awake()
     {
-        _GGPOComponent = FindObjectOfType<GGPOComponent>();
+        _GGPOComponent = FindObjectOfType<GGPOGameManager>();
 
         SetActivePlaybackButtons(false);
     }
@@ -341,7 +341,7 @@ public class ReplayManager : MonoBehaviour
             }
 
             // Advance current gamestate to next gamestate
-            currentGameState.Update(inputs, 0);
+            currentGameState.UpdateSimulation(inputs, 0);
 
             m_GameStates.Add(currentGameState);
         }

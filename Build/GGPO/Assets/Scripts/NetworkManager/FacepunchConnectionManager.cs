@@ -45,7 +45,7 @@ public class FacepunchConnectionManager : ConnectionManager, FacepunchConnection
         Connection.SendMessage(data, SendType.Unreliable);
     }
 
-    public void InitGGPOForwardSockets(GGPOComponent gameManager)
+    public void InitGGPOForwardSockets(GGPOGameManager gameManager)
     {
         ggpoSocketLayer = new GGPOSocketLayer();
         ggpoSocketLayer.InitializeGGPOSocketLayer(gameManager);

@@ -1,61 +1,33 @@
-using SharedGame;
 using System;
 using System.IO;
+using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
-
-[Serializable]
-public struct Player
-{
-    public Vector3 position;
-    public Vector3 velocity;
-
-    public void Serialize(BinaryWriter bw)
-    {
-        bw.Write(position.x);
-        bw.Write(position.z);
-        bw.Write(velocity.x);
-        bw.Write(velocity.z);
-    }
-
-    public void Deserialize(BinaryReader br)
-    {
-        position.x = br.ReadSingle();
-        position.z = br.ReadSingle();
-        velocity.x = br.ReadSingle();
-        velocity.z = br.ReadSingle();
-    }
-
-    // @LOOK Not hashing bullets.
-    public override int GetHashCode()
-    {
-        int hashCode = 1858597544;
-        hashCode = hashCode * -1521134295 + position.GetHashCode();
-        hashCode = hashCode * -1521134295 + velocity.GetHashCode();
-        return hashCode;
-    }
-};
+using Rewired;
+using SharedGame;
+using System.Linq;
 
 [Serializable]
 public struct GGPOGameState : IGame
 {
-    public const int INPUT_FORWARD = (1 << 0);
-    public const int INPUT_BACKWARD = (1 << 1);
-    public const int INPUT_LEFT = (1 << 2);
-    public const int INPUT_RIGHT = (1 << 3);
+    public Player[] Players;
+    private readonly CharacterControllerStateMachine _StateSimulator;
+    private readonly List<Rewired.Player> _Controls;
+    private readonly List<Vector3> _StartPositions;
 
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
 
     [SerializeField]
     private int frameNumber;
-    public int Framenumber { get { return frameNumber; } private set { frameNumber = value; } }
+
+    public int Framenumber 
+    {
+        get => frameNumber;
+        private set => frameNumber = value;
+    }
 
     public int Checksum => GetHashCode();
-
-    public Player[] Players;
-
-    private int _Speed;
 
     public void Serialize(BinaryWriter writer)
     {
@@ -109,25 +81,48 @@ public struct GGPOGameState : IGame
     }
 
     /*
-        * InitGameState --
-        *
-        * Initialize our game state.
-        */
+    * InitGameState --
+    *
+    * Initialize our game state.
+    */
 
     public GGPOGameState(int num_players)
     {
-        // consts
-        _Speed = 2;
-
         frameNumber = 0;
         UnserializedInputsP1 = 0;
         UnserializedInputsP2 = 0;
 
         Players = new Player[num_players];
+        _StateSimulator = new CharacterControllerStateMachine();
+
+        _Controls = new List<Rewired.Player>
+        {
+            ReInput.players.GetPlayer(0),
+            ReInput.players.GetPlayer(1)
+        };
+
+        _StartPositions = new List<Vector3>();
 
         for (int i = 0; i < Players.Length; i++)
         {
             Players[i] = new Player();
+        }
+
+        // todo: need to unsubscribe too
+        GameController.Instance.OnGameStateChanged += HandleGameStateChanged;
+    }
+
+    private void HandleGameStateChanged(object sender, MatchState state)
+    {
+        switch (state)
+        {
+            case MatchState.PreBattle:
+                ResetPlayers();
+                break;
+            case MatchState.Battle:
+                break;
+            case MatchState.PostBattle:
+                break;
         }
     }
 
@@ -141,8 +136,8 @@ public struct GGPOGameState : IGame
 
         for (int i = 0; i < newState.Players.Length; ++i)
         {
-            newState.Players[i].position = Players[i].position;
-            newState.Players[i].velocity = Players[i].velocity;
+            newState.Players[i].Position = Players[i].Position;
+            newState.Players[i].Velocity = Players[i].Velocity;
         }
 
         return newState;
@@ -150,7 +145,20 @@ public struct GGPOGameState : IGame
 
     public void InitPlayer(int index, Vector3 startPosition)
     {
-        Players[index].position = startPosition;
+        if (_StartPositions.Count == 0 || _StartPositions.Count == 1)
+        {
+            _StartPositions.Add(startPosition);
+        }
+
+        Players[index].Position = startPosition;
+        Players[index].ID = index == 0 ? PlayerID.Player1 : PlayerID.Player2;
+        Players[index].Health = 1;
+        Players[index].Stun = 0;
+        Players[index].Power = 0;
+        Players[index].State = PlayerState.Standing;
+        Players[index].IsHit = false;
+        Players[index].IsJumping = false;
+        Players[index].IsAttacking = false;
     }
 
     public Player GetPlayer(int index)
@@ -158,48 +166,17 @@ public struct GGPOGameState : IGame
         return Players[index];
     }
 
-    public void ParsePlayerInputs(long inputs, int i)
+    public ref Player GetPlayerRef(int index)
     {
-        GGPORunner.LogGame($"parsing ship {i} inputs: {inputs}.");
-        
-        Players[i].velocity.Set(0, 0, 0);
-
-        if ((inputs & INPUT_LEFT) != 0)
-        {
-            Players[i].velocity.Set(-1, 0, 0);
-        }
-
-        if ((inputs & INPUT_RIGHT) != 0)
-        {
-            Players[i].velocity.Set(1, 0, 0);
-        }
-
-        if ((inputs & INPUT_FORWARD) != 0)
-        {
-            Players[i].velocity.Set(0, 0, 1);
-        }
-
-        if ((inputs & INPUT_BACKWARD) != 0)
-        {
-            Players[i].velocity.Set(0, 0, -1);
-        }
-
-        Players[i].velocity = Players[i].velocity * _Speed;
-    }
-
-    public void MovePlayer(int index)
-    {
-        var player = Players[index];
-
-        Players[index].position = player.position + player.velocity;
+        return ref Players[index];
     }
 
     public void LogInfo(string filename)
     {
-
+        Debug.Log(filename);
     }
 
-    public void Update(long[] inputs, int disconnect_flags)
+    public void UpdateSimulation(long[] inputs, int disconnect_flags)
     {
         Framenumber++;
 
@@ -207,32 +184,60 @@ public struct GGPOGameState : IGame
         UnserializedInputsP1 = inputs[0];
         UnserializedInputsP2 = inputs[1];
 
+        if (GameController.Instance.CurrentGameType == GameType.Versus)
+        {
+            GameController.Instance.GameState = GameController.Instance.UpdateGameProgress(Players);
+        }
+
         for (int i = 0; i < Players.Length; i++)
         {
-            ParsePlayerInputs(inputs[i], i);
-            MovePlayer(i);
+            Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
         }
     }
 
     public long ReadInputs(int id)
     {
         long input = 0;
+        Rewired.Player control = _Controls[id];
 
-        if (Input.GetKey(KeyCode.W))
+        //if (control.GetButton(RewiredConsts.Action.UP))
+        //{
+        //    input |= InputConstants.INPUT_UP;
+        //}
+
+        //if (control.GetButton(RewiredConsts.Action.DOWN))
+        //{
+        //    input |= InputConstants.INPUT_DOWN;
+        //}
+
+        if (GameController.Instance.GameState == MatchState.Battle)
         {
-            input |= INPUT_FORWARD;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            input |= INPUT_BACKWARD;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            input |= INPUT_LEFT;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            input |= INPUT_RIGHT;
+            if (control.GetButton(RewiredConsts.Action.LEFT))
+            {
+                input |= InputConstants.INPUT_LEFT;
+            }
+
+            if (control.GetButton(RewiredConsts.Action.RIGHT))
+            {
+                input |= InputConstants.INPUT_RIGHT;
+            }
+
+            // Attacks
+
+            if (control.GetButtonDown(RewiredConsts.Action.SLASH))
+            {
+                input |= InputConstants.INPUT_SLASH;
+            }
+
+            if (control.GetButtonDown(RewiredConsts.Action.HEAVYSLASH))
+            {
+                input |= InputConstants.INPUT_HEAVY_SLASH;
+            }
+
+            if (control.GetButtonDown(RewiredConsts.Action.GUARDBREAK))
+            {
+                input |= InputConstants.INPUT_GUARD_BREAK;
+            }
         }
 
         return input;
@@ -254,6 +259,15 @@ public struct GGPOGameState : IGame
         {
             hashCode = hashCode * -1521134295 + player.GetHashCode();
         }
+
         return hashCode;
+    }
+
+    private void ResetPlayers()
+    {
+        for (int i = 0; i < Players.Length; i++)
+        {
+            InitPlayer(i, _StartPositions[i]);
+        }
     }
 }

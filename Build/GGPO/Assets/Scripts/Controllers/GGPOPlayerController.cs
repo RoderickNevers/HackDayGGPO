@@ -1,34 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GGPOPlayerController : MonoBehaviour
 {
-    private CharacterController m_CharacterController;
-    private GGPOComponent m_GGPOComponent;
+    private const int BASE_LAYER = -1;
+    [Header("Animator")]
+    [SerializeField] private Animator m_Animator;
 
+    [Header("Collision Detection")]
+    [SerializeField] private HitBoxComponent m_HitBox;
+    [SerializeField] private Transform m_HurtBox;
+    [SerializeField] private LayerMask m_LayerMask;
 
-    private void Awake()
+    public PlayerID ID { get; set; }
+
+    void Start()
     {
-        m_CharacterController = GetComponent<CharacterController>();
+        m_Animator.speed = 0.0f;
     }
 
-    public void Init(GGPOComponent ggpoComponent)
+    public HitData OnCheckCollision()
     {
-        m_GGPOComponent = ggpoComponent;
+        HitData result = new HitData();
+
+        Collider[] hitColliders = Physics.OverlapBox(m_HurtBox.position, m_HurtBox.localScale / 2, Quaternion.identity, m_LayerMask);
+        foreach (Collider hitbox in hitColliders)
+        {
+            if (hitbox.transform.root != this.transform)
+            {
+                result.AttackData = hitbox.GetComponent<HitBoxComponent>().AttackData;
+                result.IsHit = true;
+            }
+        }
+
+        return result;
     }
 
-    public void UpdatePlayerPosition(Player player)
+    // Called from GameController.cs. Is called anytime the GameManager's Update calls the Runner's update (ie advances the frame)
+    // Won't be called on rollbacks (I think)
+    public void OnStateChanged(ref Player player)
     {
-        if (m_GGPOComponent.manualFrameIncrement)
-        {
-            transform.position = player.position;
-        }
-        else
-        {
-            float SpeedModifier = SharedGame.GameManager.FRAME_LENGTH_SEC / m_GGPOComponent.currentFrameLength;
-            transform.position = player.position;
-            m_CharacterController.Move(player.velocity * SpeedModifier);
-        }
+        // move player
+        transform.position = player.Position;
+        transform.localScale = player.LookDirection == LookDirection.Left ? new Vector3(-1, 1, 1) : transform.localScale = new Vector3(1, 1, 1);
+        
+        // set the animator to the correct frame
+        m_Animator.Play(Animator.StringToHash(player.AnimationKey), BASE_LAYER, player.CurrentFrame);
+
+        if (player.CurrentAttackID == Guid.Empty)
+            return;
+
+        m_HitBox.AttackData = AnimationData.AttackLookup[player.CurrentAttackID];
     }
 }
