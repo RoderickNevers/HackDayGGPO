@@ -31,6 +31,8 @@ namespace SharedGame {
 
         public event Action OnCheckCollision;
 
+        public EventHandler<GameType> OnLauncheGame;
+
         // Game speed
         public const float FRAME_LENGTH_SEC = 1f / 60f;
         public float currentFrameLength { get; protected set; } = FRAME_LENGTH_SEC;

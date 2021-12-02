@@ -176,8 +176,6 @@ public struct GGPOGameState : IGame
         Debug.Log(filename);
     }
 
-    //bool flag;
-
     public void UpdateSimulation(long[] inputs, int disconnect_flags)
     {
         Framenumber++;

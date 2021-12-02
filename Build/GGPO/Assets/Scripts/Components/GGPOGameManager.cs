@@ -1,5 +1,6 @@
-using SharedGame;
 using System.Collections.Generic;
+
+using SharedGame;
 using UnityGGPO;
 
 public class GGPOGameManager : GameManager
@@ -22,14 +23,9 @@ public class GGPOGameManager : GameManager
     public override void StartGame(IGameRunner runner, bool isDebugMode = false)
     {
         base.StartGame(runner);
-        if (!isDebugMode)
-        {
-            GameController.Instance.ShowHud();
-        }
-        else
-        {
-            GameController.Instance.ShowDebug();
-        }
+
+        GameType gameType = isDebugMode ? GameType.Training : GameType.Versus;
+        OnLauncheGame?.Invoke(this, gameType);
     }
 
     public void StopGGPOGame()

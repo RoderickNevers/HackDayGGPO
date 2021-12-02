@@ -250,6 +250,7 @@ public class LobbyComponent : MonoBehaviour
 
     public void ShowLobby()
     {
+        GameController.Instance.CurrentGameType = GameType.None;
         m_MainMenuPanel.SetActive(false);
         m_LobbyPanel.SetActive(true);
         m_DebugPanel.SetActive(false);
@@ -257,6 +258,7 @@ public class LobbyComponent : MonoBehaviour
 
     public void ShowMainMenu()
     {
+        GameController.Instance.CurrentGameType = GameType.None;
         m_MainMenuPanel.SetActive(true);
         m_LobbyPanel.SetActive(false);
         m_DebugPanel.SetActive(false);
@@ -264,10 +266,8 @@ public class LobbyComponent : MonoBehaviour
 
     public void StartVersusMode()
     {
-        GameController.Instance.CurrentGameType = GameType.Versus;
-        m_MainMenuPanel.SetActive(false);
+        GGPOGameManager.Instance.OnLauncheGame?.Invoke(this, GameType.Versus);
         m_LobbyPanel.SetActive(false);
-        m_DebugPanel.SetActive(false);
     }
 
     private void LeaveLobby()

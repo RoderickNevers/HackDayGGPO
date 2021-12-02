@@ -80,6 +80,7 @@ public class GameController : MonoBehaviour
     public void Awake()
     {
         LockFramerate();
+
         _DebugPanel.SetActive(false);
         _HUDComponent.gameObject.SetActive(false);
 
@@ -132,9 +133,12 @@ public class GameController : MonoBehaviour
 
         _CreateBtn.onClick.AddListener(_LobbyComponent.CreateLobby);
         _ListLobbiesBtn.onClick.AddListener(_LobbyComponent.ListCloseLobbies);
+
+        GGPOGameManager.Instance.OnLauncheGame += HandleLaunchGame;
+
         _VersusModeBtn.onClick.AddListener(StartVersusMode);
         _TrainingModeBtn.onClick.AddListener(StartTrainingMode);
-        _StartStopSessionBtn.onClick.AddListener(ToggleSession);
+        //_StartStopSessionBtn.onClick.AddListener(ToggleSession);
     }
 
     private void RemoveListeners()
@@ -145,9 +149,42 @@ public class GameController : MonoBehaviour
 
         _CreateBtn.onClick.RemoveListener(_LobbyComponent.CreateLobby);
         _ListLobbiesBtn.onClick.RemoveListener(_LobbyComponent.ListCloseLobbies);
+
+        if (GGPOGameManager.Instance != null)
+        {
+            GGPOGameManager.Instance.OnLauncheGame -= HandleLaunchGame;
+        }
+
         _VersusModeBtn.onClick.RemoveListener(StartVersusMode);
         _TrainingModeBtn.onClick.RemoveListener(StartTrainingMode);
-        _StartStopSessionBtn.onClick.RemoveListener(ToggleSession);
+        //_StartStopSessionBtn.onClick.RemoveListener(ToggleSession);
+    }
+
+    private void HandleLaunchGame(object sender, GameType gameType)
+    {
+        switch(gameType)
+        {
+            case GameType.Versus:
+                CurrentGameType = GameType.Versus;
+
+                _LobbyComponent.enabled = false;
+
+                _DebugPanel.SetActive(false);
+                _MainMenuPanel.SetActive(false);
+                _HUDComponent.gameObject.SetActive(true);
+                break;
+
+            case GameType.Training:
+                CurrentGameType = GameType.Training;
+                GameState = MatchState.Battle;
+
+                _DebugPanel.SetActive(true);
+                _MainMenuPanel.SetActive(false);
+                _HUDComponent.gameObject.SetActive(false);
+
+                _FadeOverlayComponent.ShowScreen(0.5f);
+                break;
+        }
     }
 
     private void HandleRunningChanged(bool running)
@@ -217,6 +254,7 @@ public class GameController : MonoBehaviour
 
         GameObject player = Instantiate(_PlayerPrefab, start.position, start.rotation);
         GGPOPlayerController playerController = player.GetComponent<GGPOPlayerController>();
+
         _PlayerControllers[playerIndex] = playerController;
         playerController.ID = playerIndex == 0 ? PlayerID.Player1 : PlayerID.Player2;
         _Players.Add(playerController);
@@ -250,19 +288,6 @@ public class GameController : MonoBehaviour
         _ReplayManager.enabled = isEnabled;
     }
 
-    public void ShowHud()
-    {
-        _DebugPanel.SetActive(false);
-        _HUDComponent.gameObject.SetActive(true);
-    }
-
-    public void ShowDebug()
-    {
-        _DebugPanel.SetActive(true);
-        _HUDComponent.gameObject.SetActive(false);
-        _FadeOverlayComponent.ShowScreen(0.5f);
-    }
-
     private void StartVersusMode()
     {
         if (_GGPOComponent.IsRunning)
@@ -272,7 +297,6 @@ public class GameController : MonoBehaviour
 
         _FadeOverlayComponent.HideScreen(1f).OnComplete(() =>
         {
-            CurrentGameType = GameType.Versus;
             StartLocalGame(isDebugMode: false);
         });
     }
@@ -286,45 +310,42 @@ public class GameController : MonoBehaviour
 
         _FadeOverlayComponent.HideScreen(1f).OnComplete(() =>
         {
-            CurrentGameType = GameType.Training;
-            GameState = MatchState.Battle;
             StartLocalGame(isDebugMode: true);
         });
     }
 
-    private void ToggleSession()
-    {
-        var btnText = _StartStopSessionBtn.GetComponentInChildren<Text>();
+    //private void ToggleSession()
+    //{
+    //    var btnText = _StartStopSessionBtn.GetComponentInChildren<Text>();
 
-        if (!_GGPOComponent.IsRunning)
-        {
-            CurrentGameType = GameType.Training;
-            StartLocalGame(isDebugMode: true);
-            btnText.text = "Stop Local Session";
-        }
-        else
-        {
-            StopLocalGame();
-            btnText.text = "Start Local Session";
-        }
-    }
+    //    if (!_GGPOComponent.IsRunning)
+    //    {
+    //        CurrentGameType = GameType.Training;
+    //        StartLocalGame(isDebugMode: true);
+    //        btnText.text = "Stop Local Session";
+    //    }
+    //    else
+    //    {
+    //        StopLocalGame();
+    //        btnText.text = "Start Local Session";
+    //    }
+    //}
 
     private void StartLocalGame(bool isDebugMode)
     {
         SetEnableLocalSessionFeatures(true);
-        _LobbyComponent.enabled = false;
         _GGPOComponent.StartLocalGame(isDebugMode);
-        _MainMenuPanel.SetActive(false);
     }
 
     private void StopLocalGame()
     {
         SetEnableLocalSessionFeatures(false);
         _LobbyComponent.enabled = true;
-        _GGPOComponent.Shutdown();
         _MainMenuPanel.SetActive(true);
         _DebugPanel.SetActive(false);
         _HUDComponent.gameObject.SetActive(false);
+
+        _GGPOComponent.Shutdown();
     }
 
     public LookDirection CheckLookDirection(Player player)
