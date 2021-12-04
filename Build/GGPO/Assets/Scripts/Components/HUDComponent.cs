@@ -17,12 +17,14 @@ public class HUDComponent : MonoBehaviour
 
     public Sequence Announce(string announcement)
     {
-        float time = 0.5f;
+        float time = GameController.Instance.CurrentGameType == GameType.Versus ? 0.5f : 0.1f;
+        float delay = GameController.Instance.CurrentGameType == GameType.Versus ? 1f : 0f;
+
         _Announcer.text = announcement;
 
         Sequence sequence = DOTween.Sequence();
         sequence.Append(_Announcer.transform.DOScale(Vector2.zero, 0));
-        sequence.Append(_Announcer.transform.DOScale(Vector2.one, time)).SetDelay(1f);
+        sequence.Append(_Announcer.transform.DOScale(Vector2.one, time)).SetDelay(delay);
         sequence.Append(_Announcer.transform.DOScale(Vector2.zero, time));
 
         return sequence;

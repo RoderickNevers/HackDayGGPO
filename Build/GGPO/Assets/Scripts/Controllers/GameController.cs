@@ -167,24 +167,20 @@ public class GameController : MonoBehaviour
             case GameType.Versus:
                 CurrentGameType = GameType.Versus;
 
-                _LobbyComponent.enabled = false;
-
                 _DebugPanel.SetActive(false);
-                _MainMenuPanel.SetActive(false);
                 _HUDComponent.gameObject.SetActive(true);
                 break;
 
             case GameType.Training:
                 CurrentGameType = GameType.Training;
-                GameState = MatchState.Battle;
 
                 _DebugPanel.SetActive(true);
-                _MainMenuPanel.SetActive(false);
                 _HUDComponent.gameObject.SetActive(false);
-
-                _FadeOverlayComponent.ShowScreen(0.5f);
                 break;
         }
+
+        _LobbyComponent.enabled = false;
+        _MainMenuPanel.SetActive(false);
     }
 
     private void HandleRunningChanged(bool running)

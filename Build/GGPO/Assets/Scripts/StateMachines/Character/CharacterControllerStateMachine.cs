@@ -77,7 +77,7 @@ public class CharacterControllerStateMachine: IDisposable
         player.LookDirection = GameController.Instance.CheckLookDirection(player);
         // this is kinda of iffy but it currently works
         // Hacky landing state
-        if (!player.IsGrounded && Mathf.Approximately(player.Position.y, 0.5f) || player.Position.y < 0)
+        if (IsLanding(player))
         {
             player.IsAttacking = false;
             player.JumpType = PlayerState.None;
@@ -85,7 +85,7 @@ public class CharacterControllerStateMachine: IDisposable
             //player = _LandingState.UpdatePlayer(player, input);
         }
 
-        player.IsGrounded = GroundCheck(player);
+        player.IsGrounded = IsGrounded(player);
 
         // Ensure the players feet are always on the ground
         if (player.IsGrounded)
@@ -93,7 +93,7 @@ public class CharacterControllerStateMachine: IDisposable
             player.Position.y = 0;
         }
 
-        if (player.State == PlayerState.KO)
+        if (IsDead(player))
         {
             player = _KOState.UpdatePlayer(player, input);
             // when the animation is completem, tell the game to end
@@ -150,7 +150,7 @@ public class CharacterControllerStateMachine: IDisposable
         CheckDirectionInput(ref player, input);
 
         // Grounded states
-        if (player.IsGrounded && !player.IsJumping && !player.IsHit)
+        if (IsNeutral(player))
         {
             switch (player.State)
             {
@@ -222,7 +222,7 @@ public class CharacterControllerStateMachine: IDisposable
         //}
 
         // Apply gravity
-        if (!player.IsGrounded && player.Position.y >= 0)
+        if (!IsGrounded(player))
         {
             float gravityModifier = player.Velocity.y == 0 ? PlayerConstants.FALLING_GRAVITY : PlayerConstants.RAISING_GRAVITY;
             player.Velocity.y += gravityModifier * Time.fixedDeltaTime;
@@ -261,9 +261,24 @@ public class CharacterControllerStateMachine: IDisposable
         return player;
     }
 
-    private bool GroundCheck(Player player)
+    private bool IsGrounded(Player player)
     {
         return player.Position.y <= 0;
+    }
+
+    private bool IsLanding(Player player)
+    {
+        return !player.IsGrounded && Mathf.Approximately(player.Position.y, 0.5f) || player.Position.y < 0;
+    }
+
+    private bool IsDead(Player player)
+    {
+        return player.State == PlayerState.KO;
+    }
+
+    private bool IsNeutral(Player player)
+    {
+        return player.IsGrounded && !player.IsJumping && !player.IsHit;
     }
 
     public void CheckDirectionInput(ref Player player, long input)

@@ -70,6 +70,28 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
     }
 
+    protected Player UpdateHitReaction(Player player, Dictionary<Guid, FrameData> hitReactionLookup)
+    {
+        if (player.CurrentlyHitByID == Guid.Empty)
+        {
+            return player;
+        }
+
+        FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
+        if (attack.ID == AnimationData.StandingAttacks.GUARD_BREAK.ID)
+        {
+            player.State = PlayerState.KO;
+        }
+
+        int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
+
+        PlayHitAnimation(ref player, hitReactionLookup[player.CurrentlyHitByID]);
+        ApplyPush(ref player, direction, attack.HitPushBack);
+        ApplyDamage(ref player, attack.Damage);
+
+        return player;
+    }
+
     protected void PlayHitAnimation(ref Player player, FrameData frameData)
     {
         PlayAnimationOneShot(ref player, frameData);
@@ -147,28 +169,6 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     public override Player UpdatePlayer(Player player, long input)
     {
-        return player;
-    }
-
-    protected Player UpdateHitReaction(Player player, long input, Dictionary<Guid, FrameData> hitReactionLookup)
-    {
-        if (player.CurrentlyHitByID == Guid.Empty)
-        {
-            return player;
-        }
-
-        FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
-        if (attack.ID == AnimationData.StandingAttacks.GUARD_BREAK.ID)
-        {
-            player.State = PlayerState.KO;
-        }
-
-        int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
-
-        PlayHitAnimation(ref player, hitReactionLookup[player.CurrentlyHitByID]);
-        ApplyPush(ref player, direction, attack.HitPushBack);
-        ApplyDamage(ref player, attack.Damage);
-
         return player;
     }
 }

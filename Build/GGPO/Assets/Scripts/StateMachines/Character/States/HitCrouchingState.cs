@@ -55,6 +55,6 @@ public class HitCrouchingState : CharacterStateBlock
 
     public override Player UpdatePlayer(Player player, long input)
     {
-        return UpdateHitReaction(player, input, _HitReactionLookup);
+        return UpdateHitReaction(player, _HitReactionLookup);
     }
 }

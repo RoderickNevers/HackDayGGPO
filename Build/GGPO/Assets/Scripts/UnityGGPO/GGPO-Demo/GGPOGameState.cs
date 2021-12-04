@@ -184,10 +184,7 @@ public struct GGPOGameState : IGame
         UnserializedInputsP1 = inputs[0];
         UnserializedInputsP2 = inputs[1];
 
-        if (GameController.Instance.CurrentGameType == GameType.Versus)
-        {
-            GameController.Instance.GameState = GameController.Instance.UpdateGameProgress(Players);
-        }
+        GameController.Instance.GameState = GameController.Instance.UpdateGameProgress(Players);
 
         for (int i = 0; i < Players.Length; i++)
         {
