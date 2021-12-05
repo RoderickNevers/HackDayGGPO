@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Stateless;
+
 using UnityEngine;
 
 public class CharacterStateBlock : AbstractStateBlock, IDisposable
@@ -59,7 +59,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
         if (player.IsAttacking)
         {
-            player.State = frameData.State;
+            player.State = frameData.PlayerState;
             player.CurrentButtonPressed = frameData.Attack;
             player.CurrentAttackID = frameData.ID;
         }
@@ -78,23 +78,28 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
 
         FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
-        if (attack.ID == AnimationData.StandingAttacks.GUARD_BREAK.ID)
+        int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
+        
+        if (IsAnimationComplete(player, attack))
         {
-            player.State = PlayerState.KO;
+            return player;
         }
 
-        int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
-
-        PlayHitAnimation(ref player, hitReactionLookup[player.CurrentlyHitByID]);
+        PlayAnimationOneShot(ref player, hitReactionLookup[player.CurrentlyHitByID]);
         ApplyPush(ref player, direction, attack.HitPushBack);
         ApplyDamage(ref player, attack.Damage);
 
         return player;
     }
 
-    protected void PlayHitAnimation(ref Player player, FrameData frameData)
+    //protected void PlayHitAnimation(ref Player player, FrameData frameData)
+    //{
+        //PlayAnimationOneShot(ref player, frameData);
+    //}
+
+    protected bool IsAnimationComplete(Player player, FrameData frameData)
     {
-        PlayAnimationOneShot(ref player, frameData);
+        return player.AnimationIndex >= frameData.TotalFrames; 
     }
 
     /// <summary>
@@ -145,8 +150,8 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
     /// <summary>
     /// Checks if an attack button is being used.
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
+    /// <param name="input">The input signature</param>
+    /// <returns>The attack button state that is being used. Return none if nothing is used.</returns>
     protected AttackButtonState CheckAttacking(long input)
     {
         if ((input & InputConstants.INPUT_SLASH) != 0)

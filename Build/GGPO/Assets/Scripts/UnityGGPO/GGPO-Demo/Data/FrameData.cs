@@ -7,7 +7,7 @@ public class FrameData
     public string AnimationKey;
     public float TotalFrames;
     public float FrameRate;
-    public PlayerState State;
+    public PlayerState PlayerState;
     public AttackButtonState Attack;
     public int Damage;
     public float HitStun;
