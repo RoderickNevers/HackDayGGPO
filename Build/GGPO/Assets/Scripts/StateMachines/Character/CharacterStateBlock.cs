@@ -92,20 +92,31 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         return player;
     }
 
-    //protected void PlayHitAnimation(ref Player player, FrameData frameData)
-    //{
-        //PlayAnimationOneShot(ref player, frameData);
-    //}
+    protected Player UpdateBlockReaction(Player player)
+    {
+        if (player.CurrentlyHitByID == Guid.Empty)
+        {
+            return player;
+        }
+
+        FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
+        int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
+
+        if (IsAnimationComplete(player, attack))
+        {
+            return player;
+        }
+
+        PlayAnimationOneShot(ref player, AnimationData.Hit.BLOCK);
+        ApplyPush(ref player, direction, attack.BlockPushBack);
+        return player;
+    }
 
     protected bool IsAnimationComplete(Player player, FrameData frameData)
     {
         return player.AnimationIndex >= frameData.TotalFrames; 
     }
 
-    /// <summary>
-    /// Pushes the character in a direction.
-    /// </summary>
-    /// <param name="player"></param>
     protected void ApplyPush(ref Player player, int direction, float force)
     {
         player.Velocity.Set(direction, 0, 0);
@@ -115,6 +126,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
     protected void ApplyDamage(ref Player player, int damage)
     {
         player.Health -= damage;
+        player.IsTakingDamage = true;
     }
 
     protected void GainHealth(ref Player player, int health)

@@ -111,15 +111,14 @@ public class CharacterControllerStateMachine: IDisposable
                     case PlayerState.Forward:
                     case PlayerState.Back:
                     case PlayerState.StandHit:
-                        player.State = PlayerState.StandHit;
-                        player = _HitStandingState.UpdatePlayer(player, input);
-
                         if (player.Health <= 0)
                         {
                             player.State = PlayerState.KO;
                             return player;
                         }
 
+                        player.State = PlayerState.StandHit;
+                        player = _HitStandingState.UpdatePlayer(player, input);
                         break;
 
                     //case PlayerState.Crouching:
@@ -152,6 +151,8 @@ public class CharacterControllerStateMachine: IDisposable
         // Grounded states
         if (IsNeutral(player))
         {
+            player.IsTakingDamage = false;
+
             switch (player.State)
             {
                 case PlayerState.Standing:

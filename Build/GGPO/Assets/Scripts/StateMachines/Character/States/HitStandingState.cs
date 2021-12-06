@@ -23,52 +23,19 @@ public class HitStandingState : CharacterStateBlock
 
     }
 
-    //ScreenFreeze();
-    //ScreenShake(stateMachine.Move.AttackData.Type);
-    //characterController.HealthComponent.ApplyDamage(stateMachine.Move.AttackData);
-    //characterController.HealthComponent.OnResetDizzyLock?.Invoke(this, new EventArgs());
-        
-    //if (characterController.HealthComponent.IsAlive)
-    //{ 
-    //    PlayHitAnimation(stateMachine.Move.AttackData.Type);
-    //}
-    //else
-    //{
-    //    KO();
-    //}
-
     public override Player UpdatePlayer(Player player, long input)
     {
+        // check if they are blocking
+        if (!player.IsTakingDamage && IsBlocking(player, input))
+        {
+            return UpdateBlockReaction(player);
+        }
+
         return UpdateHitReaction(player, _HitReactionLookup);
     }
 
-    //protected virtual void HandleDizzy(object sender, EventArgs e)
-    //{
-    //    stateMachine.Fire(CharacterStateTrigger.TriggerDizzy);
-    //}
-
-    //private void KO()
-    //{
-    //    stateMachine.Fire(CharacterStateTrigger.TriggerKO);
-    //}
-
-    //private void ScreenFreeze()
-    //{
-    //    Sequence seq = DOTween.Sequence().SetUpdate(true);
-    //    seq.AppendCallback(() => { Time.timeScale = 0f; });
-    //    seq.AppendInterval(SCREEN_FREEZE_TIME);
-    //    seq.AppendCallback(() => { Time.timeScale = 1f; });
-    //    seq.Play();
-    //}
-
-    //private void ScreenShake(AttackType type)
-    //{
-    //    switch(type)
-    //    {
-    //        case AttackType.Medium:
-    //        case AttackType.Heavy:
-    //            CameraShaker.Instance.ShakeOnce(1f, 4f, 0.05f, 0.05f);
-    //            break;
-    //    }
-    //}
+    private bool IsBlocking(Player player, long input)
+    {
+        return player.LookDirection == LookDirection.Left && input == InputConstants.INPUT_RIGHT || player.LookDirection == LookDirection.Right && input == InputConstants.INPUT_LEFT;
+    }
 }

@@ -14,6 +14,7 @@ public struct Player
     public bool IsJumping;
     public bool IsAttacking;
     public bool IsHit;
+    public bool IsTakingDamage;
     public int Health;
     public int Stun;
     public int Power;
@@ -39,6 +40,7 @@ public struct Player
         bw.Write(IsJumping);
         bw.Write(IsAttacking);
         bw.Write(IsHit);
+        bw.Write(IsTakingDamage);
         bw.Write(Health);
         bw.Write(Stun);
         bw.Write(Power);
@@ -69,6 +71,7 @@ public struct Player
         IsJumping = br.ReadBoolean();
         IsAttacking = br.ReadBoolean();
         IsHit = br.ReadBoolean();
+        IsTakingDamage = br.ReadBoolean();
         Health = br.ReadInt32();
         Stun = br.ReadInt32();
         Power = br.ReadInt32();
@@ -95,7 +98,8 @@ public struct Player
         hashCode = hashCode * number + IsGrounded.GetHashCode();
         hashCode = hashCode * number + IsJumping.GetHashCode();
         hashCode = hashCode * number + IsAttacking.GetHashCode();
-        hashCode = hashCode * number + IsHit.GetHashCode();
+        hashCode = hashCode * number + IsHit.GetHashCode(); 
+        hashCode = hashCode * number + IsTakingDamage.GetHashCode();
         hashCode = hashCode * number + Health.GetHashCode();
         hashCode = hashCode * number + Stun.GetHashCode();
         hashCode = hashCode * number + Power.GetHashCode();
