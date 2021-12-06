@@ -1,7 +1,6 @@
-using SharedGame;
 using System;
 using System.IO;
-using Unity.Collections;
+
 using UnityEngine;
 
 [Serializable]
@@ -14,10 +13,13 @@ public struct Player
     public bool IsJumping;
     public bool IsAttacking;
     public bool IsHit;
+    public bool IsStunned;
     public bool IsTakingDamage;
     public int Health;
-    public int Stun;
+    public float HitStunTime;
+    public float BlockStunTime;
     public int Power;
+    public float CurrentDashTime;
     public PlayerState State;
     public PlayerState JumpType;
     public AttackButtonState CurrentButtonPressed;
@@ -40,10 +42,13 @@ public struct Player
         bw.Write(IsJumping);
         bw.Write(IsAttacking);
         bw.Write(IsHit);
+        bw.Write(IsStunned);
         bw.Write(IsTakingDamage);
         bw.Write(Health);
-        bw.Write(Stun);
+        bw.Write(HitStunTime);
+        bw.Write(BlockStunTime);
         bw.Write(Power);
+        bw.Write(CurrentDashTime);
         bw.Write((int)State);
         bw.Write((int)JumpType);
         bw.Write((int)CurrentButtonPressed);
@@ -71,10 +76,13 @@ public struct Player
         IsJumping = br.ReadBoolean();
         IsAttacking = br.ReadBoolean();
         IsHit = br.ReadBoolean();
+        IsStunned = br.ReadBoolean();
         IsTakingDamage = br.ReadBoolean();
         Health = br.ReadInt32();
-        Stun = br.ReadInt32();
+        HitStunTime = br.ReadSingle();
+        BlockStunTime = br.ReadSingle();
         Power = br.ReadInt32();
+        CurrentDashTime = br.ReadSingle();
         State = (PlayerState)br.ReadInt32();
         JumpType = (PlayerState)br.ReadInt32();
         CurrentButtonPressed = (AttackButtonState)br.ReadInt32();
@@ -98,11 +106,14 @@ public struct Player
         hashCode = hashCode * number + IsGrounded.GetHashCode();
         hashCode = hashCode * number + IsJumping.GetHashCode();
         hashCode = hashCode * number + IsAttacking.GetHashCode();
-        hashCode = hashCode * number + IsHit.GetHashCode(); 
+        hashCode = hashCode * number + IsHit.GetHashCode();
+        hashCode = hashCode * number + IsStunned.GetHashCode();
         hashCode = hashCode * number + IsTakingDamage.GetHashCode();
         hashCode = hashCode * number + Health.GetHashCode();
-        hashCode = hashCode * number + Stun.GetHashCode();
+        hashCode = hashCode * number + HitStunTime.GetHashCode();
+        hashCode = hashCode * number + BlockStunTime.GetHashCode();
         hashCode = hashCode * number + Power.GetHashCode();
+        hashCode = hashCode * number + CurrentDashTime.GetHashCode(); 
         hashCode = hashCode * number + State.GetHashCode();
         hashCode = hashCode * number + JumpType.GetHashCode();
         hashCode = hashCode * number + CurrentButtonPressed.GetHashCode();

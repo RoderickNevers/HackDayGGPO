@@ -11,6 +11,7 @@ public class FrameData
     public AttackButtonState Attack;
     public int Damage;
     public float HitStun;
+    public float BlockStun;
     public float DizzyStun;
     public float HitPushBack;
     public float BlockPushBack;

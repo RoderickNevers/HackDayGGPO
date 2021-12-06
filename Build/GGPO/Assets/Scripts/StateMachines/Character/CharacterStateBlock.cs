@@ -86,6 +86,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
 
         PlayAnimationOneShot(ref player, hitReactionLookup[player.CurrentlyHitByID]);
+        ApplyHitStun(ref player, attack.HitStun);
         ApplyPush(ref player, direction, attack.HitPushBack);
         ApplyDamage(ref player, attack.Damage);
 
@@ -108,6 +109,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
 
         PlayAnimationOneShot(ref player, AnimationData.Hit.BLOCK);
+        ApplyHitStun(ref player, attack.BlockStun);
         ApplyPush(ref player, direction, attack.BlockPushBack);
         return player;
     }
@@ -119,8 +121,21 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     protected void ApplyPush(ref Player player, int direction, float force)
     {
-        player.Velocity.Set(direction, 0, 0);
-        player.Velocity = force * Time.fixedDeltaTime * player.Velocity;
+        const float maxDashTime = 1.0f;
+        const float dashStoppingSpeed = 0.1f;
+
+        if (player.CurrentDashTime < maxDashTime)
+        {
+            player.Velocity = new Vector3(direction * force, 0 , 0);
+            player.CurrentDashTime += dashStoppingSpeed;
+        }
+        else
+        {
+            player.CurrentDashTime = 0;
+            player.Velocity = Vector3.zero;
+        }
+
+        player.Velocity = Time.fixedDeltaTime * player.Velocity;
     }
 
     protected void ApplyDamage(ref Player player, int damage)
@@ -134,19 +149,42 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         player.Health += health;
     }
 
-    protected void ApplyStun(ref Player player, int stun)
+    protected void ApplyHitStun(ref Player player, float hitStunMax)
     {
-        player.Stun += stun;
+        if (!player.IsStunned)
+        {
+            player.IsStunned = true;
+            player.HitStunTime = hitStunMax;
+        }
+        else
+        {
+            player.HitStunTime -= 0.1f;
+
+            if (player.HitStunTime <= 0)
+            {
+                player.IsStunned = false;
+                player.HitStunTime = 0;
+            }
+        }
     }
 
-    protected void ReduceStun(ref Player player, int stunReduction)
+    protected void ApplyBlockStun(ref Player player, float blockStunMax)
     {
-        player.Stun -= stunReduction;
-    }
+        if (!player.IsStunned)
+        {
+            player.IsStunned = true;
+            player.BlockStunTime = blockStunMax;
+        }
+        else
+        {
+            player.BlockStunTime -= 0.1f;
 
-    protected void ResetStun(ref Player player)
-    {
-        player.Stun = 0;
+            if (player.BlockStunTime <= 0)
+            {
+                player.IsStunned = false;
+                player.BlockStunTime = 0;
+            }
+        }
     }
 
     protected void GainPower(ref Player player, int power)

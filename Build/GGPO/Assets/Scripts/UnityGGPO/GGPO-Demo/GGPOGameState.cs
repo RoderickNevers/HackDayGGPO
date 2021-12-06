@@ -153,7 +153,7 @@ public struct GGPOGameState : IGame
         Players[index].Position = startPosition;
         Players[index].ID = index == 0 ? PlayerID.Player1 : PlayerID.Player2;
         Players[index].Health = 1;
-        Players[index].Stun = 0;
+        Players[index].HitStunTime = 0;
         Players[index].Power = 0;
         Players[index].State = PlayerState.Standing;
         Players[index].IsHit = false;
