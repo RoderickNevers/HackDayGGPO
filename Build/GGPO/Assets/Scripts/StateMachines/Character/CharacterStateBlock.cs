@@ -109,7 +109,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
 
         PlayAnimationOneShot(ref player, AnimationData.Hit.BLOCK);
-        ApplyHitStun(ref player, attack.BlockStun);
+        ApplyBlockStun(ref player, attack.BlockStun);
         ApplyPush(ref player, direction, attack.BlockPushBack);
         return player;
     }
@@ -121,21 +121,18 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     protected void ApplyPush(ref Player player, int direction, float force)
     {
-        const float maxDashTime = 1.0f;
+        const float maxDashTime = 0.5f;
         const float dashStoppingSpeed = 0.1f;
 
-        if (player.CurrentDashTime < maxDashTime)
+        if (player.CurrentPushbackTime < maxDashTime)
         {
-            player.Velocity = new Vector3(direction * force, 0 , 0);
-            player.CurrentDashTime += dashStoppingSpeed;
+            player.Position = new Vector3(player.Position.x * direction + force, player.Position.y, player.Position.z);
+            player.CurrentPushbackTime += dashStoppingSpeed;
         }
         else
         {
-            player.CurrentDashTime = 0;
-            player.Velocity = Vector3.zero;
+            player.CurrentPushbackTime = 0;
         }
-
-        player.Velocity = Time.fixedDeltaTime * player.Velocity;
     }
 
     protected void ApplyDamage(ref Player player, int damage)
@@ -170,6 +167,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     protected void ApplyBlockStun(ref Player player, float blockStunMax)
     {
+        Debug.Log($"ID: {player.ID} Stun: {player.IsStunned}");
         if (!player.IsStunned)
         {
             player.IsStunned = true;

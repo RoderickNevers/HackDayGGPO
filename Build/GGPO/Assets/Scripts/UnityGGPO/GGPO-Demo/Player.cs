@@ -19,7 +19,7 @@ public struct Player
     public float HitStunTime;
     public float BlockStunTime;
     public int Power;
-    public float CurrentDashTime;
+    public float CurrentPushbackTime;
     public PlayerState State;
     public PlayerState JumpType;
     public AttackButtonState CurrentButtonPressed;
@@ -48,7 +48,7 @@ public struct Player
         bw.Write(HitStunTime);
         bw.Write(BlockStunTime);
         bw.Write(Power);
-        bw.Write(CurrentDashTime);
+        bw.Write(CurrentPushbackTime);
         bw.Write((int)State);
         bw.Write((int)JumpType);
         bw.Write((int)CurrentButtonPressed);
@@ -82,7 +82,7 @@ public struct Player
         HitStunTime = br.ReadSingle();
         BlockStunTime = br.ReadSingle();
         Power = br.ReadInt32();
-        CurrentDashTime = br.ReadSingle();
+        CurrentPushbackTime = br.ReadSingle();
         State = (PlayerState)br.ReadInt32();
         JumpType = (PlayerState)br.ReadInt32();
         CurrentButtonPressed = (AttackButtonState)br.ReadInt32();
@@ -113,7 +113,7 @@ public struct Player
         hashCode = hashCode * number + HitStunTime.GetHashCode();
         hashCode = hashCode * number + BlockStunTime.GetHashCode();
         hashCode = hashCode * number + Power.GetHashCode();
-        hashCode = hashCode * number + CurrentDashTime.GetHashCode(); 
+        hashCode = hashCode * number + CurrentPushbackTime.GetHashCode(); 
         hashCode = hashCode * number + State.GetHashCode();
         hashCode = hashCode * number + JumpType.GetHashCode();
         hashCode = hashCode * number + CurrentButtonPressed.GetHashCode();

@@ -179,10 +179,10 @@ public class CharacterControllerStateMachine: IDisposable
                 //case PlayerState.CrouchngAttack:
                 //    player = _AttackGroundState.UpdatePlayer(player, input);
                 //    break;
-                case PlayerState.StandBlock:
-                    break;
-                case PlayerState.CrouchBlock:
-                    break;
+                //case PlayerState.StandBlock:
+                //    break;
+                //case PlayerState.CrouchBlock:
+                //    break;
                 default:
                     player = _StandingState.UpdatePlayer(player, input);
                     break;
