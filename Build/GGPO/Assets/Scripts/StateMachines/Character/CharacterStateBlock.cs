@@ -25,7 +25,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
 
         player.AnimationKey = frameData.AnimationKey;
-        player.AnimationIndex += frameData.PlaybackSpeed; //AnimationData.FRAME_SPEED;
+        player.AnimationIndex += frameData.PlaybackSpeed;
         player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;
 
         if (player.AnimationIndex >= frameData.TotalFrames)
@@ -45,7 +45,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
         if (player.AnimationIndex < frameData.TotalFrames)
         {
-            player.AnimationIndex += frameData.PlaybackSpeed; //AnimationData.FRAME_SPEED;
+            player.AnimationIndex += frameData.PlaybackSpeed;
         }
 
         player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;
@@ -126,12 +126,13 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
         if (player.CurrentPushbackTime < maxDashTime)
         {
-            player.Position = new Vector3(player.Position.x * direction + force, player.Position.y, player.Position.z);
+            player.Velocity = new Vector3(direction * force, 0, 0);
             player.CurrentPushbackTime += dashStoppingSpeed;
         }
         else
         {
             player.CurrentPushbackTime = 0;
+            //player.Velocity = Vector3.zero;
         }
     }
 
