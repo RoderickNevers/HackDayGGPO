@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
 using UnityEditor;
+using SFB;
+using System.Linq;
 
 public class ReplayManager : MonoBehaviour
 {
@@ -154,7 +156,7 @@ public class ReplayManager : MonoBehaviour
         if (m_GameStates.Count > 0)
         {
             // Saving
-            string path = EditorUtility.SaveFilePanel("Save replay", "", "GGPODemo.json", "json");
+            string path = StandaloneFileBrowser.SaveFilePanel("Save replay", "", "GGPODemo.json", "json");
             if (path.Length != 0)
             {
                 ReplayData replayData = ConvertGameStatesToReplayData();
@@ -165,8 +167,8 @@ public class ReplayManager : MonoBehaviour
         else
         {
             // Loading
-            string path = EditorUtility.OpenFilePanel("Load a save file", "", "json");
-            if (path.Length != 0)
+            string path = StandaloneFileBrowser.OpenFilePanel("Load a save file", "", "json", multiselect: false).SingleOrDefault();
+            if (path.Any())
             {
                 string jsonData = File.ReadAllText(path);
 
