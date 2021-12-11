@@ -25,7 +25,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
 
         player.AnimationKey = frameData.AnimationKey;
-        player.AnimationIndex += AnimationData.FRAME_COUNTER;
+        player.AnimationIndex += frameData.PlaybackSpeed; //AnimationData.FRAME_SPEED;
         player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;
 
         if (player.AnimationIndex >= frameData.TotalFrames)
@@ -45,7 +45,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
         if (player.AnimationIndex < frameData.TotalFrames)
         {
-            player.AnimationIndex += AnimationData.FRAME_COUNTER;
+            player.AnimationIndex += frameData.PlaybackSpeed; //AnimationData.FRAME_SPEED;
         }
 
         player.CurrentFrame = player.AnimationIndex / frameData.TotalFrames;

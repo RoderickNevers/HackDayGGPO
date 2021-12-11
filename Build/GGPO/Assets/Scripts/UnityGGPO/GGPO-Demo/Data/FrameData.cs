@@ -2,11 +2,13 @@
 
 public class FrameData
 {
+    private const float DEFAULT_PLAYBACK_SPEED = 0.2f;
+
     public Guid ID = Guid.NewGuid();
     public string Name;
     public string AnimationKey;
     public float TotalFrames;
-    public float FrameRate;
+    public float PlaybackSpeed = DEFAULT_PLAYBACK_SPEED;
     public PlayerState PlayerState;
     public AttackButtonState Attack;
     public int Damage;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class AnimationData
 {
-    public static float FRAME_COUNTER = 0.2f;
     public readonly static Dictionary<Guid, FrameData> AttackLookup = new Dictionary<Guid, FrameData>()
     {
         {StandingAttacks.SLASH.ID, StandingAttacks.SLASH },
@@ -17,7 +16,6 @@ public class AnimationData
         {
             AnimationKey = "Idle",
             TotalFrames = 12f,
-            FrameRate = 12f,
             PlayerState = PlayerState.Standing,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -29,7 +27,6 @@ public class AnimationData
         {
             AnimationKey = "WalkForward",
             TotalFrames = 8f,
-            FrameRate = 12f,
             PlayerState = PlayerState.Forward,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -41,7 +38,6 @@ public class AnimationData
         {
             AnimationKey = "WalkBackward",
             TotalFrames = 6f,
-            FrameRate = 12f,
             PlayerState = PlayerState.Back,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -56,13 +52,13 @@ public class AnimationData
         {
             AnimationKey = "Slash",
             Name = "Slash",
-            TotalFrames = 14f,
-            FrameRate = 12f,
+            TotalFrames = 10f,
+            PlaybackSpeed = 0.25f,
             PlayerState = PlayerState.Standing,
             Attack = AttackButtonState.Slash,
             Damage = 100,
             HitStun = 100,
-            DizzyStun = 05,
+            DizzyStun = 5,
             HitPushBack = 0.75f,
             BlockPushBack = 0.25f,
             MeterGainOnHit = 5,
@@ -77,8 +73,8 @@ public class AnimationData
         {
             AnimationKey = "HeavySlash",
             Name = "Heavy Slash",
-            TotalFrames = 9f,
-            FrameRate = 12f,
+            TotalFrames = 8f,
+            PlaybackSpeed = 0.25f,
             PlayerState = PlayerState.Standing,
             Attack = AttackButtonState.HeavySlash,
             Damage = 60,
@@ -99,7 +95,6 @@ public class AnimationData
             AnimationKey = "SuperSlash",
             Name = "Super Slash",
             TotalFrames = 16f,
-            FrameRate = 12f,
             PlayerState = PlayerState.Standing,
             Attack = AttackButtonState.HeavySlash,
             Damage = 60,
@@ -120,7 +115,6 @@ public class AnimationData
             AnimationKey = "GuardBreak",
             Name = "Guard Break",
             TotalFrames = 7f,
-            FrameRate = 12f,
             PlayerState = PlayerState.Standing,
             Attack = AttackButtonState.GuardBreak,
             Damage = 0,
@@ -143,7 +137,6 @@ public class AnimationData
         {
             AnimationKey = "Hit_1",
             TotalFrames = 4f,
-            FrameRate = 12f,
             PlayerState = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -155,7 +148,6 @@ public class AnimationData
         {
             AnimationKey = "Hit_2",
             TotalFrames = 4f,
-            FrameRate = 12f,
             PlayerState = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -167,7 +159,6 @@ public class AnimationData
         {
             AnimationKey = "Hit_3",
             TotalFrames = 6f,
-            FrameRate = 12f,
             PlayerState = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -179,7 +170,6 @@ public class AnimationData
         {
             AnimationKey = "Dead_1",
             TotalFrames = 8f,
-            FrameRate = 12f,
             PlayerState = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -191,7 +181,6 @@ public class AnimationData
         {
             AnimationKey = "Dead_2",
             TotalFrames = 2f,
-            FrameRate = 12f,
             PlayerState = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -203,7 +192,6 @@ public class AnimationData
         {
             AnimationKey = "Dead_3",
             TotalFrames = 8f,
-            FrameRate = 12f,
             PlayerState = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -215,7 +203,6 @@ public class AnimationData
         {
             AnimationKey = "Dead_4",
             TotalFrames = 3f,
-            FrameRate = 12f,
             PlayerState = PlayerState.StandHit,
             Attack = AttackButtonState.None,
             Damage = 0,
@@ -227,7 +214,6 @@ public class AnimationData
         {
             AnimationKey = "Block",
             TotalFrames = 4f,
-            FrameRate = 12f,
             PlayerState = PlayerState.StandBlock,
             Attack = AttackButtonState.None,
             Damage = 0,
