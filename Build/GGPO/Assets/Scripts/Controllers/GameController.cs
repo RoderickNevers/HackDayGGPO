@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,10 +39,14 @@ public class GameController : MonoBehaviour
     [SerializeField] private Button _VersusModeBtn;
     [SerializeField] private Button _TrainingModeBtn;
 
+    [Header("Post FX")]
+    [SerializeField] private GameObject _PostFX;
+
     [Header("Debug UI")]
     [SerializeField] private Button _StartStopSessionBtn;
     [SerializeField] private GameObject _MainMenuPanel;
     [SerializeField] private GameObject _DebugPanel;
+    [SerializeField] private TextMeshProUGUI _RefreshRateWindow;
 
     private static GameController _instance;
     public static GameController Instance
@@ -56,14 +61,16 @@ public class GameController : MonoBehaviour
         }
     }
 
-    const int FRAME_RATE_LOCK = 60;
-
     public EventHandler<MatchState> OnGameStateChanged;
 
     private MatchState _GameState = MatchState.PreBattle;
+
     private readonly List<GGPOPlayerController> _Players = new List<GGPOPlayerController>();
     private GGPOPlayerController[] _PlayerControllers = Array.Empty<GGPOPlayerController>();
+
     private bool isPlaying = false;
+
+    public static int MonitorRefreshRate => Screen.currentResolution.refreshRate;
 
     public GameType CurrentGameType { get; set; } = GameType.None;
 
@@ -80,6 +87,7 @@ public class GameController : MonoBehaviour
     public void Awake()
     {
         LockFramerate();
+        EnablePostFX();
 
         _DebugPanel.SetActive(false);
         _HUDComponent.gameObject.SetActive(false);
@@ -267,10 +275,17 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void EnablePostFX()
+    {
+        _PostFX.SetActive(true);
+    }
+
     private void LockFramerate()
     {
-        Time.captureFramerate = FRAME_RATE_LOCK;
-        Application.targetFrameRate = FRAME_RATE_LOCK;
+        Time.captureFramerate = MonitorRefreshRate;
+        Application.targetFrameRate = MonitorRefreshRate;
+
+        _RefreshRateWindow.text = $"Time.captureFramerate: {Time.captureFramerate}\nApplication.targetFrameRate: {Application.targetFrameRate}\nMonitor Refresh Rate: {MonitorRefreshRate}";
     }
 
     private void SetLocalSessionActiveState(bool isEnabled)
