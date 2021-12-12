@@ -15,6 +15,7 @@ public struct Player
     public bool IsHit;
     public bool IsStunned;
     public bool IsTakingDamage;
+    public bool IsPressedAgainstOpponent;
     public int Health;
     public float HitStunTime;
     public float BlockStunTime;
@@ -44,6 +45,7 @@ public struct Player
         bw.Write(IsHit);
         bw.Write(IsStunned);
         bw.Write(IsTakingDamage);
+        bw.Write(IsPressedAgainstOpponent);
         bw.Write(Health);
         bw.Write(HitStunTime);
         bw.Write(BlockStunTime);
@@ -78,6 +80,7 @@ public struct Player
         IsHit = br.ReadBoolean();
         IsStunned = br.ReadBoolean();
         IsTakingDamage = br.ReadBoolean();
+        IsPressedAgainstOpponent = br.ReadBoolean();
         Health = br.ReadInt32();
         HitStunTime = br.ReadSingle();
         BlockStunTime = br.ReadSingle();
@@ -109,6 +112,7 @@ public struct Player
         hashCode = hashCode * number + IsHit.GetHashCode();
         hashCode = hashCode * number + IsStunned.GetHashCode();
         hashCode = hashCode * number + IsTakingDamage.GetHashCode();
+        hashCode = hashCode * number + IsPressedAgainstOpponent.GetHashCode();
         hashCode = hashCode * number + Health.GetHashCode();
         hashCode = hashCode * number + HitStunTime.GetHashCode();
         hashCode = hashCode * number + BlockStunTime.GetHashCode();

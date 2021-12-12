@@ -53,43 +53,15 @@ public class AdvancingState : CharacterStateBlock
             }
         }
 
+        if (player.IsPressedAgainstOpponent)
+        {
+            player.Velocity = Vector3.zero;
+            return player;
+        }
+
         player.Velocity.Set(velocity, 0, 0);
         player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
 
         return player;
     }
-
-    //private void HandleInputCommand(object sender, InputCommandArgs e)
-    //{
-    //    //Debug.Log($"Advancing Attack: {e.Attack}");
-    //    string name = e.Move != null ? e.Move.AttackData.Name : e.AttackName;
-    //    stateMachine.FireAttack(CharacterStateTrigger.TriggerAttackGround, $"{ProjectConstants.MovelistStateKeys.STANDING}-{name}", e.Move);
-    //}
-
-    //private void HandleMovement()
-    //{
-    //    switch (characterController.InputController.CurrentInputDirection)
-    //    {
-    //        case InputCommandElement.Neutral:
-    //            stateMachine.Fire(CharacterStateTrigger.TriggerStanding);
-    //            break;
-    //        case InputCommandElement.UpForward:
-    //            stateMachine.Fire(CharacterStateTrigger.TriggerJumpTowards);
-    //            break;
-    //        case InputCommandElement.DownForward:
-    //        case InputCommandElement.DownBack:
-    //        case InputCommandElement.Down:
-    //            stateMachine.Fire(CharacterStateTrigger.TriggerCrouching);
-    //            break;
-    //        case InputCommandElement.Back:
-    //            stateMachine.Fire(CharacterStateTrigger.TriggerRetreating);
-    //            break;
-    //        case InputCommandElement.UpBack:
-    //            stateMachine.Fire(CharacterStateTrigger.TriggerJumpBack);
-    //            break;
-    //        case InputCommandElement.Up:
-    //            stateMachine.Fire(CharacterStateTrigger.TriggerJumpUp);
-    //            break;
-    //    }
-    //}
 }

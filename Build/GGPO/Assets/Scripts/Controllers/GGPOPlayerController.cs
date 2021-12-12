@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class GGPOPlayerController : MonoBehaviour
@@ -10,7 +11,7 @@ public class GGPOPlayerController : MonoBehaviour
     [Header("Collision Detection")]
     [SerializeField] private HitBoxComponent m_HitBox;
     [SerializeField] private Transform m_HurtBox;
-    [SerializeField] private LayerMask m_LayerMask;
+    [SerializeField] private Transform m_Body;
 
     public PlayerID ID { get; set; }
 
@@ -19,11 +20,25 @@ public class GGPOPlayerController : MonoBehaviour
         m_Animator.speed = 0.0f;
     }
 
+    /// <summary>
+    /// Is the players' body touching the other player
+    /// </summary>
+    /// <returns>True if the players' body is touching the other player.</returns>
+    public bool OnBodyCollision()
+    {
+        Collider[] bodyColliders = Physics.OverlapBox(m_Body.position, m_Body.localScale / 2, Quaternion.identity, 1 << LayerMask.NameToLayer("PlayerBody")); 
+        return bodyColliders.Any(x => x.transform.root != this.transform);
+    }
+
+    /// <summary>
+    /// Is the player being hit by an attack?
+    /// </summary>
+    /// <returns>True if the player is hit by an attack.</returns>
     public HitData OnCheckCollision()
     {
         HitData result = new HitData();
 
-        Collider[] hitColliders = Physics.OverlapBox(m_HurtBox.position, m_HurtBox.localScale / 2, Quaternion.identity, m_LayerMask);
+        Collider[] hitColliders = Physics.OverlapBox(m_HurtBox.position, m_HurtBox.localScale / 2, Quaternion.identity, 1 << LayerMask.NameToLayer("Hitbox"));
         foreach (Collider hitbox in hitColliders)
         {
             if (hitbox.transform.root != this.transform)

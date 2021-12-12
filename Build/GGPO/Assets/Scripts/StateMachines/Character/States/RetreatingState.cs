@@ -60,14 +60,14 @@ public class RetreatingState : CharacterStateBlock
         // screen bounds left
         if (player.Position.x < -14)
         {
-            player.Position.x = -14; //-13.9f;
+            player.Position.x = -14;
             return player;
         }
 
         // screen bounds right
         if (player.Position.x > 14)
         {
-            player.Position.x = 14; //13.9f;
+            player.Position.x = 14;
             return player;
         }
 

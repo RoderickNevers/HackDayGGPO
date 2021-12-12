@@ -138,6 +138,7 @@ public class GameController : MonoBehaviour
         _GGPOComponent.OnRunningChanged += HandleRunningChanged;
         _GGPOComponent.OnStateChanged += HandleStateChanged;
         _GGPOComponent.OnCheckCollision += HandleCheckCollision;
+        _GGPOComponent.OnBodyCollisionCheck += HandleBodyCollision;
 
         _CreateBtn.onClick.AddListener(_LobbyComponent.CreateLobby);
         _ListLobbiesBtn.onClick.AddListener(_LobbyComponent.ListCloseLobbies);
@@ -154,6 +155,7 @@ public class GameController : MonoBehaviour
         _GGPOComponent.OnRunningChanged -= HandleRunningChanged;
         _GGPOComponent.OnStateChanged -= HandleStateChanged;
         _GGPOComponent.OnCheckCollision -= HandleCheckCollision;
+        _GGPOComponent.OnBodyCollisionCheck -= HandleBodyCollision;
 
         _CreateBtn.onClick.RemoveListener(_LobbyComponent.CreateLobby);
         _ListLobbiesBtn.onClick.RemoveListener(_LobbyComponent.ListCloseLobbies);
@@ -229,7 +231,7 @@ public class GameController : MonoBehaviour
     //Checks the players controller for attack collisions
     private void HandleCheckCollision()
     {
-        var gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
+        GGPOGameState gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
 
         for (int i = 0; i < _PlayerControllers.Length; ++i)
         {
@@ -239,10 +241,21 @@ public class GameController : MonoBehaviour
         }
     }
 
+    //Checks the players controller for push body collisions
+    private void HandleBodyCollision()
+    {
+        GGPOGameState gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
+
+        for (int i = 0; i < _PlayerControllers.Length; ++i)
+        {
+            gameState.GetPlayerRef(i).IsPressedAgainstOpponent = _PlayerControllers[i].OnBodyCollision();
+        }
+    }
+
     // Triggers the Player Controller to update with new data
     private void HandleStateChanged()
     {
-        var gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
+        GGPOGameState gameState = (GGPOGameState)_GGPOComponent.Runner.Game;
 
         for (int i = 0; i < _PlayerControllers.Length; ++i)
         {

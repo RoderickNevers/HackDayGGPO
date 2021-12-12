@@ -31,6 +31,8 @@ namespace SharedGame {
 
         public event Action OnCheckCollision;
 
+        public event Action OnBodyCollisionCheck;
+
         public EventHandler<GameType> OnLauncheGame;
 
         // Game speed
@@ -122,6 +124,7 @@ namespace SharedGame {
                         if (m_ReplayManager == null)
                         {
                             OnPreRunFrame();
+                            OnBodyCollisionCheck?.Invoke();
                             OnCheckCollision?.Invoke();
                             Runner.RunFrame();
                             OnStateChanged?.Invoke();
@@ -155,6 +158,7 @@ namespace SharedGame {
                         if (m_ReplayManager == null)
                         {
                             OnPreRunFrame();
+                            OnBodyCollisionCheck?.Invoke();
                             OnCheckCollision?.Invoke();
                             Runner.RunFrame();
                             OnStateChanged?.Invoke();
