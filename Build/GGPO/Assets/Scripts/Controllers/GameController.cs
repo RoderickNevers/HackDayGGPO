@@ -248,7 +248,9 @@ public class GameController : MonoBehaviour
 
         for (int i = 0; i < _PlayerControllers.Length; ++i)
         {
-            gameState.GetPlayerRef(i).IsPressedAgainstOpponent = _PlayerControllers[i].OnBodyCollision();
+            PushBodyData push = _PlayerControllers[i].OnBodyCollision();
+            gameState.GetPlayerRef(i).IsCloseToOpponent = push.IsCloseToOpponent;
+            gameState.GetPlayerRef(i).IsBeingPushed = push.IsBeingPushing;
         }
     }
 

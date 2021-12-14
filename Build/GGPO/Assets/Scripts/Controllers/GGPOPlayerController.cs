@@ -14,6 +14,7 @@ public class GGPOPlayerController : MonoBehaviour
     [SerializeField] private Transform m_Body;
 
     public PlayerID ID { get; set; }
+    public PlayerState CurrentState { get; set; }
 
     void Start()
     {
@@ -24,10 +25,20 @@ public class GGPOPlayerController : MonoBehaviour
     /// Is the players' body touching the other player
     /// </summary>
     /// <returns>True if the players' body is touching the other player.</returns>
-    public bool OnBodyCollision()
+    public PushBodyData OnBodyCollision()
     {
-        Collider[] bodyColliders = Physics.OverlapBox(m_Body.position, m_Body.localScale / 2, Quaternion.identity, 1 << LayerMask.NameToLayer("PlayerBody")); 
-        return bodyColliders.Any(x => x.transform.root != this.transform);
+        PushBodyData result = new PushBodyData();
+        Collider[] bodyColliders = Physics.OverlapBox(m_Body.position, m_Body.localScale / 2, Quaternion.identity, 1 << LayerMask.NameToLayer("PlayerBody"));
+
+        foreach (Collider hitbox in bodyColliders)
+        {
+            if (hitbox.transform.root != this.transform)
+            {
+                result.IsBeingPushing = hitbox.GetComponentInParent<GGPOPlayerController>().CurrentState == PlayerState.Forward;
+                result.IsCloseToOpponent = bodyColliders.Any(x => x.transform.root != this.transform);
+            }
+        }
+        return result;
     }
 
     /// <summary>
@@ -37,8 +48,8 @@ public class GGPOPlayerController : MonoBehaviour
     public HitData OnCheckCollision()
     {
         HitData result = new HitData();
-
         Collider[] hitColliders = Physics.OverlapBox(m_HurtBox.position, m_HurtBox.localScale / 2, Quaternion.identity, 1 << LayerMask.NameToLayer("Hitbox"));
+
         foreach (Collider hitbox in hitColliders)
         {
             if (hitbox.transform.root != this.transform)
@@ -55,6 +66,8 @@ public class GGPOPlayerController : MonoBehaviour
     // Won't be called on rollbacks (I think)
     public void OnStateChanged(ref Player player)
     {
+        CurrentState = player.State;
+
         // move player
         transform.position = player.Position;
         transform.localScale = player.LookDirection == LookDirection.Left ? new Vector3(-1, 1, 1) : transform.localScale = new Vector3(1, 1, 1);
@@ -62,6 +75,7 @@ public class GGPOPlayerController : MonoBehaviour
         // set the animator to the correct frame
         m_Animator.Play(Animator.StringToHash(player.AnimationKey), BASE_LAYER, player.CurrentFrame);
 
+        //------NOTHING GOES BELOW THIS------//
         if (player.CurrentAttackID == Guid.Empty)
             return;
 

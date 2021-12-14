@@ -53,7 +53,7 @@ public class AdvancingState : CharacterStateBlock
             }
         }
 
-        if (player.IsPressedAgainstOpponent)
+        if (player.IsCloseToOpponent)
         {
             player.Velocity = Vector3.zero;
             return player;
