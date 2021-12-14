@@ -121,19 +121,9 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     protected void ApplyPush(ref Player player, int direction, float force)
     {
-        const float maxDashTime = 0.5f;
-        const float dashStoppingSpeed = 0.1f;
-
-        if (player.CurrentPushbackTime < maxDashTime)
-        {
-            player.Velocity = new Vector3(direction * force, 0, 0);
-            player.CurrentPushbackTime += dashStoppingSpeed;
-        }
-        else
-        {
-            player.CurrentPushbackTime = 0;
-            //player.Velocity = Vector3.zero;
-        }
+        //var velocity = player.LookDirection == LookDirection.Right ? -1 : 1;
+        player.Velocity.Set(direction, 0, 0);
+        player.Velocity *= force * Time.fixedDeltaTime;
     }
 
     protected void ApplyDamage(ref Player player, int damage)
