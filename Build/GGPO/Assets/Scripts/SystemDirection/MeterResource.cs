@@ -6,7 +6,6 @@ using UnityEngine;
 public class MeterResource : ScriptableObject
 {
     [SerializeField] public bool Enabled = true;
-
     [SerializeField] public int SingleMeterCapacity = 100;
     [SerializeField] public int QuantityOfMetersToStore = 1;
 }

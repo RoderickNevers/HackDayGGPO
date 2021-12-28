@@ -1,5 +1,6 @@
 ﻿using System;
 
+[Serializable]
 public class FrameData
 {
     private const float DEFAULT_PLAYBACK_SPEED = 0.2f;
