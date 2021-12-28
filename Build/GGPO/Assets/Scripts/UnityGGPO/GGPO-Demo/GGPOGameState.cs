@@ -221,17 +221,17 @@ public struct GGPOGameState : IGame
 
             // Attacks
 
-            if (control.GetButtonDown(RewiredConsts.Action.SLASH))
+            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_A))
             {
                 input |= InputConstants.INPUT_SLASH;
             }
 
-            if (control.GetButtonDown(RewiredConsts.Action.HEAVYSLASH))
+            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_B))
             {
                 input |= InputConstants.INPUT_HEAVY_SLASH;
             }
 
-            if (control.GetButtonDown(RewiredConsts.Action.GUARDBREAK))
+            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_C))
             {
                 input |= InputConstants.INPUT_GUARD_BREAK;
             }
