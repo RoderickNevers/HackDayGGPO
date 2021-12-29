@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,8 +9,7 @@ public class InputDisplayComponent : MonoBehaviour
 {
     [SerializeField] private GGPOGameManager GameManager;
     [SerializeField] private Text CurrentP1Input;
-    [SerializeField] private Text P1Text;
-    [SerializeField] private Text P2Text;
+    [SerializeField] private List<TextMeshProUGUI> _PlayerDebugInfo;
 
     private GGPOGameState GameState;
     private Text text;
@@ -28,13 +29,38 @@ public class InputDisplayComponent : MonoBehaviour
             text.text = GameManager.DisplayFrameInputs();
             CurrentP1Input.text = $"{GameState.ReadInputs(0)}";
 
-            Player player1 = GameState.GetPlayer(0);
-            string p1string = string.Format($"Health: {player1.Health}\nPosition: {player1.Position.x}, {player1.Position.y}, {player1.Position.z}");
-            P1Text.text = p1string;
-
-            Player player2 = GameState.GetPlayer(1);
-            string p2string = string.Format($"Health: {player2.Health}\nPosition: {player2.Position.x}, {player2.Position.y}, {player2.Position.z}");
-            P2Text.text = p2string;
+            for (int i = 0; i < GameState.Players.Length; i++)
+            {
+                Player player = GameState.GetPlayer(i);
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"ID: {player.ID}");
+                sb.AppendLine($"Position: {player.Position}");
+                sb.AppendLine($"Velocity: {player.Velocity}");
+                sb.AppendLine($"IsGrounded: {player.IsGrounded}");
+                sb.AppendLine($"IsJumping: {player.IsJumping}");
+                sb.AppendLine($"IsAttacking: {player.IsAttacking}");
+                sb.AppendLine($"IsHit: {player.IsHit}");
+                sb.AppendLine($"IsStunned: {player.IsStunned}");
+                sb.AppendLine($"IsTakingDamage: {player.IsTakingDamage}");
+                sb.AppendLine($"IsCloseToOpponent: {player.IsCloseToOpponent}");
+                sb.AppendLine($"IsBeingPushed: {player.IsBeingPushed}");
+                sb.AppendLine($"Health: {player.Health}");
+                sb.AppendLine($"HitStunTime: {player.HitStunTime}");
+                sb.AppendLine($"BlockStunTime: {player.BlockStunTime}");
+                sb.AppendLine($"Power: {player.Power}");
+                sb.AppendLine($"CurrentPushbackTime: {player.CurrentPushbackTime}");
+                sb.AppendLine($"State: {player.State}");
+                sb.AppendLine($"JumpType: {player.JumpType}");
+                sb.AppendLine($"CurrentButtonPressed: {player.CurrentButtonPressed}");
+                sb.AppendLine($"CurrentAttackID: {player.CurrentAttackID}");
+                sb.AppendLine($"CurrentlyHitByID: {player.CurrentlyHitByID}");
+                sb.AppendLine($"LookDirection: {player.LookDirection}");
+                sb.AppendLine($"AnimationKey: {player.AnimationKey}");
+                sb.AppendLine($"CurrentFrame: {player.CurrentFrame}");
+                sb.AppendLine($"AnimationIndex: {player.AnimationIndex}");
+                sb.AppendLine($"Loses: {player.Loses}");
+                _PlayerDebugInfo[i].text = sb.ToString();
+            }
         }
     }
 }
