@@ -10,28 +10,20 @@ public class HitStandingState : CharacterStateBlock
 {
     private const float SCREEN_FREEZE_TIME = 0.11f;
 
-    private readonly Dictionary<Guid, FrameData> _HitReactionLookup = new Dictionary<Guid, FrameData>()
-    {
-        // Standing attacks
-        {AnimationData.StandingAttacks.SLASH.ID, AnimationData.Hit.DEAD_4},
-        {AnimationData.StandingAttacks.HEAVY_SLASH.ID, AnimationData.Hit.DEAD_4},
-        {AnimationData.StandingAttacks.GUARD_BREAK.ID, AnimationData.Hit.HIT_3},
-    };
-
     public HitStandingState()
     {
 
     }
 
-    public override Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, PlayerCommandList commandList, long input)
     {
         // check if they are blocking
         if (!player.IsTakingDamage && IsBlocking(player, input))
         {
-            return UpdateBlockReaction(player);
+            return UpdateBlockReaction(player, commandList);
         }
 
-        return UpdateHitReaction(player, _HitReactionLookup);
+        return UpdateHitReaction(player, commandList);
     }
 
     private bool IsBlocking(Player player, long input)

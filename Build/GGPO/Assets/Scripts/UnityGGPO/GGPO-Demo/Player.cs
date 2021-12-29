@@ -60,8 +60,9 @@ public struct Player
         bw.Write(CurrentlyHitByID.ToString());
         bw.Write((int)LookDirection);
 
+        // TODO: FIX THIS FLOATING STRING
         if (AnimationKey == null)
-            AnimationKey = AnimationData.Movememt.IDLE.AnimationKey;
+            AnimationKey = "Idle";
 
         bw.Write(AnimationKey);
         bw.Write(CurrentFrame);

@@ -18,6 +18,8 @@ public struct GGPOGameState : IGame
     public long UnserializedInputsP1 { get; private set; }
     public long UnserializedInputsP2 { get; private set; }
 
+    public List<PlayerCommandList> CommandLists;
+
     [SerializeField]
     private int frameNumber;
 
@@ -108,6 +110,13 @@ public struct GGPOGameState : IGame
             Players[i] = new Player();
         }
 
+        // TODO :: Need to pipe this in when the players select their characters and start their match
+        CommandLists = new List<PlayerCommandList>()
+        {
+            Resources.Load<PlayerCommandList>("Systems/Samurai/CommandList/SamuraiCommandList"),
+            Resources.Load<PlayerCommandList>("Systems/Samurai/CommandList/SamuraiCommandList"),
+        };
+
         // todo: need to unsubscribe too
         GameController.Instance.OnGameStateChanged += HandleGameStateChanged;
     }
@@ -188,7 +197,7 @@ public struct GGPOGameState : IGame
 
         for (int i = 0; i < Players.Length; i++)
         {
-            Players[i] = _StateSimulator.Run(Players[i], inputs[i]);
+            Players[i] = _StateSimulator.Run(Players[i], CommandLists[i], inputs[i]);
         }
     }
 
@@ -197,18 +206,20 @@ public struct GGPOGameState : IGame
         long input = 0;
         Rewired.Player control = _Controls[id];
 
-        //if (control.GetButton(RewiredConsts.Action.UP))
-        //{
-        //    input |= InputConstants.INPUT_UP;
-        //}
 
-        //if (control.GetButton(RewiredConsts.Action.DOWN))
-        //{
-        //    input |= InputConstants.INPUT_DOWN;
-        //}
 
         if (GameController.Instance.GameState == MatchState.Battle)
         {
+            if (control.GetButton(RewiredConsts.Action.UP))
+            {
+                input |= InputConstants.INPUT_UP;
+            }
+
+            if (control.GetButton(RewiredConsts.Action.DOWN))
+            {
+                input |= InputConstants.INPUT_DOWN;
+            }
+
             if (control.GetButton(RewiredConsts.Action.LEFT))
             {
                 input |= InputConstants.INPUT_LEFT;

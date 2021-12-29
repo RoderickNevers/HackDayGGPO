@@ -53,8 +53,8 @@ public class HitInAirState : CharacterStateBlock
 
     }
 
-    public override Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, PlayerCommandList commandList, long input)
     {
-        return UpdateHitReaction(player, _HitReactionLookup);
+        return UpdateHitReaction(player, commandList);
     }
 }

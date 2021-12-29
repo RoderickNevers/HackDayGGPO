@@ -16,7 +16,7 @@ public class JumpBackState : CharacterStateBlock
     //    _Animator.SetTrigger(AnimatorConstants.PARAMENTER_JUMP);
 
 
-    public override Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, PlayerCommandList commandList, long input)
     {
         player.JumpType = PlayerState.JumpBack;
 

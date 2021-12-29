@@ -12,7 +12,7 @@ public class OnTheGroundState : CharacterStateBlock
 
     }
 
-    public override Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, PlayerCommandList commandList, long input)
     {
         // How did the player fall -> Hard or Soft Knockdown
         // Hard -> Nornal & Delayed

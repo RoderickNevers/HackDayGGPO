@@ -10,8 +10,8 @@ public class BeingThrownState : CharacterStateBlock
 
     }
 
-    public override Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, PlayerCommandList commandList, long input)
     {
-        return base.UpdatePlayer(player, input);
+        return base.UpdatePlayer(player, commandList, input);
     }
 }

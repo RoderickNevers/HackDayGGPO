@@ -70,14 +70,14 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         }
     }
 
-    protected Player UpdateHitReaction(Player player, Dictionary<Guid, FrameData> hitReactionLookup)
+    protected Player UpdateHitReaction(Player player, PlayerCommandList commandList)
     {
         if (player.CurrentlyHitByID == Guid.Empty)
         {
             return player;
         }
 
-        FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
+        FrameData attack = commandList.AttackLookup[player.CurrentlyHitByID];
         int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
         
         if (IsAnimationComplete(player, attack))
@@ -85,7 +85,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
             return player;
         }
 
-        PlayAnimationOneShot(ref player, hitReactionLookup[player.CurrentlyHitByID]);
+        PlayAnimationOneShot(ref player, commandList.HitReactionLookup[player.CurrentlyHitByID]);
         ApplyHitStun(ref player, attack.HitStun);
         ApplyPush(ref player, direction, attack.HitPushBack);
         ApplyDamage(ref player, attack.Damage);
@@ -93,14 +93,14 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         return player;
     }
 
-    protected Player UpdateBlockReaction(Player player)
+    protected Player UpdateBlockReaction(Player player, PlayerCommandList commandList)
     {
         if (player.CurrentlyHitByID == Guid.Empty)
         {
             return player;
         }
 
-        FrameData attack = AnimationData.AttackLookup[player.CurrentlyHitByID];
+        FrameData attack = commandList.AttackLookup[player.CurrentlyHitByID];
         int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
 
         if (IsAnimationComplete(player, attack))
@@ -108,7 +108,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
             return player;
         }
 
-        PlayAnimationOneShot(ref player, AnimationData.Hit.BLOCK);
+        PlayAnimationOneShot(ref player, commandList.Block.FrameData);
         ApplyBlockStun(ref player, attack.BlockStun);
         ApplyPush(ref player, direction, attack.BlockPushBack);
         return player;
@@ -195,23 +195,23 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
     {
         if ((input & InputConstants.INPUT_SLASH) != 0)
         {
-            return AttackButtonState.Slash;
+            return AttackButtonState.Button_1;
         }
 
         if ((input & InputConstants.INPUT_HEAVY_SLASH) != 0)
         {
-            return AttackButtonState.HeavySlash;
+            return AttackButtonState.Button_2;
         }
 
         if ((input & InputConstants.INPUT_GUARD_BREAK) != 0)
         {
-            return AttackButtonState.GuardBreak;
+            return AttackButtonState.Button_3;
         }
 
         return AttackButtonState.None;
     }
 
-    public override Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, PlayerCommandList commandList, long input)
     {
         return player;
     }

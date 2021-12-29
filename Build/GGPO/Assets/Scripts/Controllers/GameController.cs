@@ -262,7 +262,8 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < _PlayerControllers.Length; ++i)
         {
             Player player = gameState.GetPlayer(i);
-            _PlayerControllers[i].OnStateChanged(ref player);
+            _PlayerControllers[i].OnStateChanged(ref player, gameState.CommandLists[i]);
+            //TODO:: Need to make sure the command list data is legit
         }
     }
 

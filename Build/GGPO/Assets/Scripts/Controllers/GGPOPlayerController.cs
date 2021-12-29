@@ -64,7 +64,7 @@ public class GGPOPlayerController : MonoBehaviour
 
     // Called from GameController.cs. Is called anytime the GameManager's Update calls the Runner's update (ie advances the frame)
     // Won't be called on rollbacks (I think)
-    public void OnStateChanged(ref Player player)
+    public void OnStateChanged(ref Player player, PlayerCommandList commandList)
     {
         CurrentState = player.State;
 
@@ -79,6 +79,6 @@ public class GGPOPlayerController : MonoBehaviour
         if (player.CurrentAttackID == Guid.Empty)
             return;
 
-        m_HitBox.AttackData = AnimationData.AttackLookup[player.CurrentAttackID];
+        m_HitBox.AttackData = commandList.AttackLookup[player.CurrentAttackID];
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Stateless;
 using System;
+using System.Linq;
 
 public class RetreatingState : CharacterStateBlock
 {
@@ -12,50 +13,34 @@ public class RetreatingState : CharacterStateBlock
     {
     }
 
-    public override Player UpdatePlayer(Player player, long input)
+    public override Player UpdatePlayer(Player player, PlayerCommandList commandList, long input)
     {
         float velocity = 0;
 
-        if (player.IsHit)
+        if (player.IsAttacking)
         {
-            Debug.Log("IM HIT CAPTAIN!!!!!!!!!!!!!!!");
-        }
-        //Returning attack
-        else if (player.IsAttacking)
-        {
-            switch (player.CurrentButtonPressed)
+            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == player.CurrentButtonPressed).FirstOrDefault().Value;
+            if (attackFrameData != null)
             {
-                case AttackButtonState.Slash:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.SLASH);
-                    break;
-                case AttackButtonState.HeavySlash:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_SLASH);
-                    break;
-                case AttackButtonState.GuardBreak:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.GUARD_BREAK);
-                    break;
+                PlayAttackAnimation(ref player, attackFrameData);
             }
         }
         //New attack or nothing
         else
         {
-            switch (CheckAttacking(input))
+            AttackButtonState currentButtonPressed = CheckAttacking(input);
+            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == currentButtonPressed).FirstOrDefault().Value;
+            if (attackFrameData != null)
             {
-                case AttackButtonState.Slash:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.SLASH);
-                    break;
-                case AttackButtonState.HeavySlash:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.HEAVY_SLASH);
-                    break;
-                case AttackButtonState.GuardBreak:
-                    PlayAttackAnimation(ref player, AnimationData.StandingAttacks.GUARD_BREAK);
-                    break;
-                case AttackButtonState.None:
-                    PlayAnimationLoop(ref player, AnimationData.Movememt.WALK_BACKWARD);
-                    velocity = player.LookDirection == LookDirection.Right ? -1 : 1;
-                    break;
+                PlayAttackAnimation(ref player, attackFrameData);
+            }
+            else
+            {
+                PlayAnimationLoop(ref player, commandList.Forward.FrameData);
+                velocity = player.LookDirection == LookDirection.Right ? -1 : 1;
             }
         }
+
 
         // screen bounds left
         if (player.Position.x < -14)

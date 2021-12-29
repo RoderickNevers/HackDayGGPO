@@ -72,7 +72,7 @@ public class CharacterControllerStateMachine: IDisposable
         _KOState?.Dispose();
     }
 
-    public Player Run(Player player, long input)
+    public Player Run(Player player, PlayerCommandList commandList, long input)
     {
         player.LookDirection = GameController.Instance.CheckLookDirection(player);
         // this is kinda of iffy but it currently works
@@ -95,7 +95,7 @@ public class CharacterControllerStateMachine: IDisposable
 
         if (IsDead(player))
         {
-            player = _KOState.UpdatePlayer(player, input);
+            player = _KOState.UpdatePlayer(player, commandList, input);
             // when the animation is completem, tell the game to end
             return player;
         }
@@ -118,7 +118,7 @@ public class CharacterControllerStateMachine: IDisposable
                         }
 
                         player.State = PlayerState.StandHit;
-                        player = _HitStandingState.UpdatePlayer(player, input);
+                        player = _HitStandingState.UpdatePlayer(player, commandList, input);
                         break;
 
                     //case PlayerState.Crouching:
@@ -156,13 +156,13 @@ public class CharacterControllerStateMachine: IDisposable
             switch (player.State)
             {
                 case PlayerState.Standing:
-                    player = _StandingState.UpdatePlayer(player, input);
+                    player = _StandingState.UpdatePlayer(player, commandList, input);
                     break;
                 case PlayerState.Forward:
-                    player = _AdvancingState.UpdatePlayer(player, input);
+                    player = _AdvancingState.UpdatePlayer(player, commandList, input);
                     break;
                 case PlayerState.Back:
-                    player = _RetreatingState.UpdatePlayer(player, input);
+                    player = _RetreatingState.UpdatePlayer(player, commandList, input);
                     break;
                 //case PlayerState.Crouching:
                 //    player = _CrouchingState.UpdatePlayer(player, input);
@@ -174,7 +174,7 @@ public class CharacterControllerStateMachine: IDisposable
                 //    player = _CrouchingState.UpdatePlayer(player, input);
                 //    break;
                 case PlayerState.StandingAttack:
-                    player = _AttackGroundState.UpdatePlayer(player, input);
+                    player = _AttackGroundState.UpdatePlayer(player, commandList, input);
                     break;
                 //case PlayerState.CrouchngAttack:
                 //    player = _AttackGroundState.UpdatePlayer(player, input);
@@ -184,7 +184,7 @@ public class CharacterControllerStateMachine: IDisposable
                 //case PlayerState.CrouchBlock:
                 //    break;
                 default:
-                    player = _StandingState.UpdatePlayer(player, input);
+                    player = _StandingState.UpdatePlayer(player, commandList, input);
                     break;
             }
         }
