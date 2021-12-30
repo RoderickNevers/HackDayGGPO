@@ -72,7 +72,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     protected Player UpdateHitReaction(Player player, PlayerCommandList commandList)
     {
-        if (player.IncomingAttackFrameData == null)
+        if (player.IncomingAttackFrameData == null || player.IncomingAttackFrameData == FrameData.Empty)
         {
             return player;
         }
@@ -95,7 +95,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     protected Player UpdateBlockReaction(Player player, PlayerCommandList commandList)
     {
-        if (player.IncomingAttackFrameData == null)
+        if (player.IncomingAttackFrameData == null || player.IncomingAttackFrameData == FrameData.Empty)
         {
             return player;
         }

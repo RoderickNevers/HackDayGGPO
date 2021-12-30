@@ -58,10 +58,7 @@ public struct Player
         bw.Write((int)JumpType);
         bw.Write((int)CurrentButtonPressed);
         bw.Write(CurrentAttackID.ToString());
-        FrameData data = IncomingAttackFrameData == null ? FrameData.Empty : IncomingAttackFrameData;
-        var asdf = SerializeToBytes(data);
-        bw.Write(asdf);
-        IncomingAttackFrameDataSize = (int)asdf.Length;
+        bw.Write(ConvertFrameDataToBytes(IncomingAttackFrameData, ref IncomingAttackFrameDataSize));
         bw.Write(IncomingAttackFrameDataSize);
         bw.Write((int)LookDirection);
 
@@ -99,7 +96,7 @@ public struct Player
         JumpType = (PlayerState)br.ReadInt32();
         CurrentButtonPressed = (AttackButtonState)br.ReadInt32();
         CurrentAttackID = Guid.Parse(br.ReadString());
-        IncomingAttackFrameData = (FrameData)DeserializeFromBytes(br.ReadBytes(int.MaxValue)); // This may be a problem
+        IncomingAttackFrameData = (FrameData)DeserializeFromBytes(br.ReadBytes(IncomingAttackFrameDataSize));
         IncomingAttackFrameDataSize = br.ReadInt32();
         LookDirection = (LookDirection)br.ReadInt32();
         AnimationKey = br.ReadString();
@@ -144,7 +141,15 @@ public struct Player
         return hashCode;
     }
 
-    public static byte[] SerializeToBytes<T>(T item)
+    private byte[] ConvertFrameDataToBytes(FrameData frameData, ref int byteArraySize)
+    {
+        FrameData data = frameData == null ? FrameData.Empty : frameData;
+        byte[] byteArray = SerializeToBytes(data);
+        byteArraySize = byteArray.Length;
+        return byteArray;
+    }
+
+    private byte[] SerializeToBytes<T>(T item)
     {
         var formatter = new BinaryFormatter();
         using (var stream = new MemoryStream())
@@ -155,7 +160,7 @@ public struct Player
         }
     }
 
-    public static object DeserializeFromBytes(byte[] bytes)
+    private object DeserializeFromBytes(byte[] bytes)
     {
         var formatter = new BinaryFormatter();
         using (var stream = new MemoryStream(bytes))
