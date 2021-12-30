@@ -57,7 +57,8 @@ public struct Player
         bw.Write((int)JumpType);
         bw.Write((int)CurrentButtonPressed);
         bw.Write(CurrentAttackID.ToString());
-        bw.Write(SerializeToBytes(IncomingAttackFrameData));
+        FrameData data = IncomingAttackFrameData == null ? FrameData.Empty : IncomingAttackFrameData;
+        bw.Write(SerializeToBytes(data));
         bw.Write((int)LookDirection);
 
         // TODO: FIX THIS FLOATING STRING

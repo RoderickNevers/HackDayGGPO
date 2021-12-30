@@ -24,4 +24,26 @@ public class FrameData
     public AttackLevel Level;
     public AttackCategory Category;
     public AttackProperty Property;
+
+    public static FrameData Empty => new FrameData()
+        {
+            ID = Guid.Empty,
+            Name = string.Empty,
+            AnimationKey = string.Empty,
+            TotalFrames = 0,
+            PlaybackSpeed = DEFAULT_PLAYBACK_SPEED,
+            PlayerState = PlayerState.Standing,
+            Attack = AttackButtonState.None,
+            Damage = 0,
+            HitStun = 0,
+            BlockStun = 0,
+            DizzyStun = 0,
+            HitPushBack = 0,
+            MeterGainOnWiff = 0,
+            MeterGainOnHit = 0,
+            Type = AttackType.None,
+            Level = AttackLevel.High,
+            Category = AttackCategory.Ground,
+            Property = AttackProperty.Standard
+        };
 }

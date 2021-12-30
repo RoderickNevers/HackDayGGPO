@@ -237,7 +237,7 @@ public class GameController : MonoBehaviour
         {
             HitData result = _PlayerControllers[i].OnCheckCollision();
             gameState.GetPlayerRef(i).IsHit = result.IsHit;
-            gameState.GetPlayerRef(i).IncomingAttackFrameData = result.AttackData;
+            gameState.GetPlayerRef(i).IncomingAttackFrameData = result.AttackData == null ? FrameData.Empty : result.AttackData;
         }
     }
 
