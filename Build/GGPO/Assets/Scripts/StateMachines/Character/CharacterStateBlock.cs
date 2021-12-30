@@ -72,45 +72,45 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     protected Player UpdateHitReaction(Player player, PlayerCommandList commandList)
     {
-        if (player.CurrentlyHitByID == Guid.Empty)
+        if (player.IncomingAttackFrameData == null)
         {
             return player;
         }
 
-        FrameData attack = commandList.AttackLookup[player.CurrentlyHitByID];
         int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
-        
-        if (IsAnimationComplete(player, attack))
+        FrameData incomingAttack = player.IncomingAttackFrameData;
+
+        if (IsAnimationComplete(player, incomingAttack))
         {
             return player;
         }
 
-        PlayAnimationOneShot(ref player, commandList.HitReactionLookup[player.CurrentlyHitByID]);
-        ApplyHitStun(ref player, attack.HitStun);
-        ApplyPush(ref player, direction, attack.HitPushBack);
-        ApplyDamage(ref player, attack.Damage);
+        PlayAnimationOneShot(ref player, commandList.DeathReactions[3]); //TODO
+        ApplyHitStun(ref player, incomingAttack.HitStun);
+        ApplyPush(ref player, direction, incomingAttack.HitPushBack);
+        ApplyDamage(ref player, incomingAttack.Damage);
 
         return player;
     }
 
     protected Player UpdateBlockReaction(Player player, PlayerCommandList commandList)
     {
-        if (player.CurrentlyHitByID == Guid.Empty)
+        if (player.IncomingAttackFrameData == null)
         {
             return player;
         }
 
-        FrameData attack = commandList.AttackLookup[player.CurrentlyHitByID];
         int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
+        FrameData incomingAttack = player.IncomingAttackFrameData;
 
-        if (IsAnimationComplete(player, attack))
+        if (IsAnimationComplete(player, incomingAttack))
         {
             return player;
         }
 
         PlayAnimationOneShot(ref player, commandList.Block.FrameData);
-        ApplyBlockStun(ref player, attack.BlockStun);
-        ApplyPush(ref player, direction, attack.BlockPushBack);
+        ApplyBlockStun(ref player, incomingAttack.BlockStun);
+        ApplyPush(ref player, direction, incomingAttack.BlockPushBack);
         return player;
     }
 

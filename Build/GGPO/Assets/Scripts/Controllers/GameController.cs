@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Text;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -237,7 +237,7 @@ public class GameController : MonoBehaviour
         {
             HitData result = _PlayerControllers[i].OnCheckCollision();
             gameState.GetPlayerRef(i).IsHit = result.IsHit;
-            gameState.GetPlayerRef(i).CurrentlyHitByID = result.AttackData?.ID ?? Guid.Empty;
+            gameState.GetPlayerRef(i).IncomingAttackFrameData = result.AttackData;
         }
     }
 

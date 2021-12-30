@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 [Serializable]
@@ -26,7 +26,7 @@ public struct Player
     public PlayerState JumpType;
     public AttackButtonState CurrentButtonPressed;
     public Guid CurrentAttackID;
-    public Guid CurrentlyHitByID;
+    public FrameData IncomingAttackFrameData;
     public LookDirection LookDirection;
     public string AnimationKey;
     public float CurrentFrame;
@@ -57,7 +57,7 @@ public struct Player
         bw.Write((int)JumpType);
         bw.Write((int)CurrentButtonPressed);
         bw.Write(CurrentAttackID.ToString());
-        bw.Write(CurrentlyHitByID.ToString());
+        bw.Write(SerializeToBytes(IncomingAttackFrameData));
         bw.Write((int)LookDirection);
 
         // TODO: FIX THIS FLOATING STRING
@@ -94,7 +94,7 @@ public struct Player
         JumpType = (PlayerState)br.ReadInt32();
         CurrentButtonPressed = (AttackButtonState)br.ReadInt32();
         CurrentAttackID = Guid.Parse(br.ReadString());
-        CurrentlyHitByID = Guid.Parse(br.ReadString());
+        IncomingAttackFrameData = (FrameData)DeserializeFromBytes(br.ReadBytes((int)br.BaseStream.Length)); // This may be a problem
         LookDirection = (LookDirection)br.ReadInt32();
         AnimationKey = br.ReadString();
         CurrentFrame = br.ReadSingle();
@@ -127,7 +127,7 @@ public struct Player
         hashCode = hashCode * number + JumpType.GetHashCode();
         hashCode = hashCode * number + CurrentButtonPressed.GetHashCode();
         hashCode = hashCode * number + CurrentAttackID.GetHashCode();
-        hashCode = hashCode * number + CurrentlyHitByID.GetHashCode();
+        hashCode = hashCode * number + IncomingAttackFrameData.GetHashCode();
         hashCode = hashCode * number + LookDirection.GetHashCode();
         hashCode = hashCode * number + AnimationKey.GetHashCode();
         hashCode = hashCode * number + CurrentFrame.GetHashCode();
@@ -135,5 +135,25 @@ public struct Player
         hashCode = hashCode * number + Loses.GetHashCode();
 
         return hashCode;
+    }
+
+    public static byte[] SerializeToBytes<T>(T item)
+    {
+        var formatter = new BinaryFormatter();
+        using (var stream = new MemoryStream())
+        {
+            formatter.Serialize(stream, item);
+            stream.Seek(0, SeekOrigin.Begin);
+            return stream.ToArray();
+        }
+    }
+
+    public static object DeserializeFromBytes(byte[] bytes)
+    {
+        var formatter = new BinaryFormatter();
+        using (var stream = new MemoryStream(bytes))
+        {
+            return formatter.Deserialize(stream);
+        }
     }
 };

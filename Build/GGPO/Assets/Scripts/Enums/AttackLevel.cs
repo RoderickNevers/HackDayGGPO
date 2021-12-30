@@ -1,6 +1,6 @@
 ﻿public enum AttackLevel
 {
-    High,
-    Mid,
-    Low
+    High = 0,
+    Mid = 1,
+    Low = 2
 }

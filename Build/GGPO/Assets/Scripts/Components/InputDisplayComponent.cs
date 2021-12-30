@@ -53,7 +53,7 @@ public class InputDisplayComponent : MonoBehaviour
                 sb.AppendLine($"JumpType: {player.JumpType}");
                 sb.AppendLine($"CurrentButtonPressed: {player.CurrentButtonPressed}");
                 sb.AppendLine($"CurrentAttackID: {player.CurrentAttackID}");
-                sb.AppendLine($"CurrentlyHitByID: {player.CurrentlyHitByID}");
+                sb.AppendLine($"CurrentlyHitByID: {player.IncomingAttackFrameData}");
                 sb.AppendLine($"LookDirection: {player.LookDirection}");
                 sb.AppendLine($"AnimationKey: {player.AnimationKey}");
                 sb.AppendLine($"CurrentFrame: {player.CurrentFrame}");

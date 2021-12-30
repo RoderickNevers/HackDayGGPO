@@ -32,17 +32,13 @@ public class PlayerCommandList : ScriptableObject
     [Header("Attacks - Jumping")]
     [SerializeField] private List<InputCommand> JumpingAttacks;
 
-    [Header("Taking Damage")]
-    [SerializeField] private List<FrameData> HitReactions;
+    [Header("Hit Animations")]
+    [SerializeField] public List<FrameData> HitReactions;
+
+    [Header("Death Animations")]
+    [SerializeField] public List<FrameData> DeathReactions;
 
     public readonly Dictionary<Guid, FrameData> AttackLookup = new Dictionary<Guid, FrameData>();
-    public readonly Dictionary<Guid, FrameData> HitReactionLookup = new Dictionary<Guid, FrameData>();
-    //{
-    //    // Standing attacks
-    //    {AnimationData.StandingAttacks.SLASH.ID, AnimationData.Hit.DEAD_4},
-    //    {AnimationData.StandingAttacks.HEAVY_SLASH.ID, AnimationData.Hit.DEAD_4},
-    //    {AnimationData.StandingAttacks.GUARD_BREAK.ID, AnimationData.Hit.HIT_3},
-    //};
 
     public void PopulateLookups()
     {
@@ -50,8 +46,5 @@ public class PlayerCommandList : ScriptableObject
         StandingAttacks.ForEach(x => AttackLookup.Add(x.FrameData.ID, x.FrameData));
         CrouchingAttacks.ForEach(x => AttackLookup.Add(x.FrameData.ID, x.FrameData));
         JumpingAttacks.ForEach(x => AttackLookup.Add(x.FrameData.ID, x.FrameData));
-
-        // Hits
-        HitReactions.ForEach(x => HitReactionLookup.Add(x.ID, x));
     }
 }

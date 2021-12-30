@@ -120,11 +120,6 @@ public struct GGPOGameState : IGame
 
         CommandLists[0].PopulateLookups();
 
-        //foreach (var list in CommandLists)
-        //{
-        //    list.PopulateLookups();
-        //}
-
         // todo: need to unsubscribe too
         GameController.Instance.OnGameStateChanged += HandleGameStateChanged;
     }
