@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 //using UnityEngine.InputSystem;
 public class JumpUpState : CharacterStateBlock
@@ -14,63 +15,25 @@ public class JumpUpState : CharacterStateBlock
 
         if (player.IsJumping)
         {
-            if (player.IsHit)
+            // Returning attack
+            if (player.IsAttacking)
             {
-                Debug.Log("IM HIT CAPTAIN!!!!!!!!!!!!!!!");
+                FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == player.CurrentButtonPressed).FirstOrDefault().Value;
+                if (attackFrameData != null)
+                {
+                    PlayAttackAnimation(ref player, attackFrameData);
+                }
             }
-            //Returning attack
-            //else if (player.IsAttacking)
-            //{
-            //    switch (player.CurrentButtonPressed)
-            //    {
-            //        case AttackButtonState.LightPunch:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_PUNCH);
-            //            break;
-            //        case AttackButtonState.MediumPunch:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_PUNCH);
-            //            break;
-            //        case AttackButtonState.HeavyPunch:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_PUNCH);
-            //            break;
-            //        case AttackButtonState.LightKick:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_KICK);
-            //            break;
-            //        case AttackButtonState.MediumKick:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_KICK);
-            //            break;
-            //        case AttackButtonState.HeavyKick:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_KICK);
-            //            break;
-            //    }
-            //}
-            ////New attack or nothing
-            //else
-            //{
-            //    switch (CheckAttacking(input))
-            //    {
-            //        case AttackButtonState.LightPunch:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_PUNCH);
-            //            break;
-            //        case AttackButtonState.MediumPunch:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_PUNCH);
-            //            break;
-            //        case AttackButtonState.HeavyPunch:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_PUNCH);
-            //            break;
-            //        case AttackButtonState.LightKick:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.LIGHT_KICK);
-            //            break;
-            //        case AttackButtonState.MediumKick:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.MEDIUM_KICK);
-            //            break;
-            //        case AttackButtonState.HeavyKick:
-            //            PlayAttackAnimation(ref player, AnimationData.JumpUpAttacks.HEAVY_KICK);
-            //            break;
-            //        case AttackButtonState.None:
-            //            PlayAnimationOneShot(ref player, AnimationData.Movememt.JUMP_UP);
-            //            break;
-            //    }
-            //}
+            //New attack or nothing
+            else
+            {
+                AttackButtonState currentButtonPressed = CheckAttacking(input);
+                FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == currentButtonPressed).FirstOrDefault().Value;
+                if (attackFrameData != null)
+                {
+                    PlayAttackAnimation(ref player, attackFrameData);
+                }
+            }
 
             player.Velocity = PlayerConstants.MOVE_SPEED * Time.fixedDeltaTime * player.Velocity;
             player.Velocity.y += Mathf.Sqrt(PlayerConstants.JUMP_FORCE_VERT * Time.fixedDeltaTime);
@@ -79,23 +42,4 @@ public class JumpUpState : CharacterStateBlock
 
         return player;
     }
-
-    //protected override void OnUpdate()
-    //{
-    //    base.OnUpdate();
-
-    //    characterController.Jump(0);
-
-    //    if (characterController.Controller.velocity.y < 0)
-    //    {
-    //        stateMachine.Fire(CharacterStateTrigger.TriggerFalling);
-    //    }
-    //}
-
-    //private void HandleInputCommand(object sender, InputCommandArgs e)
-    //{
-    //    //Debug.Log($"Standing Attack: {e.Attack}");
-    //    string name = e.Move != null ? e.Move.AttackData.Name : e.AttackName;
-    //    stateMachine.FireAttack(CharacterStateTrigger.TriggerAttackInAir, $"{ProjectConstants.MovelistStateKeys.JUMP_UP}-{name}", e.Move);
-    //}
 }

@@ -13,12 +13,7 @@ public class AdvancingState : CharacterStateBlock
     {
         float velocity = 0;
 
-        if (player.IsHit)
-        {
-            Debug.Log("IM HIT CAPTAIN!!!!!!!!!!!!!!!");
-        }
-        //Returning attack
-        else if (player.IsAttacking)
+        if (player.IsAttacking)
         {
             FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == player.CurrentButtonPressed).FirstOrDefault().Value;
             if (attackFrameData != null)

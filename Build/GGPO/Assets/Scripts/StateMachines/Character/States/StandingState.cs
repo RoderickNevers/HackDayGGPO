@@ -9,6 +9,7 @@ public class StandingState : CharacterStateBlock
 
     public override Player UpdatePlayer(Player player, PlayerCommandList commandList, long input)
     {
+        // Returning attack
         if (player.IsAttacking)
         {
             FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == player.CurrentButtonPressed).FirstOrDefault().Value;
