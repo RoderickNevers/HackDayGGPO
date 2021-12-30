@@ -28,6 +28,6 @@ public class HitStandingState : CharacterStateBlock
 
     private bool IsBlocking(Player player, long input)
     {
-        return player.LookDirection == LookDirection.Left && input == InputConstants.INPUT_RIGHT || player.LookDirection == LookDirection.Right && input == InputConstants.INPUT_LEFT;
+        return player.LookDirection == LookDirection.Left && input == (int)InputButtons.INPUT_RIGHT || player.LookDirection == LookDirection.Right && input == (int)InputButtons.INPUT_LEFT;
     }
 }

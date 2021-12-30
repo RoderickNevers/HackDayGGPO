@@ -288,63 +288,63 @@ MonoBehaviour:
       _userAssignable: 1
       _categoryId: 1
     - _id: 5
-      _name: Button A
+      _name: Button_0
       _type: 1
-      _descriptiveName: Button A
+      _descriptiveName: Button 0
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
     - _id: 6
-      _name: Button B
+      _name: Button_1
       _type: 1
-      _descriptiveName: Button B
+      _descriptiveName: Button 1
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
     - _id: 7
-      _name: Button C
+      _name: Button_2
       _type: 1
-      _descriptiveName: Button C
+      _descriptiveName: Button 2
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
     - _id: 8
-      _name: Button D
+      _name: Button_3
       _type: 1
-      _descriptiveName: Button D
+      _descriptiveName: Button 3
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
     - _id: 9
-      _name: Button E
+      _name: Button_4
       _type: 1
-      _descriptiveName: Button E
+      _descriptiveName: Button 4
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
     - _id: 10
-      _name: Button F
+      _name: Button_5
       _type: 1
-      _descriptiveName: Button F
+      _descriptiveName: Button 5
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 1
     - _id: 11
-      _name: Pause
+      _name: Start
       _type: 1
-      _descriptiveName: Pause
+      _descriptiveName: Start
       _positiveDescriptiveName: 
       _negativeDescriptiveName: 
       _behaviorId: 0

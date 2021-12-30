@@ -33,7 +33,7 @@ public class PlayerCommandList : ScriptableObject
     [SerializeField] private List<InputCommand> JumpingAttacks;
 
     [Header("Taking Damage")]
-    [SerializeField] private List<InputCommand> HitReactions;
+    [SerializeField] private List<FrameData> HitReactions;
 
     public readonly Dictionary<Guid, FrameData> AttackLookup = new Dictionary<Guid, FrameData>();
     public readonly Dictionary<Guid, FrameData> HitReactionLookup = new Dictionary<Guid, FrameData>();
@@ -52,6 +52,6 @@ public class PlayerCommandList : ScriptableObject
         JumpingAttacks.ForEach(x => AttackLookup.Add(x.FrameData.ID, x.FrameData));
 
         // Hits
-        HitReactions.ForEach(x => HitReactionLookup.Add(x.FrameData.ID, x.FrameData));
+        HitReactions.ForEach(x => HitReactionLookup.Add(x.ID, x));
     }
 }

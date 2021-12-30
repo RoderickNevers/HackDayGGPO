@@ -111,11 +111,19 @@ public struct GGPOGameState : IGame
         }
 
         // TODO :: Need to pipe this in when the players select their characters and start their match
+        // If two players are the same character, only need to populate one command list for both of them
         CommandLists = new List<PlayerCommandList>()
         {
             Resources.Load<PlayerCommandList>("Systems/Samurai/CommandList/SamuraiCommandList"),
             Resources.Load<PlayerCommandList>("Systems/Samurai/CommandList/SamuraiCommandList"),
         };
+
+        CommandLists[0].PopulateLookups();
+
+        //foreach (var list in CommandLists)
+        //{
+        //    list.PopulateLookups();
+        //}
 
         // todo: need to unsubscribe too
         GameController.Instance.OnGameStateChanged += HandleGameStateChanged;
@@ -206,45 +214,69 @@ public struct GGPOGameState : IGame
         long input = 0;
         Rewired.Player control = _Controls[id];
 
-
-
         if (GameController.Instance.GameState == MatchState.Battle)
         {
+            // Movement Buttons
             if (control.GetButton(RewiredConsts.Action.UP))
             {
-                input |= InputConstants.INPUT_UP;
+                input |= (int)InputButtons.INPUT_UP;
             }
 
             if (control.GetButton(RewiredConsts.Action.DOWN))
             {
-                input |= InputConstants.INPUT_DOWN;
+                input |= (int)InputButtons.INPUT_DOWN;
             }
 
             if (control.GetButton(RewiredConsts.Action.LEFT))
             {
-                input |= InputConstants.INPUT_LEFT;
+                input |= (int)InputButtons.INPUT_LEFT;
             }
 
             if (control.GetButton(RewiredConsts.Action.RIGHT))
             {
-                input |= InputConstants.INPUT_RIGHT;
+                input |= (int)InputButtons.INPUT_RIGHT;
             }
 
-            // Attacks
-
-            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_A))
+            // Action Buttons
+            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_0))
             {
-                input |= InputConstants.INPUT_SLASH;
+                input |= (int)InputButtons.INPUT_BUTTON_0;
             }
 
-            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_B))
+            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_1))
             {
-                input |= InputConstants.INPUT_HEAVY_SLASH;
+                input |= (int)InputButtons.INPUT_BUTTON_1;
             }
 
-            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_C))
+            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_2))
             {
-                input |= InputConstants.INPUT_GUARD_BREAK;
+                input |= (int)InputButtons.INPUT_BUTTON_2;
+            }
+
+            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_3))
+            {
+                input |= (int)InputButtons.INPUT_BUTTON_3;
+            }
+
+            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_4))
+            {
+                input |= (int)InputButtons.INPUT_BUTTON_4;
+            }
+
+            if (control.GetButtonDown(RewiredConsts.Action.BUTTON_5))
+            {
+                input |= (int)InputButtons.INPUT_BUTTON_5;
+            }
+
+            // Utility Buttons
+            if (control.GetButtonDown(RewiredConsts.Action.START))
+            {
+                input |= (int)InputButtons.INPUT_BUTTON_START;
+            }
+
+            if (control.GetButtonDown(RewiredConsts.Action.SELECT))
+            {
+                input |= (int)InputButtons.INPUT_BUTTON_SELECT;
             }
         }
 

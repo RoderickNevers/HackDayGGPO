@@ -36,7 +36,7 @@ public class RetreatingState : CharacterStateBlock
             }
             else
             {
-                PlayAnimationLoop(ref player, commandList.Forward.FrameData);
+                PlayAnimationLoop(ref player, commandList.Back.FrameData);
                 velocity = player.LookDirection == LookDirection.Right ? -1 : 1;
             }
         }

@@ -193,19 +193,34 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
     /// <returns>The attack button state that is being used. Return none if nothing is used.</returns>
     protected AttackButtonState CheckAttacking(long input)
     {
-        if ((input & InputConstants.INPUT_SLASH) != 0)
+        if ((input & (int)InputButtons.INPUT_BUTTON_0) != 0)
         {
             return AttackButtonState.Button_1;
         }
 
-        if ((input & InputConstants.INPUT_HEAVY_SLASH) != 0)
+        if ((input & (int)InputButtons.INPUT_BUTTON_1) != 0)
         {
             return AttackButtonState.Button_2;
         }
 
-        if ((input & InputConstants.INPUT_GUARD_BREAK) != 0)
+        if ((input & (int)InputButtons.INPUT_BUTTON_2) != 0)
         {
             return AttackButtonState.Button_3;
+        }
+
+        if ((input & (int)InputButtons.INPUT_BUTTON_3) != 0)
+        {
+            return AttackButtonState.Button_4;
+        }
+
+        if ((input & (int)InputButtons.INPUT_BUTTON_4) != 0)
+        {
+            return AttackButtonState.Button_5;
+        }
+
+        if ((input & (int)InputButtons.INPUT_BUTTON_5) != 0)
+        {
+            return AttackButtonState.Button_6;
         }
 
         return AttackButtonState.None;

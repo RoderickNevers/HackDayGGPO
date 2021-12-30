@@ -314,24 +314,24 @@ public class CharacterControllerStateMachine: IDisposable
             //    player.State = PlayerState.Crouching;
             //}
             //Looking left
-            if ((input & InputConstants.INPUT_LEFT) != 0 && player.LookDirection == LookDirection.Left)
+            if ((input & (int)InputButtons.INPUT_LEFT) != 0 && player.LookDirection == LookDirection.Left)
             {
                 player.State = PlayerState.Forward;
             }
-            else if ((input & InputConstants.INPUT_RIGHT) != 0 && player.LookDirection == LookDirection.Left)
+            else if ((input & (int)InputButtons.INPUT_RIGHT) != 0 && player.LookDirection == LookDirection.Left)
             {
                 player.State = PlayerState.Back;
             }
             //Looking right
-            else if ((input & InputConstants.INPUT_LEFT) != 0 && player.LookDirection == LookDirection.Right)
+            else if ((input & (int)InputButtons.INPUT_LEFT) != 0 && player.LookDirection == LookDirection.Right)
             {
                 player.State = PlayerState.Back;
             }
-            else if ((input & InputConstants.INPUT_RIGHT) != 0 && player.LookDirection == LookDirection.Right)
+            else if ((input & (int)InputButtons.INPUT_RIGHT) != 0 && player.LookDirection == LookDirection.Right)
             {
                 player.State = PlayerState.Forward;
             }
-            else if ((input & InputConstants.INPUT_LEFT) == 0 && (input & InputConstants.INPUT_RIGHT) == 0)
+            else if ((input & (int)InputButtons.INPUT_LEFT) == 0 && (input & (int)InputButtons.INPUT_RIGHT) == 0)
             {
                 player.State = PlayerState.Standing;
             }
