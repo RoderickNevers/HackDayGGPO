@@ -27,6 +27,7 @@ public struct Player
     public AttackButtonState CurrentButtonPressed;
     public Guid CurrentAttackID;
     public FrameData IncomingAttackFrameData;
+    private int IncomingAttackFrameDataSize;
     public LookDirection LookDirection;
     public string AnimationKey;
     public float CurrentFrame;
@@ -58,7 +59,10 @@ public struct Player
         bw.Write((int)CurrentButtonPressed);
         bw.Write(CurrentAttackID.ToString());
         FrameData data = IncomingAttackFrameData == null ? FrameData.Empty : IncomingAttackFrameData;
-        bw.Write(SerializeToBytes(data));
+        var asdf = SerializeToBytes(data);
+        bw.Write(asdf);
+        IncomingAttackFrameDataSize = (int)asdf.Length;
+        bw.Write(IncomingAttackFrameDataSize);
         bw.Write((int)LookDirection);
 
         // TODO: FIX THIS FLOATING STRING
@@ -95,7 +99,8 @@ public struct Player
         JumpType = (PlayerState)br.ReadInt32();
         CurrentButtonPressed = (AttackButtonState)br.ReadInt32();
         CurrentAttackID = Guid.Parse(br.ReadString());
-        IncomingAttackFrameData = (FrameData)DeserializeFromBytes(br.ReadBytes((int)br.BaseStream.Length)); // This may be a problem
+        IncomingAttackFrameData = (FrameData)DeserializeFromBytes(br.ReadBytes(int.MaxValue)); // This may be a problem
+        IncomingAttackFrameDataSize = br.ReadInt32();
         LookDirection = (LookDirection)br.ReadInt32();
         AnimationKey = br.ReadString();
         CurrentFrame = br.ReadSingle();
@@ -129,6 +134,7 @@ public struct Player
         hashCode = hashCode * number + CurrentButtonPressed.GetHashCode();
         hashCode = hashCode * number + CurrentAttackID.GetHashCode();
         hashCode = hashCode * number + IncomingAttackFrameData.GetHashCode();
+        hashCode = hashCode * number + IncomingAttackFrameDataSize.GetHashCode();
         hashCode = hashCode * number + LookDirection.GetHashCode();
         hashCode = hashCode * number + AnimationKey.GetHashCode();
         hashCode = hashCode * number + CurrentFrame.GetHashCode();
