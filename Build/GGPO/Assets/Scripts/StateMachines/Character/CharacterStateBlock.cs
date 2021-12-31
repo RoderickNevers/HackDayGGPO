@@ -80,10 +80,12 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         int direction = player.LookDirection == LookDirection.Left ? 1 : -1;
         FrameData incomingAttack = player.IncomingAttackFrameData;
 
-        if (IsAnimationComplete(player, incomingAttack))
-        {
-            return player;
-        }
+        // TODO:: Keep an eye out for this because another problem may arise.
+        // Will keep this commented out for now
+        //if (IsAnimationComplete(player, incomingAttack))
+        //{
+        //    return player;
+        //}
 
         PlayAnimationOneShot(ref player, commandList.DeathReactions[3]); //TODO
         ApplyHitStun(ref player, incomingAttack.HitStun);
@@ -158,7 +160,7 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
 
     protected void ApplyBlockStun(ref Player player, float blockStunMax)
     {
-        Debug.Log($"ID: {player.ID} Stun: {player.IsStunned}");
+        //Debug.Log($"ID: {player.ID} Stun: {player.IsStunned}");
         if (!player.IsStunned)
         {
             player.IsStunned = true;
