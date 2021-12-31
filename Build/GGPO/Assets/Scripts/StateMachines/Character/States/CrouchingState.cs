@@ -16,7 +16,7 @@ public class CrouchingState : CharacterStateBlock
         // Returning attack
         if (player.IsAttacking)
         {
-            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == player.CurrentButtonPressed).FirstOrDefault().Value;
+            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Input == player.CurrentButtonPressed).FirstOrDefault().Value;
             if (attackFrameData != null)
             {
                 PlayAttackAnimation(ref player, attackFrameData);
@@ -25,8 +25,8 @@ public class CrouchingState : CharacterStateBlock
         //New attack or nothing
         else
         {
-            AttackButtonState currentButtonPressed = CheckAttacking(input);
-            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == currentButtonPressed).FirstOrDefault().Value;
+            InputButtons currentButtonPressed = CheckAttacking(input);
+            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Input == currentButtonPressed).FirstOrDefault().Value;
             if (attackFrameData != null)
             {
                 PlayAttackAnimation(ref player, attackFrameData);

@@ -9,12 +9,12 @@ public class PlayerCommandList : ScriptableObject
     [Header("Player Movement")]
     [SerializeField] public InputCommand Idle;
 
-    [SerializeField] public InputCommand Forward;
-    [SerializeField] public InputCommand Back;
+    [SerializeField] public InputCommand Right;
+    [SerializeField] public InputCommand Left;
 
-    [SerializeField] public InputCommand JumpUp;
-    [SerializeField] public InputCommand JumpForward;
-    [SerializeField] public InputCommand JumpBack;
+    [SerializeField] public InputCommand Up;
+    [SerializeField] public InputCommand UpForward;
+    [SerializeField] public InputCommand UpBack;
 
     [SerializeField] public InputCommand Down;
     [SerializeField] public InputCommand DownForward;

@@ -8,7 +8,6 @@ public class BaseInputCommand
 {
     public InputCommandType Type;
     public InputAction InputAction;
-    public List<InputButtons> Buttons;
 }
 
 // Commands unique to the character

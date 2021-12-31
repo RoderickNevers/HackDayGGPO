@@ -19,7 +19,7 @@ public class RetreatingState : CharacterStateBlock
 
         if (player.IsAttacking)
         {
-            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == player.CurrentButtonPressed).FirstOrDefault().Value;
+            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Input == player.CurrentButtonPressed).FirstOrDefault().Value;
             if (attackFrameData != null)
             {
                 PlayAttackAnimation(ref player, attackFrameData);
@@ -28,15 +28,15 @@ public class RetreatingState : CharacterStateBlock
         //New attack or nothing
         else
         {
-            AttackButtonState currentButtonPressed = CheckAttacking(input);
-            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == currentButtonPressed).FirstOrDefault().Value;
+            InputButtons currentButtonPressed = CheckAttacking(input);
+            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Input == currentButtonPressed).FirstOrDefault().Value;
             if (attackFrameData != null)
             {
                 PlayAttackAnimation(ref player, attackFrameData);
             }
             else
             {
-                PlayAnimationLoop(ref player, commandList.Back.FrameData);
+                PlayAnimationLoop(ref player, commandList.Left.FrameData);
                 velocity = player.LookDirection == LookDirection.Right ? -1 : 1;
             }
         }

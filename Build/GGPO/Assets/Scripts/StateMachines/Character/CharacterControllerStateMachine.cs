@@ -146,7 +146,7 @@ public class CharacterControllerStateMachine: IDisposable
             }
         }
 
-        CheckDirectionInput(ref player, input);
+        CheckDirectionInput(ref player, commandList, input);
 
         // Grounded states
         if (IsNeutral(player))
@@ -279,47 +279,47 @@ public class CharacterControllerStateMachine: IDisposable
         return player.IsGrounded && !player.IsJumping && !player.IsHit;
     }
 
-    public void CheckDirectionInput(ref Player player, long input)
+    public void CheckDirectionInput(ref Player player, PlayerCommandList commandList, long input)
     {
         if (player.IsGrounded && !player.IsJumping && !player.IsAttacking)
         {
             if (player.LookDirection == LookDirection.Right)
             {
                 // Jumping
-                if ((input & (int)InputButtons.INPUT_UP) != 0 && (input & (int)InputButtons.INPUT_LEFT) != 0)
+                if ((input & (int)commandList.Up.FrameData.Input) != 0 && (input & (int)commandList.UpBack.FrameData.Input) != 0)
                 {
                     player.IsJumping = true;
                     player.State = PlayerState.JumpBack;
                 }
-                else if ((input & (int)InputButtons.INPUT_UP) != 0 && (input & (int)InputButtons.INPUT_RIGHT) != 0)
+                else if ((input & (int)commandList.Up.FrameData.Input) != 0 && (input & (int)commandList.UpForward.FrameData.Input) != 0)
                 {
                     player.IsJumping = true;
                     player.State = PlayerState.JumpToward;
                 }
-                else if ((input & (int)InputButtons.INPUT_UP) != 0)
+                else if ((input & (int)commandList.Up.FrameData.Input) != 0)
                 {
                     player.IsJumping = true;
                     player.State = PlayerState.JumpUp;
                 }
                 // Crouching
-                else if ((input & (int)InputButtons.INPUT_DOWN) != 0 && (input & (int)InputButtons.INPUT_LEFT) != 0)
+                else if ((input & (int)commandList.Down.FrameData.Input) != 0 && (input & (int)commandList.Left.FrameData.Input) != 0)
                 {
                     player.State = PlayerState.DownBack;
                 }
-                else if ((input & (int)InputButtons.INPUT_DOWN) != 0 && (input & (int)InputButtons.INPUT_RIGHT) != 0)
+                else if ((input & (int)commandList.Down.FrameData.Input) != 0 && (input & (int)commandList.Right.FrameData.Input) != 0)
                 {
                     player.State = PlayerState.DownForward;
                 }
-                else if ((input & (int)InputButtons.INPUT_DOWN) != 0)
+                else if ((input & (int)commandList.Down.FrameData.Input) != 0)
                 {
                     player.State = PlayerState.Crouching;
                 }
                 // Movement
-                if ((input & (int)InputButtons.INPUT_LEFT) != 0 && (input & (int)InputButtons.INPUT_DOWN) == 0 && !player.IsJumping)
+                if ((input & (int)commandList.Left.FrameData.Input) != 0 && (input & (int)commandList.Down.FrameData.Input) == 0 && !player.IsJumping)
                 {
                     player.State = PlayerState.Back;
                 }
-                else if ((input & (int)InputButtons.INPUT_RIGHT) != 0 && (input & (int)InputButtons.INPUT_DOWN) == 0 && !player.IsJumping)
+                else if ((input & (int)commandList.Right.FrameData.Input) != 0 && (input & (int)commandList.Down.FrameData.Input) == 0 && !player.IsJumping)
                 {
                     player.State = PlayerState.Forward;
                 }
@@ -327,49 +327,49 @@ public class CharacterControllerStateMachine: IDisposable
             else // Looking Left
             {
                 // Jumping
-                if ((input & (int)InputButtons.INPUT_UP) != 0 && (input & (int)InputButtons.INPUT_RIGHT) != 0)
+                if ((input & (int)commandList.Up.FrameData.Input) != 0 && (input & (int)commandList.Right.FrameData.Input) != 0)
                 {
                     player.IsJumping = true;
                     player.State = PlayerState.JumpBack;
                 }
-                else if ((input & (int)InputButtons.INPUT_UP) != 0 && (input & (int)InputButtons.INPUT_LEFT) != 0)
+                else if ((input & (int)commandList.Up.FrameData.Input) != 0 && (input & (int)commandList.Left.FrameData.Input) != 0)
                 {
                     player.IsJumping = true;
                     player.State = PlayerState.JumpToward;
                 }
-                else if ((input & (int)InputButtons.INPUT_UP) != 0)
+                else if ((input & (int)commandList.Up.FrameData.Input) != 0)
                 {
                     player.IsJumping = true;
                     player.State = PlayerState.JumpUp;
                 }
                 // Crouching
-                else if ((input & (int)InputButtons.INPUT_DOWN) != 0 && (input & (int)InputButtons.INPUT_RIGHT) != 0)
+                else if ((input & (int)commandList.Down.FrameData.Input) != 0 && (input & (int)commandList.Right.FrameData.Input) != 0)
                 {
                     player.State = PlayerState.DownBack;
                 }
-                else if ((input & (int)InputButtons.INPUT_DOWN) != 0 && (input & (int)InputButtons.INPUT_LEFT) != 0)
+                else if ((input & (int)commandList.Down.FrameData.Input) != 0 && (input & (int)commandList.Left.FrameData.Input) != 0)
                 {
                     player.State = PlayerState.DownForward;
                 }
-                else if ((input & (int)InputButtons.INPUT_DOWN) != 0)
+                else if ((input & (int)commandList.Down.FrameData.Input) != 0)
                 {
                     player.State = PlayerState.Crouching;
                 }
                 // Looking left
-                if ((input & (int)InputButtons.INPUT_LEFT) != 0 && (input & (int)InputButtons.INPUT_DOWN) == 0 && !player.IsJumping)
+                if ((input & (int)commandList.Left.FrameData.Input) != 0 && (input & (int)commandList.Down.FrameData.Input) == 0 && !player.IsJumping)
                 {
                     player.State = PlayerState.Forward;
                 }
-                else if ((input & (int)InputButtons.INPUT_RIGHT) != 0 && (input & (int)InputButtons.INPUT_DOWN) == 0 && !player.IsJumping)
+                else if ((input & (int)commandList.Right.FrameData.Input) != 0 && (input & (int)commandList.Down.FrameData.Input) == 0 && !player.IsJumping)
                 {
                     player.State = PlayerState.Back;
                 }
             }
 
-            if ((input & (int)InputButtons.INPUT_LEFT) == 0 &&
-                (input & (int)InputButtons.INPUT_RIGHT) == 0 &&
-                (input & (int)InputButtons.INPUT_UP) == 0 &&
-                (input & (int)InputButtons.INPUT_DOWN) == 0)
+            if ((input & (int)commandList.Left.FrameData.Input) == 0 &&
+                (input & (int)commandList.Right.FrameData.Input) == 0 &&
+                (input & (int)commandList.Up.FrameData.Input) == 0 &&
+                (input & (int)commandList.Down.FrameData.Input) == 0)
             {
                 player.State = PlayerState.Standing;
             }

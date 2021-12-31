@@ -15,7 +15,7 @@ public class AdvancingState : CharacterStateBlock
 
         if (player.IsAttacking)
         {
-            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == player.CurrentButtonPressed).FirstOrDefault().Value;
+            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Input == player.CurrentButtonPressed).FirstOrDefault().Value;
             if (attackFrameData != null)
             {
                 PlayAttackAnimation(ref player, attackFrameData);
@@ -24,15 +24,15 @@ public class AdvancingState : CharacterStateBlock
         //New attack or nothing
         else
         {
-            AttackButtonState currentButtonPressed = CheckAttacking(input);
-            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Attack == currentButtonPressed).FirstOrDefault().Value;
+            InputButtons currentButtonPressed = CheckAttacking(input);
+            FrameData attackFrameData = commandList.AttackLookup.Where(x => x.Value.Input == currentButtonPressed).FirstOrDefault().Value;
             if (attackFrameData != null)
             {
                 PlayAttackAnimation(ref player, attackFrameData);
             }
             else
             {
-                PlayAnimationLoop(ref player, commandList.Forward.FrameData);
+                PlayAnimationLoop(ref player, commandList.Right.FrameData);
                 velocity = player.LookDirection == LookDirection.Right ? 1 : -1;
             }
         }

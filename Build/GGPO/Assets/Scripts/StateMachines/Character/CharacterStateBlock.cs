@@ -60,12 +60,12 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
         if (player.IsAttacking)
         {
             player.State = frameData.PlayerState;
-            player.CurrentButtonPressed = frameData.Attack;
+            player.CurrentButtonPressed = frameData.Input;
             player.CurrentAttackID = frameData.ID;
         }
         else
         {
-            player.CurrentButtonPressed = AttackButtonState.None;
+            player.CurrentButtonPressed = InputButtons.None;
             player.CurrentAttackID = Guid.Empty;
         }
     }
@@ -191,39 +191,39 @@ public class CharacterStateBlock : AbstractStateBlock, IDisposable
     /// </summary>
     /// <param name="input">The input signature</param>
     /// <returns>The attack button state that is being used. Return none if nothing is used.</returns>
-    protected AttackButtonState CheckAttacking(long input)
+    protected InputButtons CheckAttacking(long input)
     {
         if ((input & (int)InputButtons.INPUT_BUTTON_0) != 0)
         {
-            return AttackButtonState.Button_1;
+            return InputButtons.INPUT_BUTTON_0;
         }
 
         if ((input & (int)InputButtons.INPUT_BUTTON_1) != 0)
         {
-            return AttackButtonState.Button_2;
+            return InputButtons.INPUT_BUTTON_1;
         }
 
         if ((input & (int)InputButtons.INPUT_BUTTON_2) != 0)
         {
-            return AttackButtonState.Button_3;
+            return InputButtons.INPUT_BUTTON_2;
         }
 
         if ((input & (int)InputButtons.INPUT_BUTTON_3) != 0)
         {
-            return AttackButtonState.Button_4;
+            return InputButtons.INPUT_BUTTON_3;
         }
 
         if ((input & (int)InputButtons.INPUT_BUTTON_4) != 0)
         {
-            return AttackButtonState.Button_5;
+            return InputButtons.INPUT_BUTTON_4;
         }
 
         if ((input & (int)InputButtons.INPUT_BUTTON_5) != 0)
         {
-            return AttackButtonState.Button_6;
+            return InputButtons.INPUT_BUTTON_5;
         }
 
-        return AttackButtonState.None;
+        return InputButtons.None;
     }
 
     public override Player UpdatePlayer(Player player, PlayerCommandList commandList, long input)

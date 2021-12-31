@@ -24,7 +24,7 @@ public struct Player
     public float CurrentPushbackTime;
     public PlayerState State;
     public PlayerState JumpType;
-    public AttackButtonState CurrentButtonPressed;
+    public InputButtons CurrentButtonPressed;
     public Guid CurrentAttackID;
     public FrameData IncomingAttackFrameData;
     private int IncomingAttackFrameDataSize;
@@ -94,7 +94,7 @@ public struct Player
         CurrentPushbackTime = br.ReadSingle();
         State = (PlayerState)br.ReadInt32();
         JumpType = (PlayerState)br.ReadInt32();
-        CurrentButtonPressed = (AttackButtonState)br.ReadInt32();
+        CurrentButtonPressed = (InputButtons)br.ReadInt32();
         CurrentAttackID = Guid.Parse(br.ReadString());
         IncomingAttackFrameData = (FrameData)DeserializeFromBytes(br.ReadBytes(IncomingAttackFrameDataSize));
         IncomingAttackFrameDataSize = br.ReadInt32();

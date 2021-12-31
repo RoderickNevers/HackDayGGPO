@@ -11,7 +11,7 @@ public class FrameData
     public float TotalFrames;
     public float PlaybackSpeed = DEFAULT_PLAYBACK_SPEED;
     public PlayerState PlayerState;
-    public AttackButtonState Attack;
+    public InputButtons Input;
     public int Damage;
     public float HitStun;
     public float BlockStun;
@@ -33,7 +33,7 @@ public class FrameData
             TotalFrames = 0,
             PlaybackSpeed = DEFAULT_PLAYBACK_SPEED,
             PlayerState = PlayerState.Standing,
-            Attack = AttackButtonState.None,
+            Input = InputButtons.None,
             Damage = 0,
             HitStun = 0,
             BlockStun = 0,
